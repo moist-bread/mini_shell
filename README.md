@@ -1,4 +1,4 @@
-# $\color{LightSkyBlue}{\textbf{minishell}}$
+# $\color{LightSkyBlue}{\textbf{mini\textunderscore shell}}$
 creating our own shell (but mini)
 
 ### Branch organization
@@ -16,9 +16,9 @@ creating our own shell (but mini)
 
 * $\color{DodgerBlue}{\textbf{readline()}}$ $\color{DarkCyan}{\textit{<stdio.h>}}$ &nbsp; - functions in a similar way as get_next_line(1) but intead of recieving an fd it recieves a **const char \*prompt** that will be displayed idly in the terminal as the prompt
 
-* $\color{DodgerBlue}{\textbf{rl\_ clear\_ history()}}$  $\color{DarkCyan}{\textit{<stdio.h>}}$ &nbsp; - clears readline history i guess?
+* $\color{DodgerBlue}{\textbf{rl\textunderscore clear\textunderscore history()}}$  $\color{DarkCyan}{\textit{<stdio.h>}}$ &nbsp; - clears readline history i guess?
 
-* $\color{DodgerBlue}{\textbf{add\_ history()}}$ $\color{DarkCyan}{\textit{<stdio.h>}}$ &nbsp; - recieves **char \*s** and saves that string in the history (like up and down arrows)
+* $\color{DodgerBlue}{\textbf{add\textunderscore history()}}$ $\color{DarkCyan}{\textit{<stdio.h>}}$ &nbsp; - recieves **char \*s** and saves that string in the history (like up and down arrows)
 
 * $\color{DodgerBlue}{\textbf{sigaction()}}$ _<signal.h>_ &nbsp; - change the action taken by a process when recieving a specific signal (man 7 signal)
 
