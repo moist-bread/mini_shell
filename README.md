@@ -50,7 +50,13 @@ creating our own shell (but mini)
 
 * $\color{DodgerBlue}{\textbf{ttyname()}}$ _<unistd.h>_ &nbsp; - returns a **char \*** of the path of the terminal device that is open on the **int fd**
 
-* $\color{DodgerBlue}{\textbf{ttyslot()}}$ _<unistd.h>_ &nbsp; - stopped here
+* $\color{DodgerBlue}{\textbf{ttyslot()}}$ _<unistd.h>_ &nbsp; - returns the index of the controlling terminal of the calling process in the file /etc/ttys or on System  V-like systems it returns the current user's index in the user accounting data base (0 or -1 on error)
+
+* $\color{DodgerBlue}{\textbf{ioctl()}}$ _<sys/ioctl.h>_ &nbsp; - control input output, can be used to know window size etc
+
+* $\color{DodgerBlue}{\textbf{getenv()}}$ _<stdlib.h>_ &nbsp; - searches for parameter **const char \*name** in the env and returns the corresponding line if found 
+
+* $\color{DodgerBlue}{\textbf{tcsetattr()}}$ _<termios.h>_ &nbsp; - stopped here
 
 <br>
 <details>
