@@ -16,7 +16,7 @@ creating our own shell (but mini)
 
 * $\color{DodgerBlue}{\textbf{readline()}}$ $\color{DarkCyan}{\textit{<stdio.h>}}$ &nbsp; - functions in a similar way as get_next_line(1) but intead of recieving an fd it recieves a **const char \*prompt** that will be displayed idly in the terminal as the prompt
 
-* $\color{DodgerBlue}{{\textbf{rl}}{\text{\_}}}$  $\color{DarkCyan}{\textit{<stdio.h>}}$ &nbsp; - clears readline history i guess?
+	```rl_history_clear()``` $\color{DarkCyan}{\textit{<stdio.h>}}$ &nbsp; - clears readline history i guess?
 
 * $\color{DodgerBlue}{\textbf{add\textunderscore history()}}$ $\color{DarkCyan}{\textit{<stdio.h>}}$ &nbsp; - recieves **char \*s** and saves that string in the history (like up and down arrows)
 
