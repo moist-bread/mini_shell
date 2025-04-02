@@ -1,4 +1,4 @@
-# $\color{LightSkyBlue}{\textbf{mini\textunderscore shell}}$
+# $\color{LightSkyBlue}{\textbf{mini shell}}$
 creating our own shell (but mini)
 
 ### Branch organization
