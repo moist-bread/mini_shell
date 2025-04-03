@@ -56,7 +56,21 @@ creating our own shell (but mini)
 
 * $\color{DodgerBlue}{\textbf{getenv()}}$ _<stdlib.h>_ &nbsp; - searches for parameter **const char \*name** in the env and returns the corresponding line if found 
 
-* $\color{DodgerBlue}{\textbf{tcsetattr()}}$ _<termios.h>_ &nbsp; - stopped here
+* $\color{DodgerBlue}{\textbf{tcsetattr()}}$ _<termios.h>_ &nbsp; - sets the parameters associated  with  the  terminal adressed by the **int fd** according to the termios structure **const struct termios \*termios_p**
+
+* $\color{DodgerBlue}{\textbf{tcgetattr()}}$ _<termios.h>_ &nbsp; - gets the parameters associated  with  the  terminal adressed by the **int fd** and stores it in the termios structure **struct termios \*termios_p**
+
+* $\color{DodgerBlue}{\textbf{tgetent()}}$ _<termios.h>_ &nbsp; - sets the parameters associated  with  the  terminal adressed by the **int fd** according to the termios structure **const struct termios \*termios_p**
+
+* $\color{DodgerBlue}{\textbf{tgetent()}}$ _<term.h><curses.h>_ &nbsp; -  loads the entry for name (conversion aid for programs that use the termcap library)
+
+* $\color{DodgerBlue}{\textbf{tgetflag()}}$ _<term.h><curses.h>_ &nbsp; - gets the boolean entry for id, or zero if it is not available
+
+* $\color{DodgerBlue}{\textbf{tgetnum()}}$ _<term.h><curses.h>_ &nbsp; - gets the numeric entry for id, or -1 if it is not available
+
+* $\color{DodgerBlue}{\textbf{tgetstr()}}$ _<term.h><curses.h>_ &nbsp; - returns the string entry for id, or zero if it is not available
+
+* $\color{DodgerBlue}{\textbf{tgoto()}}$ _<term.h><curses.h>_ &nbsp; - returns the string entry for id, or zero if it is not available
 
 <br>
 <details>
