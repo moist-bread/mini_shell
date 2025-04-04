@@ -1,4 +1,4 @@
-# $\color{LightSkyBlue}{\textbf{mini shell}}$
+# $\color{LightSkyBlue}{\textbf{Mini Shell}}$
 creating our own shell (but mini)
 
 ### Branch organization
@@ -14,9 +14,15 @@ creating our own shell (but mini)
 
 [more explanations of the fts (42 cursus)](https://42-cursus.gitbook.io/guide/rank-03/minishell/functions)
 
-* $\color{DodgerBlue}{\textbf{readline()}}$ $\color{DarkCyan}{\textit{<stdio.h>}}$ &nbsp; - functions in a similar way as get_next_line(1) but intead of recieving an fd it recieves a **const char \*prompt** that will be displayed idly in the terminal as the prompt
+* $\color{DodgerBlue}{\textbf{readline()}}$ $\color{DarkCyan}{\textit{<readline/readline.h><readline/history.h>}}$ &nbsp; - functions in a similar way as get_next_line(1) but intead of recieving an fd it recieves a **const char \*prompt** that will be displayed idly in the terminal as the prompt
 
-* ```rl_clear_history()``` $\color{DarkCyan}{\textit{<stdio.h>}}$ &nbsp; - clears readline history i guess?
+* ```rl_clear_history()``` $\color{DarkCyan}{\textit{<readline/history.h>}}$ &nbsp; - clears the command history created by readline (being able to up arrow and show the prev line)
+
+* ```rl_on_new_line()``` $\color{DarkCyan}{\textit{<readline/history.h>}}$ &nbsp; - tells that we have moved onto a new empty line, usually used after outputting a line
+
+* ```rl_replace_line()``` $\color{DarkCyan}{\textit{<readline/history.h>}}$ &nbsp; - replaces the current line with **char \*replacement**
+
+* ```rl_redisplay()``` $\color{DarkCyan}{\textit{<readline/history.h>}}$ &nbsp; - replaces the current line with **char \*replacement**
 
 * ```add_history()``` $\color{DarkCyan}{\textit{<stdio.h>}}$ &nbsp; - recieves **char \*s** and saves that string in the history (like up and down arrows)
 
@@ -70,16 +76,27 @@ creating our own shell (but mini)
 
 * $\color{DodgerBlue}{\textbf{tgetstr()}}$ _<term.h><curses.h>_ &nbsp; - returns the string entry for id, or zero if it is not available
 
-* $\color{DodgerBlue}{\textbf{tgoto()}}$ _<term.h><curses.h>_ &nbsp; - returns the string entry for id, or zero if it is not available
+* $\color{DodgerBlue}{\textbf{tgoto()}}$ _<term.h><curses.h>_ &nbsp; -  instantiates the parameters into the given capability. The output from this routine is to be passed to **tputs()**
+
+* $\color{DodgerBlue}{\textbf{tputs()}}$ _<term.h><curses.h>_ &nbsp; -   applies padding information (i.e., by interpreting marker embedded in the terminfo capability) and outputs it
 
 <br>
 <details>
 <summary> Function use examples and prototypes:</summary>
 <br>
 
-* **readline() _<stdio.h>_ -** functions in a similar way as get_next_line(1) but intead of recieving an fd it recieves a **const char \*prompt** that will be displayed idly in the terminal as the prompt
+* **char \*readline (const char \*prompt);** 
+	```		c
+	char *ret = readline("(Prompt) Your input goes here: ");
+	if (ret == NULL)
+		// EOF on empty line (CTRL + D)
+	else
+		printf("input collected: %s", ret);
+	```
 
-* **rl_clear_history() _<stdio.h>_ -** clears readline history i guess?
+* **void rl_clear_history(void);** 
+
+* **void rl_clear_history(void);** 
 
 * **add_history() _<stdio.h>_ -** recieves **char \*s** and saves that string in the history (like up and down arrows)
 
