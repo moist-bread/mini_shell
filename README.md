@@ -9,6 +9,28 @@ creating our own shell (but mini)
 | feat-exec		| branch to develop the execution feature	|
 | test-*		| branches starting in “test-” are for testing anything (can be deleted)	|
 
+git switch -c (name) - create branch and move to it<br>
+git checkout -B (name) - create branch and move to it<br>
+<br>
+git branch (name) (base-name) - creates branch<br>
+git branch -d (name) - delete branch<br>
+git branch - shows all branches<br>
+git switch (name) - moves to branch if it exists<br>
+git checkout (name) - moves to branch if it exists<br>
+<br>
+git push –set-upstream origin (where to connect) - push specified branch<br>
+git push origin (name) - push specified branch<br>
+git merge (name) - name = branch origin, be on the branch you wanna merge into<br>
+<br>
+git log –oneline - git logs resumed<br>
+git commit –amend –no-edit - com added files to prev com without editing message<br>
+git rebase -i HEAD~(n) - used to edit the last 3 commits
+reword, squash, edit<br>
+git rebase main - update current branch to use current main as base state<br>
+git branch -a  - if on remote do not rebase, merge or pull –rebase instead<br>
+git rebase –abort - self explanatory<br>
+git rebase –continue - self explanatory<br>
+
 ### <br>
 ### $\color{LightSkyBlue}{\textbf{Allowed external functions}}$
 
