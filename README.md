@@ -36,7 +36,7 @@ git rebase –continue - self explanatory<br>
 
 [more explanations of the fts (42 cursus)](https://42-cursus.gitbook.io/guide/rank-03/minishell/functions)
 
-* $\color{DodgerBlue}{\textbf{readline()}}$ $\color{DarkCyan}{\textit{<readline/readline.h><readline/history.h>}}$ &nbsp; - functions in a similar way as get_next_line(1) but intead of recieving an fd it recieves a **const char \*prompt** that will be displayed idly in the terminal as the prompt
+* $\color{DodgerBlue}{\textbf{readline()}}$ $\color{DarkCyan}{\textit{<readline/readline.h><readline/history.h>}}$ &nbsp; - Functions in a similar way as get_next_line(1) but intead of recieving an fd it recieves a **const char \*prompt** that will be displayed idly in the terminal as the prompt
 
 * ```rl_clear_history()``` $\color{DarkCyan}{\textit{<readline/history.h>}}$ &nbsp; - clears the command history created by readline (being able to up arrow and show the prev line)
 

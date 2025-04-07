@@ -6,7 +6,7 @@
 #    By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 15:43:01 by andcarva          #+#    #+#              #
-#    Updated: 2025/03/25 17:29:59 by rduro-pe         ###   ########.fr        #
+#    Updated: 2025/04/07 11:44:09 by rduro-pe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,16 +22,26 @@ CFLAGS	=	-Wall -Wextra -Werror -g
 
 # -->┊( SOURCES AND OBJS )
 MAIN		=	minishell_main.c
-SRC_FILES	=	
+EXEC_MAIN	=	exec_main.c
+PARSE_MAIN	=	parse_main.c
 
-SRC_DIR		=	Src
-SRC			=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
-SRC_MAIN	=	$(addprefix $(SRC_DIR)/, $(MAIN))
+SRC_EXEC_FILES	=	
 
-OBJS_DIR	=	Objs
-OBJS		=	$(addprefix $(OBJS_DIR)/, $(SRC_FILES:.c=.o))
-OBJS_MAIN	=	$(addprefix $(OBJS_DIR)/, $(MAIN:.c=.o))
 
+SRC_PARSE_FILES	=	
+
+
+SRC_DIR			=	Src
+SRC				=	$(addprefix $(SRC_DIR)/, $(SRC_EXEC_FILES) $(SRC_PARSE_FILES))
+SRC_MAIN		=	$(addprefix $(SRC_DIR)/, $(MAIN))
+SRC_MAIN_EXEC	=	$(addprefix $(SRC_DIR)/, $(EXEC_MAIN))
+SRC_MAIN_PARSE	=	$(addprefix $(SRC_DIR)/, $(PARSE_MAIN))
+
+OBJS_DIR		=	Objs
+OBJS			=	$(addprefix $(OBJS_DIR)/, $(SRC_FILES:.c=.o))
+OBJS_MAIN		=	$(addprefix $(OBJS_DIR)/, $(MAIN:.c=.o))
+OBJS_MAIN_EXEC	=	$(addprefix $(OBJS_DIR)/, $(EXEC_MAIN:.c=.o))
+OBJS_MAIN_PARSE	=	$(addprefix $(OBJS_DIR)/, $(PARSE_MAIN:.c=.o))
 
 # -->┊( RULES )
 all: $(NAME)
@@ -49,6 +59,16 @@ $(OBJS_DIR):
 
 $(LIBFT):
 	@make -C ./Inc/Libft -s
+
+exec: $(OBJS_MAIN_EXEC) $(OBJS) $(LIBFT)
+	$(M_COMP_E)
+	@$(CC) $(CFLAGS) $(OBJS_MAIN_EXEC) $(OBJS) $(LIBFT) -o $(NAME)
+	$(M_DONE)
+
+parse: $(OBJS_MAIN_PARSE) $(OBJS) $(LIBFT)
+	$(M_COMP_P)
+	@$(CC) $(CFLAGS) $(OBJS_MAIN_PARSE) $(OBJS) $(LIBFT) -o $(NAME)
+	$(M_DONE)
 
 clean:
 	@make clean -C ./Inc/Libft -s
@@ -89,6 +109,8 @@ WHTB 	=	\e[47m
 
 #->┊ messages
 M_COMP		= @echo "$(BLK)-->┊$(GRN)  Compiling: $(DEF)$(BLK)$(WHTB) $(NAME) $(BLK)$(DEF)"
+M_COMP_E	= @echo "$(BLK)-->┊$(GRN)  Compiling: $(DEF)$(BLK)$(WHTB) EXE $(NAME) $(BLK)$(DEF)"
+M_COMP_P	= @echo "$(BLK)-->┊$(GRN)  Compiling: $(DEF)$(BLK)$(WHTB) PAR $(NAME) $(BLK)$(DEF)"
 M_REM		= @echo "$(BLK)-->┊$(BLU)  Removing:  $(DEF)$(BLK)$(WHTB) $(NAME) $(BLK)$(DEF)"
 M_REMOBJS	= @echo "$(BLK)-->┊$(BLU)  Removing: $(BWHT) $(NAME)/objs $(BLK)$(DEF)"
 M_DONE		= @echo "$(BLK)-->┊$(BGRN)  DONE!!$(DEF)"
