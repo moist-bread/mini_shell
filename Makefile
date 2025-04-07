@@ -6,7 +6,7 @@
 #    By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 15:43:01 by andcarva          #+#    #+#              #
-#    Updated: 2025/04/07 18:29:17 by andcarva         ###   ########.fr        #
+#    Updated: 2025/04/07 19:08:37 by andcarva         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ LIBFT	=	./Inc/Libft/libft.a
 # -->┊( COMMANDS AND FLAGS )
 CC		=	cc
 CFLAGS	=	-Wall -Wextra -Werror -g
+RL		=	-lreadline
 
 # -->┊( DIRECTORIES )
 SRC_DIR			=	Src
@@ -79,7 +80,7 @@ exec: $(OBJS_MAIN_EXEC) $(OBJS) $(LIBFT)
 
 parse: $(OBJS_MAIN_PARSE) $(OBJS) $(LIBFT)
 	$(M_COMP_P)
-	@$(CC) $(CFLAGS) $(OBJS_MAIN_PARSE) $(OBJS) $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN_PARSE) $(OBJS) $(LIBFT) -o $(NAME)
 	$(M_DONE)
 
 clean:
@@ -96,7 +97,8 @@ fclean: clean
 	
 re: fclean all
 
-.PHONY: all clean fclean re bonus exe
+
+.PHONY: all clean fclean re bonus exe rp
 
 
 # -->┊( EXE TEST RULES )
