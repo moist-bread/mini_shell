@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 15:22:02 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/04/07 17:20:44 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/04/07 18:28:38 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,16 @@ typedef enum s_node_type
 	REDIR_OUT_APPEND,
 	BUILT_IN,
 }						t_node_type;
+
+/// @param type Node Type
+/// @param cont Node Content
+/// @param next Next Node
+typedef struct s_token
+{
+	t_node_type			type;
+	char				*cont;
+	struct s_token		*next;
+}						t_token;
 
 /// @brief Place where the content of t_node_type is stored
 /// @param cmd (char *) Main command to be executed

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+         #
+#    By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 15:43:01 by andcarva          #+#    #+#              #
-#    Updated: 2025/04/07 11:44:09 by rduro-pe         ###   ########.fr        #
+#    Updated: 2025/04/07 18:29:17 by andcarva         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,29 +19,35 @@ LIBFT	=	./Inc/Libft/libft.a
 CC		=	cc
 CFLAGS	=	-Wall -Wextra -Werror -g
 
+# -->┊( DIRECTORIES )
+SRC_DIR			=	Src
+OBJS_DIR		=	Objs
+MINISHELL_DIR	=	Minishell
+EXEC_DIR		= 	Exec
+PARSE_DIR		=	Parse
 
 # -->┊( SOURCES AND OBJS )
-MAIN		=	minishell_main.c
-EXEC_MAIN	=	exec_main.c
-PARSE_MAIN	=	parse_main.c
+MAIN_C			=	minishell_main.c
+EXEC_MAIN_C		=	exec_main.c
+PARSE_MAIN_C	=	parse_main.c
 
-SRC_EXEC_FILES	=	
+MAIN		=	$(addprefix	$(MINISHELL_DIR)/, $(MAIN_C))
+EXEC_MAIN	=	$(addprefix	$(EXEC_DIR)/, $(EXEC_MAIN_C))
+PARSE_MAIN	=	$(addprefix	$(PARSE_DIR)/, $(PARSE_MAIN_C))
 
+SRC_MINISHELL_FILES	=	$(addprefix	$(MINISHELL_DIR)/, )
+SRC_EXEC_FILES		=	$(addprefix	$(EXEC_DIR)/, )
+SRC_PARSE_FILES		=	$(addprefix	$(PARSE_DIR)/, )
 
-SRC_PARSE_FILES	=	
-
-
-SRC_DIR			=	Src
-SRC				=	$(addprefix $(SRC_DIR)/, $(SRC_EXEC_FILES) $(SRC_PARSE_FILES))
+SRC				=	$(addprefix $(SRC_DIR)/, $(SRC_EXEC_FILES) $(SRC_PARSE_FILES) $(SRC_MINISHELL_FILES))
 SRC_MAIN		=	$(addprefix $(SRC_DIR)/, $(MAIN))
 SRC_MAIN_EXEC	=	$(addprefix $(SRC_DIR)/, $(EXEC_MAIN))
 SRC_MAIN_PARSE	=	$(addprefix $(SRC_DIR)/, $(PARSE_MAIN))
 
-OBJS_DIR		=	Objs
-OBJS			=	$(addprefix $(OBJS_DIR)/, $(SRC_FILES:.c=.o))
-OBJS_MAIN		=	$(addprefix $(OBJS_DIR)/, $(MAIN:.c=.o))
-OBJS_MAIN_EXEC	=	$(addprefix $(OBJS_DIR)/, $(EXEC_MAIN:.c=.o))
-OBJS_MAIN_PARSE	=	$(addprefix $(OBJS_DIR)/, $(PARSE_MAIN:.c=.o))
+OBJS			=	$(addprefix $(OBJS_DIR)/, $(SRC:.c=.o))
+OBJS_MAIN		=	$(addprefix $(OBJS_DIR)/, $(MAIN_C:.c=.o))
+OBJS_MAIN_EXEC	=	$(addprefix $(OBJS_DIR)/, $(EXEC_MAIN_C:.c=.o))
+OBJS_MAIN_PARSE	=	$(addprefix $(OBJS_DIR)/, $(PARSE_MAIN_C:.c=.o))
 
 # -->┊( RULES )
 all: $(NAME)
@@ -51,7 +57,13 @@ $(NAME): $(OBJS_MAIN) $(OBJS) $(LIBFT)
 	@$(CC) $(CFLAGS) $(OBJS_MAIN) $(OBJS) $(LIBFT) -o $(NAME)
 	$(M_DONE)
 
-$(OBJS_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJS_DIR)
+$(OBJS_DIR)/%.o: $(SRC_DIR)/$(MINISHELL_DIR)/%.c | $(OBJS_DIR)
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJS_DIR)/%.o: $(SRC_DIR)/$(EXEC_DIR)/%.c | $(OBJS_DIR)
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJS_DIR)/%.o: $(SRC_DIR)/$(PARSE_DIR)/%.c | $(OBJS_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJS_DIR):
