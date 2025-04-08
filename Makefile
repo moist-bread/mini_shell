@@ -6,7 +6,7 @@
 #    By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 15:43:01 by andcarva          #+#    #+#              #
-#    Updated: 2025/04/07 19:08:37 by andcarva         ###   ########.fr        #
+#    Updated: 2025/04/08 12:14:12 by andcarva         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -97,6 +97,7 @@ fclean: clean
 	
 re: fclean all
 
+rp: fclean parse
 
 .PHONY: all clean fclean re bonus exe rp
 
