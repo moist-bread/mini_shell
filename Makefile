@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+         #
+#    By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 15:43:01 by andcarva          #+#    #+#              #
-#    Updated: 2025/04/07 18:29:17 by andcarva         ###   ########.fr        #
+#    Updated: 2025/04/08 12:25:35 by rduro-pe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ LIBFT	=	./Inc/Libft/libft.a
 # -->┊( COMMANDS AND FLAGS )
 CC		=	cc
 CFLAGS	=	-Wall -Wextra -Werror -g
+RL		=	-lreadline
 
 # -->┊( DIRECTORIES )
 SRC_DIR			=	Src
@@ -61,7 +62,7 @@ $(OBJS_DIR)/%.o: $(SRC_DIR)/$(MINISHELL_DIR)/%.c | $(OBJS_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJS_DIR)/%.o: $(SRC_DIR)/$(EXEC_DIR)/%.c | $(OBJS_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(RL) -c $< -o $@
 
 $(OBJS_DIR)/%.o: $(SRC_DIR)/$(PARSE_DIR)/%.c | $(OBJS_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
