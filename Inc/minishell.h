@@ -6,12 +6,37 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 15:22:02 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/04/07 18:28:38 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:42:51 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+// NOTES: ANDRE
+
+// char *input = "< infile cat | cat | "ls -l" > out"; 
+// cracked slpit returns t_node just for basic token and sep is space.
+// Nodes:
+// 1 - "<"; 2 - "infile"; 3 - "cat"; 4 - "|"; 5 - "cat"; etc; 
+// funcs that check the new list of tokens.
+// Funcs:
+// Diverse check enquanto corro a lista the tokens;
+// Assign types to the tokens;
+// Func That will create the tree for varios Casos;
+
+// -------------------------------------------------------------------------------------------------|
+
+// First pipe initilize pipe data and put number of cmds.
+// Other pipes just the type and the correspondant left and right nodes;
+// If Pipe, Left always cmds;
+// If Pipe, Right next Operator or The final cmds;
+// If Cmd, Left Redir, Right Args "Flags e afins" 
+// If Redir, Left Redir, cont the file name or LIMITER, 
+// Consult on the .h for the Types of Redir;
+// Check with rackel if is Build it for the correct Type;
+
+// -------------------------------------------------------------------------------------------------|
 
 // LIBS
 # include "Libft/libft.h"
@@ -88,6 +113,7 @@ typedef struct s_token
 	t_node_type			type;
 	char				*cont;
 	struct s_token		*next;
+	struct s_token		*prev;
 }						t_token;
 
 /// @brief Place where the content of t_node_type is stored
