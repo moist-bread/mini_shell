@@ -3,5 +3,5 @@
 *.out
 *.o
 *.a
-/obj
+/Objs
 minishell

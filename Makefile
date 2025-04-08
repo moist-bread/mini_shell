@@ -6,7 +6,7 @@
 #    By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 15:43:01 by andcarva          #+#    #+#              #
-#    Updated: 2025/04/08 12:14:12 by andcarva         ###   ########.fr        #
+#    Updated: 2025/04/08 15:58:45 by andcarva         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,23 +29,17 @@ PARSE_DIR		=	Parse
 
 # -->┊( SOURCES AND OBJS )
 MAIN_C			=	minishell_main.c
+
 EXEC_MAIN_C		=	exec_main.c
+
 PARSE_MAIN_C	=	parse_main.c
+PARSE_FILES_C	= 	tokenization_utils.c tokenization.c
 
 MAIN		=	$(addprefix	$(MINISHELL_DIR)/, $(MAIN_C))
 EXEC_MAIN	=	$(addprefix	$(EXEC_DIR)/, $(EXEC_MAIN_C))
 PARSE_MAIN	=	$(addprefix	$(PARSE_DIR)/, $(PARSE_MAIN_C))
 
-SRC_MINISHELL_FILES	=	$(addprefix	$(MINISHELL_DIR)/, )
-SRC_EXEC_FILES		=	$(addprefix	$(EXEC_DIR)/, )
-SRC_PARSE_FILES		=	$(addprefix	$(PARSE_DIR)/, )
-
-SRC				=	$(addprefix $(SRC_DIR)/, $(SRC_EXEC_FILES) $(SRC_PARSE_FILES) $(SRC_MINISHELL_FILES))
-SRC_MAIN		=	$(addprefix $(SRC_DIR)/, $(MAIN))
-SRC_MAIN_EXEC	=	$(addprefix $(SRC_DIR)/, $(EXEC_MAIN))
-SRC_MAIN_PARSE	=	$(addprefix $(SRC_DIR)/, $(PARSE_MAIN))
-
-OBJS			=	$(addprefix $(OBJS_DIR)/, $(SRC:.c=.o))
+OBJS			=	$(addprefix $(OBJS_DIR)/, $(PARSE_FILES_C:.c=.o))
 OBJS_MAIN		=	$(addprefix $(OBJS_DIR)/, $(MAIN_C:.c=.o))
 OBJS_MAIN_EXEC	=	$(addprefix $(OBJS_DIR)/, $(EXEC_MAIN_C:.c=.o))
 OBJS_MAIN_PARSE	=	$(addprefix $(OBJS_DIR)/, $(PARSE_MAIN_C:.c=.o))
