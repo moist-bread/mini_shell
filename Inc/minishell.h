@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 15:22:02 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/04/08 16:42:51 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/04/09 11:37:08 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ typedef struct s_minishell
 // (to be determined) functions without a place yet
 
 // PARSING
-// put parsing prototypes here
+char	**ft_split_mini(char const *s, char c);
 
 // EXECUTION
 // put execution prototypes here
