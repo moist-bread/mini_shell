@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 15:55:58 by andcarva          #+#    #+#             */
-/*   Updated: 2025/04/16 17:44:12 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/04/16 17:46:37 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,6 +205,41 @@ void redir_handler(t_minishell minishell, t_tree_node *cmd_node, int *in, int *o
 		*out = open(cmd_node->left->cont.file, O_RDWR | O_TRUNC | O_CREAT, 0644);
 	}
 	else if (cmd_node->left->type == REDIR_OUT_APPEND) // APPEND OUT >>
+	{
+		if (*out > 2)
+			close(*out);	
+		*out = open(cmd_node->left->cont.file, O_RDWR | O_APPEND | O_CREAT, 0644);
+	}
+	if (*in == -1 || *out == -1) // NO MORE REDIRS ARE HANDLED and cmd doesnt execute?
+		pipex_clean_up(); // write bash: cmd_node->left->cont.file: perror
+	if (cmd_node->left->left) // more redir
+		redir_handler(minishell, cmd_node->left, in, out);	
+}
+
+int	here_doc_redir(char *limiter)
+{
+	int here_pipe[2];
+	char *line;
+	
+	if(pipe(here_pipe) == -1)
+		; // abort
+	while (1)
+	{
+		line = readline("> ");
+		if (line)
+		{
+			if (!ft_strncmp(line, limiter, ft_strlen(limiter)))
+				break ;
+			ft_putstr_fd(line, here_pipe[1]);
+			free(line);
+		}
+		else
+			break; // CTRL D CASE
+	}
+	if (line)
+		free(line);
+	close(here_pipe[1]);
+	return (here_pipe[0]);
 	{
 		if (*out > 2)
 			close(*out);	
