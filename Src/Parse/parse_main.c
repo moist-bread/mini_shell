@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 17:09:32 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/04/08 12:57:17 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/04/09 17:04:39 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,14 @@
 
 int	main(int ac, char **av, char **env)
 {
-	char	*input;
+	char	*input = NULL;
 	(void)ac;
 	(void)av;
 	(void)env;
 	printf(YEL "Parse Main !\n" DEF);
 	while(1)
 	{
-		input = readline("minishell > ");
-		if (!input)
-		{
-			free(input);
-			exit(0);
-		}
-		add_history(input);
-		if (ft_strncmp(input, "exit", 4) == 0)
-			exit (0);
+		readinput(input);
 		free(input);
 	}
 	return (0);
