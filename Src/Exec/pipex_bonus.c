@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 15:55:58 by andcarva          #+#    #+#             */
-/*   Updated: 2025/04/16 17:51:34 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/04/16 17:51:57 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ typedef enum s_pipe_ms
 }		t_pipe_ms;
 
 void	pipex_proc(t_minishell minishell, t_tree_node *tree_head,
-		t_pipe_data *pipex, int idx);
+			t_pipe_data *pipex, int idx);
 
 int	main(int ac, char **av, char **env)
 {
@@ -57,20 +57,20 @@ void	pipex_proc(t_minishell minishell, t_tree_node *tree_head,
 	pipex_clean_up();
 }
 
-int	execute_pipex_cmd(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data *pipex, int idx)
+int	execute_pipex_cmd(t_minishell minishell, t_tree_node *cmd_node,
+		t_pipe_data *pipex, int idx)
 {
-	// EXECUTE THE COMMAND
-	
-	// step 1: check redir and open needed --
 	int	redir_fd[2];
-	ft_bzero(redir_fd, 2);
-	redir_handler(minishell, cmd_node, &redir_fd[0], &redir_fd[1]);	
-	// --
-	
-	// step 2: create pipe and assign fds --
-	assign_pipe_fds(minishell, pipex, redir_fd, idx); // needs to know if its the last cmd
-	// --
 
+	// EXECUTE THE COMMAND
+	// step 1: check redir and open needed --
+	ft_bzero(redir_fd, 2);
+	redir_handler(minishell, cmd_node, &redir_fd[0], &redir_fd[1]);
+	// --
+	// step 2: create pipe and assign fds --
+	assign_pipe_fds(minishell, pipex, redir_fd, idx);
+		// needs to know if its the last cmd
+	// --
 	// step 3: fork, parse, dup execute --
 	pipex->pid[idx] = fork();
 	if (pipex->pid[idx] < 0)
@@ -78,28 +78,27 @@ int	execute_pipex_cmd(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data 
 	if (pipex->pid[idx] == 0)
 		child_parse_and_exe(minishell, cmd_node, pipex, idx);
 	// --
-	
 	// step 4: parent close what needs to be closed --
 	if (pipex->cur_pipe[1] > 2)
 		close(pipex->cur_pipe[1]);
 	// --
 }
 
-void child_parse_and_exe(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data *pipex, int idx)
+void	child_parse_and_exe(t_minishell minishell, t_tree_node *cmd_node,
+		t_pipe_data *pipex, int idx)
 {
 	// cmd parse --
 	if (cmd_node->right)
-		pipex->cmd = matrix_add_front(cmd_node->cont.cmd, cmd_node->right->cont.args);
+		pipex->cmd = matrix_add_front(cmd_node->cont.cmd,
+				cmd_node->right->cont.args);
 	else
 		pipex->cmd = matrix_add_front(cmd_node->cont.cmd, NULL);
-	if(!pipex->cmd)
+	if (!pipex->cmd)
 		pipex_clean_up(); // fail fork abort
-	
 	// path parse --
 	pipex->path = get_path(pipex->cmd[0], pipex->env);
 	if (!pipex->path)
-			pipex_clean_up(); // fail alloc abort
-			
+		pipex_clean_up(); // fail alloc abort
 	// dupping --
 	if (pipex->next_pipe[0] > 2)
 		close(pipex->next_pipe[0]);
@@ -109,7 +108,6 @@ void child_parse_and_exe(t_minishell minishell, t_tree_node *cmd_node, t_pipe_da
 	if (pipex->cur_pipe[1] > 2)
 		dup2(pipex->cur_pipe[1], STDOUT_FILENO);
 	master_close();
-	
 	// executing --
 	if (execve(pipex->path, pipex->cmd, pipex->env) == -1)
 		pipex_clean_up(); // fail fork abort
@@ -154,19 +152,21 @@ char	*get_path(char *cmds, char **env)
 	return (free_split(path), ft_strdup(cmds));
 }
 
-void assign_pipe_fds(t_minishell minishell, t_pipe_data *pipex, int *redir_fd, int idx)
+void	assign_pipe_fds(t_minishell minishell, t_pipe_data *pipex,
+		int *redir_fd, int idx)
 {
-	int new_pipe[2];
-	
+	int	new_pipe[2];
+
 	if (pipex->cur_pipe[0] > 2)
-		close (pipex->cur_pipe[0]);
+		close(pipex->cur_pipe[0]);
 	if (redir_fd[0] > 2) // in redir
 	{
 		pipex->cur_pipe[0] = redir_fd[0];
 		if (pipex->next_pipe[0] > 2) // possible problem
 			close(pipex->next_pipe[0]);
 	}
-	else // no redir in, input from pipe/stdin if prev cmd was redir out or cur is first
+	else // no redir in,
+		input from pipe/stdin if prev cmd was redir out or cur is first
 	{
 		pipex->cur_pipe[0] = pipex->next_pipe[0];
 		pipex->next_pipe[0] = 0;
@@ -182,46 +182,52 @@ void assign_pipe_fds(t_minishell minishell, t_pipe_data *pipex, int *redir_fd, i
 	}
 }
 
-void redir_handler(t_minishell minishell, t_tree_node *cmd_node, int *in, int *out)
+void	redir_handler(t_minishell minishell, t_tree_node *cmd_node, int *in,
+		int *out)
 {
 	if (!cmd_node->left) // NO REDIR
-		return ;	
+		return ;
 	else if (cmd_node->left->type == REDIR_IN) // IN <
 	{
 		if (*in > 2)
-			close(*in);	
+			close(*in);
 		*in = open(cmd_node->left->cont.file, O_RDONLY);
 	}
 	else if (cmd_node->left->type == REDIR_HERE_DOC) // HERE_DOC IN <<
 	{
 		if (*in > 2)
 			close(*in);
-		*in = here_doc_redir(cmd_node->left->cont.file); // do it directly onto a pipe write end
+		*in = here_doc_redir(cmd_node->left->cont.file);
+			// do it directly onto a pipe write end
 	}
 	else if (cmd_node->left->type == REDIR_OUT) // OUT >
 	{
 		if (*out > 2)
-			close(*out);	
-		*out = open(cmd_node->left->cont.file, O_RDWR | O_TRUNC | O_CREAT, 0644);
+			close(*out);
+		*out = open(cmd_node->left->cont.file, O_RDWR | O_TRUNC | O_CREAT,
+				0644);
 	}
 	else if (cmd_node->left->type == REDIR_OUT_APPEND) // APPEND OUT >>
 	{
 		if (*out > 2)
-			close(*out);	
-		*out = open(cmd_node->left->cont.file, O_RDWR | O_APPEND | O_CREAT, 0644);
+			close(*out);
+		*out = open(cmd_node->left->cont.file, O_RDWR | O_APPEND | O_CREAT,
+				0644);
 	}
-	if (*in == -1 || *out == -1) // NO MORE REDIRS ARE HANDLED and cmd doesnt execute?
-		pipex_clean_up(); // write bash: cmd_node->left->cont.file: perror
-	if (cmd_node->left->left) // more redir
-		redir_handler(minishell, cmd_node->left, in, out);	
+	if (*in == -1 || *out == -1)
+		// NO MORE REDIRS ARE HANDLED and cmd doesnt execute?
+		pipex_clean_up();       
+			// write bash: cmd_node->left->cont.file: perror
+	if (cmd_node->left->left)    // more redir
+		redir_handler(minishell, cmd_node->left, in, out);
 }
 
 int	here_doc_redir(char *limiter)
 {
-	int here_pipe[2];
-	char *line;
-	
-	if(pipe(here_pipe) == -1)
+	int		here_pipe[2];
+	char	*line;
+
+	if (pipe(here_pipe) == -1)
 		; // abort
 	while (1)
 	{
@@ -234,7 +240,7 @@ int	here_doc_redir(char *limiter)
 			free(line);
 		}
 		else
-			break; // CTRL D CASE
+			break ; // CTRL D CASE
 	}
 	if (line)
 		free(line);
@@ -242,21 +248,24 @@ int	here_doc_redir(char *limiter)
 	return (here_pipe[0]);
 	{
 		if (*out > 2)
-			close(*out);	
-		*out = open(cmd_node->left->cont.file, O_RDWR | O_APPEND | O_CREAT, 0644);
+			close(*out);
+		*out = open(cmd_node->left->cont.file, O_RDWR | O_APPEND | O_CREAT,
+				0644);
 	}
-	if (*in == -1 || *out == -1) // NO MORE REDIRS ARE HANDLED and cmd doesnt execute?
-		pipex_clean_up(); // write bash: cmd_node->left->cont.file: perror
-	if (cmd_node->left->left) // more redir
-		redir_handler(minishell, cmd_node->left, in, out);	
+	if (*in == -1 || *out == -1)
+		// NO MORE REDIRS ARE HANDLED and cmd doesnt execute?
+		pipex_clean_up();       
+			// write bash: cmd_node->left->cont.file: perror
+	if (cmd_node->left->left)    // more redir
+		redir_handler(minishell, cmd_node->left, in, out);
 }
 
 int	here_doc_redir(char *limiter)
 {
-	int here_pipe[2];
-	char *line;
-	
-	if(pipe(here_pipe) == -1)
+	int		here_pipe[2];
+	char	*line;
+
+	if (pipe(here_pipe) == -1)
 		; // abort
 	while (1)
 	{
@@ -269,7 +278,7 @@ int	here_doc_redir(char *limiter)
 			free(line);
 		}
 		else
-			break; // CTRL D CASE
+			break ; // CTRL D CASE
 	}
 	if (line)
 		free(line);
