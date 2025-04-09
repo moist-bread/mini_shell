@@ -54,8 +54,7 @@ void	check_cmd_or_arg(t_token *token)
 		&& token->type != REDIR_OUT && token->type != REDIR_HERE_DOC && token->type != REDIR_OUT_APPEND)
 		token->type = CMD;
 	if (token->type == PIPE)
-		token->next->type = CMD;
-	 
+		token->next->type = CMD;	 
 }
 
 void	assign_name(int type)
