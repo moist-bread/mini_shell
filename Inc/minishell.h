@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 15:22:02 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/04/09 18:02:50 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/04/09 18:17:37 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,8 @@ void	assign_type_token(t_token *token);
 void	assign_name(int type);
 void	check_types(t_token *token);
 void	checks_built_in(t_token *token);
-
+void	check_cmd_or_arg(t_token *token);
+		
 // EXECUTION
 // put execution prototypes here
 

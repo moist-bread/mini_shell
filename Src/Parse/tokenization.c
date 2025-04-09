@@ -51,6 +51,7 @@ void	assign_type_token(t_token *token)
 	{
 		checks_built_in(temp);
 		check_types(temp);
+		check_cmd_or_arg(temp);
 		temp = temp->next;
 	}
 }

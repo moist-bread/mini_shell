@@ -34,10 +34,29 @@ void	check_types(t_token *token)
 		token->type = REDIR_OUT_APPEND;
 }
 
-// void	check_cmd_or_arg(t_token *token)
-// {
-// 	if ()
-// }
+void	check_cmd_or_arg(t_token *token)
+{
+	// if(token->type == PIPE)
+	// 	token->next->type = CMD;
+	// else if (token->type == REDIR_IN || token->type == REDIR_OUT \
+	// 	 || token->type == REDIR_HERE_DOC || token->type == REDIR_OUT_APPEND)
+	// {
+	// 	if (token->next->type != ARG)
+	// 		token->next->type = CMD;
+	// 	else if (token->prev->type != BUILT_IN)
+	// 		token->prev->type = CMD;
+	// 	else
+	// 		token->next->type = ARG;
+	// }
+	// else if ()
+
+	if (token->prev == NULL && token->type != BUILT_IN && token->type != REDIR_IN\
+		&& token->type != REDIR_OUT && token->type != REDIR_HERE_DOC && token->type != REDIR_OUT_APPEND)
+		token->type = CMD;
+	if (token->type == PIPE)
+		token->next->type = CMD;
+	 
+}
 
 void	assign_name(int type)
 {
