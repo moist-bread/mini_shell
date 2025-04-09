@@ -16,8 +16,8 @@ void	tokenadd_back(t_token **tklst, t_token *newtk)
 	while (temptk->next)
 		temptk = temptk->next;
 	temptk->next = newtk;
-	newtk->prev = temptk;
 	newtk->next = NULL;
+	newtk->prev = temptk;
 }
 
 void	tokenadd_front(t_token **tklst, t_token *newtk)
@@ -32,7 +32,7 @@ void	tokenadd_front(t_token **tklst, t_token *newtk)
 
 }
 
-t_token	*newtoken(char *cont, t_node_type type)
+t_token	*newtoken(char *cont)
 {
 	t_token	*newtk;
 
@@ -40,9 +40,29 @@ t_token	*newtoken(char *cont, t_node_type type)
 	if (!newtk)
 		return (NULL);
 	newtk->cont = cont;
-	newtk->type = type;
 	newtk->next = NULL;
 	newtk->prev = NULL;
 	return (newtk);
+}
+
+void	print_tokens(t_token *tokens)
+{
+	t_token	*curr;
+	int		i;
+
+	if (!tokens)
+		return ;
+	curr = tokens;
+	i = 0;
+	while (curr)
+	{
+		printf("Token[%d]: %s", i, curr->cont);
+		printf("\t");
+		assign_name(curr->type);
+		printf("\t");
+		printf("ID: %u\n", curr->type);
+		curr = curr->next;
+		i++;
+	}
 }
 

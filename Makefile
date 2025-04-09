@@ -6,7 +6,7 @@
 #    By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 15:43:01 by andcarva          #+#    #+#              #
-#    Updated: 2025/04/09 12:39:46 by andcarva         ###   ########.fr        #
+#    Updated: 2025/04/09 17:20:58 by andcarva         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ MAIN_C			=	minishell_main.c
 EXEC_MAIN_C		=	exec_main.c
 
 PARSE_MAIN_C	=	parse_main.c
-PARSE_FILES_C	= 	tokenization_utils.c tokenization.c
+PARSE_FILES_C	= 	tokenization_utils.c tokenization.c checks.c
 
 MAIN		=	$(addprefix	$(MINISHELL_DIR)/, $(MAIN_C))
 EXEC_MAIN	=	$(addprefix	$(EXEC_DIR)/, $(EXEC_MAIN_C))
