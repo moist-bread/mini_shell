@@ -2,6 +2,8 @@
 
 #include "../../Inc/minishell.h"
 
+/// @brief Reads the input, adds a history, places a node in a list, assigns a type and prints
+/// @param input The string received from the Stdout
 void	readinput(char	*input)
 {
 	t_token *token;
@@ -22,6 +24,10 @@ void	readinput(char	*input)
 	print_tokens(token);
 }
 
+/// @brief Places a node in a list
+/// @param input String received from the Stdout 
+/// @param head Beggining of the list
+/// @return The head of the list
 t_token	*place_token(char *input, t_token *head)
 {
 	t_token	*newtk;
@@ -36,10 +42,11 @@ t_token	*place_token(char *input, t_token *head)
 		newtk = newtoken(tokens[i]);
 		tokenadd_back(&head, newtk);
 	}
-	// print_tokens(head);
 	return (head);
 }
 
+/// @brief Assigns a Type to the Node
+/// @param token Node of a list 
 void	assign_type_token(t_token *token)
 {
 	t_token	*temp;

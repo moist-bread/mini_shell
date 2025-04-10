@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 15:28:57 by andcarva          #+#    #+#             */
-/*   Updated: 2025/04/03 15:09:19 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/04/10 18:56:29 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 	return (len);
 } */
 
-char	*ft_strstr(const char *ptr, int c)
+char	*ft_strrstr(const char *ptr, int c)
 {
 	char	*p;
 	int		i;

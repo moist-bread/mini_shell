@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 15:22:02 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/04/09 18:17:37 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/04/10 18:53:47 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 // 1 - "<"; 2 - "infile"; 3 - "cat"; 4 - "|"; 5 - "cat"; etc; 
 // funcs that check the new list of tokens.
 // Funcs:
+// Check Pipes and redir for spaces, if they dont have it put space after and before
 // Diverse check enquanto corro a lista the tokens;
 // Assign types to the tokens;
 // Func That will create the tree for varios Casos;
@@ -35,6 +36,12 @@
 // If Redir, Left Redir, cont the file name or LIMITER, 
 // Consult on the .h for the Types of Redir;
 // Check with rackel if is Build it for the correct Type;
+
+// -------------------------------------------------------------------------------------------------|
+
+// CHECKS ERROR
+
+// Check what is after here_doc, strncmp, if for redirs ou pipe Error the syntax
 
 // -------------------------------------------------------------------------------------------------|
 
@@ -90,6 +97,7 @@ typedef struct s_pipe_data
 /// @param PIPE |
 /// @param REDIR_IN <
 /// @param REDIR_HERE_DOC <<
+/// @param LIM Arg after here_doc
 /// @param REDIR_OUT >
 /// @param REDIR_OUT_APPEND >>
 /// @param BUILT_IN echo cd pwd export unset env exit
@@ -100,6 +108,7 @@ typedef enum s_node_type
 	PIPE,
 	REDIR_IN,
 	REDIR_HERE_DOC,
+	LIM,
 	REDIR_OUT,
 	REDIR_OUT_APPEND,
 	BUILT_IN,
@@ -161,6 +170,7 @@ typedef struct s_minishell
 // (to be determined) functions without a place yet
 
 // PARSING
+
 void	tokenadd_back(t_token **tklst, t_token *newtk);
 void	tokenadd_front(t_token **tklst, t_token *newtk);
 t_token	*newtoken(char *cont);
@@ -172,7 +182,12 @@ void	assign_name(int type);
 void	check_types(t_token *token);
 void	checks_built_in(t_token *token);
 void	check_cmd_or_arg(t_token *token);
-		
+// char	**cracked_split(char const *s, char c);
+// void	working_quote(char const *s, int *len, char c);
+// char	*extract_single_quote(const char *s, int len);
+// int		handle_single_quote(const char **s);
+
+
 // EXECUTION
 // put execution prototypes here
 
