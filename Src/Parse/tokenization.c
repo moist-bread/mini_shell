@@ -1,5 +1,4 @@
 
-
 #include "../../Inc/minishell.h"
 
 /// @brief Reads the input, adds a history, places a node in a list, assigns a type and prints

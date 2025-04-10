@@ -181,6 +181,10 @@ void	check_cmd_or_arg(t_token *token);
 
 // EXECUTION
 // put execution prototypes here
+char	**matrix_add_front(char *add, char **original);
+size_t	ft_matrixlen(char **matrix);
+char	**matrix_dup_char(char **original_matrix);
+void	free_matrix(void **matrix, int max);
 
 // FILE NAME IN ALL CAPS
 // functions in the file
