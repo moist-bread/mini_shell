@@ -1,5 +1,4 @@
 
-
 #include "../../Inc/minishell.h"
 
 void	readinput(char	*input)
