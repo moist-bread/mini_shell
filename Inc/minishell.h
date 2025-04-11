@@ -177,9 +177,15 @@ void	check_cmd_or_arg(t_token *token);
 // char	*extract_single_quote(const char *s, int len);
 // int		handle_single_quote(const char **s);
 
+// TREE UTILS
+
+t_tree_node	*newtreenode(t_node_cont cont);
 
 // EXECUTION
 // put execution prototypes here
+
+// MATRIX UTILS
+
 char	**matrix_add_front(char *add, char **original);
 size_t	ft_matrixlen(char **matrix);
 char	**matrix_dup_char(char **original_matrix);
