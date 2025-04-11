@@ -13,4 +13,5 @@ t_tree_node	*newtreenode(t_node_cont cont)
 	newnode->prev = NULL;
 	newnode->left = NULL;
 	newnode->right = NULL;
+	return (newnode);
 }
