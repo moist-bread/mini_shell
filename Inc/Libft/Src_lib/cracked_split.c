@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 12:38:09 by andcarva          #+#    #+#             */
-/*   Updated: 2025/04/09 12:45:15 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/04/10 18:28:24 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,27 +43,24 @@ static int	count_str(char const *s, char c)
 
 static void	working_quote(char const *s, int *len, char c)
 {
-	char	quote;
+    char	quote;
+
     *len = 0;
-    while (s[*len])
+    while (s[*len] && s[*len] == c)
+        (*len)++;
+    if (s[*len] && (s[*len] == '\'' || s[*len] == '\"'))
     {
-        while (s[*len] && s[*len] == c)
+        quote = s[(*len)++];
+        while (s[*len] && s[*len] != quote)
             (*len)++;
-        if (s[*len] && (s[*len] == '\'' || s[*len] == '\"'))
-        {
-            quote = s[(*len)++];
-            while (s[*len] && s[*len] != quote)
-                (*len)++;
-            while (s[*len] == quote)
-                (*len)++;
-        }
-        else
-        {
-            while (s[*len] && s[*len] != c && s[*len] != '\'' && s[*len] != '\"')
-                (*len)++;
-        }
-        break ;
+        if (s[*len] == quote)
+            (*len)++;
     }
+    else
+	{	
+		while (s[*len] && s[*len] != c && s[*len] != '\'' && s[*len] != '\"')
+			(*len)++;
+	}
 }
 
 static char	*get_word(char const *s, char c)
@@ -73,11 +70,6 @@ static char	*get_word(char const *s, char c)
 
     len = 0;
     working_quote(s, &len, c);
-    if (s[0] == '\'' || s[0] == '\"')
-    {
-        s++;
-        len -= 2;
-    }
     new_word = malloc(sizeof(char) * (len + 1));
     if (!new_word)
         return (NULL);
