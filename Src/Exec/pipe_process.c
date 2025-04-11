@@ -1,0 +1,72 @@
+#include "../../Inc/pipex.h"
+#include "../../Inc/minishell.h"
+
+void	pipex_process(t_minishell minishell, t_tree_node *tree_head,
+		t_pipe_data *pipex, int idx)
+{	
+	int id;
+
+	id = fork();
+	if (id < 0)
+		pipex_clean_up(minishell, 1); // fail fork abort WITHOUT EXIT
+	if (id == 0)
+	{
+		// duplicate but with built in or add to the if
+		if (tree_head->left && tree_head->left->type == CMD)
+			execute_pipex_cmd(minishell, tree_head->left, pipex, idx++);
+		if (tree_head->right && tree_head->right->type == CMD)
+			execute_pipex_cmd(minishell, tree_head->right, pipex, idx++);
+		else if (tree_head->right && tree_head->right->type == PIPE)
+			pipex_process(minishell, tree_head->right, pipex, idx);
+		multi_proc_wait(pipex, &minishell.exit_status);
+		pipex_clean_up(minishell, 1);
+	}
+	waitpid(id, &minishell.exit_status, 0);
+}
+
+void	execute_pipex_cmd(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data *pipex, int idx)
+{
+	// EXECUTE THE COMMAND
+	
+	// step 1: check redir and open needed --
+	int	redir_fd[2];
+	ft_bzero(redir_fd, 2);
+	redir_handler(minishell, cmd_node, &redir_fd[0], &redir_fd[1]);	
+	// --
+	
+	// step 2: create pipe and assign fds --
+	assign_pipe_fds(minishell, pipex, redir_fd, idx); // needs to know if its the last cmd
+	// --
+
+	// step 3: child pro, parse, dup execute --
+	pipex->pid[idx] = fork();
+	if (pipex->pid[idx] < 0)
+		pipex_clean_up(minishell, 1); // fail fork ABORT
+	if (pipex->pid[idx] == 0)
+		child_parse_and_exe(minishell, cmd_node, pipex, idx);
+	// --
+	
+	// step 4: parent close what needs to be closed --
+	if (pipex->cur_pipe[1] > 2)
+		close(pipex->cur_pipe[1]);
+	// --
+}
+
+void	multi_proc_wait(t_pipe_data *pipex, int *status)
+{
+	int	i;
+	int	exit_status;
+
+	i = -1;
+	*status = 0;
+	while (++i < pipex->cmd_n)
+		waitpid(pipex->pid[i], &exit_status, 0);
+	if (WIFEXITED(exit_status))
+		*status = WEXITSTATUS(exit_status);
+}
+
+void	pipex_clean_up(t_minishell minishell, int status)
+{
+	(void)minishell;
+	exit(status);
+}

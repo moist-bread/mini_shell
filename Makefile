@@ -6,7 +6,7 @@
 #    By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 15:43:01 by andcarva          #+#    #+#              #
-#    Updated: 2025/04/11 16:12:08 by rduro-pe         ###   ########.fr        #
+#    Updated: 2025/04/11 16:14:58 by rduro-pe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ PARSE_DIR		=	Parse
 # -->┊( SOURCES AND OBJS )
 MAIN_C			=	minishell_main.c
 
-EXEC_MAIN_C		=	exec_main.c matrix_utils.c
+EXEC_MAIN_C		=	exec_main.c matrix_utils.c pipe_process.c pipe_redir_handler.c pipe_child_pro.c
 
 PARSE_MAIN_C	=	parse_main.c
 PARSE_FILES_C	= 	tokenization_utils.c tokenization.c checks.c \
