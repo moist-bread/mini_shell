@@ -39,7 +39,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS_MAIN) $(OBJS) $(LIBFT)
 	$(M_COMP)
-	@$(CC) $(CFLAGS) $(OBJS_MAIN) $(OBJS) $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN) $(OBJS) $(LIBFT) -o $(NAME)
 	$(M_DONE)
 
 $(OBJS_DIR)/%.o: $(SRC_DIR)/$(MINISHELL_DIR)/%.c | $(OBJS_DIR)
@@ -64,7 +64,7 @@ exec: $(OBJS_MAIN_EXEC) $(OBJS) $(LIBFT)
 
 parse: $(OBJS_MAIN_PARSE) $(OBJS) $(LIBFT)
 	$(M_COMP_P)
-	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN_PARSE) $(OBJS) $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN_PARSE) $(OBJS) $(LIBFT) $(RL) -o $(NAME)
 	$(M_DONE)
 
 clean:

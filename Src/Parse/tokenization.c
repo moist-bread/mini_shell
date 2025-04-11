@@ -87,11 +87,11 @@ void	assign_type_token(t_token *token)
 /// @return 
 char	*add_spaces(char *input)
 {
-	int		i;
+	// int		i;
 	char	*newinput;
 	int		len;
 
-	i = -1;
+	// i = -1;
 	len = space_length(input);
 	// newinput = calloc(len + ft_strlen(input), sizeof(char));
 	newinput = space_put(input, len);

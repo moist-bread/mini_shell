@@ -3,7 +3,7 @@
 #include "../../Inc/minishell.h"
 
 /// @brief Length of new input
-/// @param input 
+/// @param input The string received from the Stdout
 /// @return length
 int	space_length(char *input)
 {
@@ -33,6 +33,10 @@ int	space_length(char *input)
 	return (spaces);
 }
 
+/// @brief Functions adds a space before and after Pipes and Regirs
+/// @param input The string received from the Stdout
+/// @param len the number of spaces
+/// @return the updated string with spaces
 char	*space_put(char *input, int len)
 {
 	int		i;
@@ -50,21 +54,18 @@ char	*space_put(char *input, int len)
 			while (ft_isprint(input[i]) && input[i] != '\"')
 				dest[j++] = input[i++];
 			if (input[i] == '\"')
-				dest[j++] = input[i++];
+				dest[j] = input[i];
 		}
 		else if (ft_strchr("|<>", input[i]))
 		{
 
 			if (input[i - 1] != ' ' && !ft_strchr("|<>", input[i - 1]))
 				dest[j++] = ' ';
-			if (input[i] == '|' || input[i] == input[i + 1])
+			if (input[i] == input[i + 1])
 				dest[j++] = input[i++];
 			dest[j++] = input[i];
 			if (input[i] != ' ')
 				dest[j] = ' ';
-
-
-
 			// if (input[i - 1] != ' ' && !ft_strchr("|<>", input[i - 1]))
 			// 	dest[j++] = ' ';
 			// dest[j++] = input[i++];
@@ -73,11 +74,8 @@ char	*space_put(char *input, int len)
 		}
 		else
 			dest[j] = input[i];
-		printf("char i: %c, %d\n", input[i - 1], i - 1);
-		printf("char j: %c, %d\n", dest[j - 1], j - 1);
 		j++;
 		i++;
-
 	}
 	dest[j] = '\0';
 	printf("line: %s\n", dest);
