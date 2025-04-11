@@ -23,7 +23,7 @@ MAIN_C			=	minishell_main.c
 EXEC_MAIN_C		=	exec_main.c
 
 PARSE_MAIN_C	=	parse_main.c
-PARSE_FILES_C	= 	tokenization_utils.c tokenization.c checks.c \
+PARSE_FILES_C	= 	tokenization_utils.c tokenization.c checks.c check_utils.c #tree_utils.c
 
 MAIN		=	$(addprefix	$(MINISHELL_DIR)/, $(MAIN_C))
 EXEC_MAIN	=	$(addprefix	$(EXEC_DIR)/, $(EXEC_MAIN_C))
