@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 15:22:02 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/04/10 15:20:14 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/04/11 15:18:00 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,27 @@ char	**matrix_add_front(char *add, char **original);
 size_t	ft_matrixlen(char **matrix);
 char	**matrix_dup_char(char **original_matrix);
 void	free_matrix(void **matrix, int max);
+
+// PIPE PROCESS
+
+void	pipex_process(t_minishell minishell, t_tree_node *tree_head,
+		t_pipe_data *pipex, int idx);
+void	execute_pipex_cmd(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data *pipex, int idx);
+void	multi_proc_wait(t_pipe_data *pipex, int *status);
+void	pipex_clean_up(t_minishell minishell, int status);
+
+// PIPE REDIR HANDLER
+
+void redir_handler(t_minishell minishell, t_tree_node *cmd_node, int *in, int *out);
+int	here_doc_redir(char *limiter);
+void	master_close(void);
+
+// PIPE CHILD PROCESS
+
+void assign_pipe_fds(t_minishell minishell, t_pipe_data *pipex, int *redir_fd, int idx);
+void child_parse_and_exe(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data *pipex, int idx);
+char	*get_path(t_minishell minishell, char *cmds);
+
 
 // FILE NAME IN ALL CAPS
 // functions in the file
