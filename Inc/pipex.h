@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 16:47:11 by andcarva          #+#    #+#             */
-/*   Updated: 2025/04/16 17:50:43 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/04/16 17:54:45 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ void	write_to_pipe(char **av, char **env, t_pipex *pipex);
 void	the_pipe(char **av, char **env, t_pipex *pipex);
 
 // GET FUNC
-char	*get_path(char *cmds, char **env, int i);
 
 // ERROR FUNC
 void	ft_error_file(t_pipex *pipex, char *s);
