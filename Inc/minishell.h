@@ -1,14 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/29 15:22:02 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/04/10 18:53:47 by andcarva         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -174,8 +164,9 @@ typedef struct s_minishell
 void	tokenadd_back(t_token **tklst, t_token *newtk);
 void	tokenadd_front(t_token **tklst, t_token *newtk);
 t_token	*newtoken(char *cont);
-void	readinput(char	*input);
-t_token	*place_token(char *input, t_token *head);
+void	create_tokens(char *input);
+char	*readinput(char	*input);
+void	place_token(char *input, t_token **head);
 void	print_tokens(t_token *tokens);
 void	assign_type_token(t_token *token);
 void	assign_name(int type);

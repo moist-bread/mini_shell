@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 17:09:32 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/04/10 12:59:31 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/04/11 12:52:02 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ int	main(int ac, char **av, char **env)
 	printf(YEL "Parse Main !\n" DEF);
 	while(1)
 	{
-		readinput(input);
+		input = readinput(input);
+		create_tokens(input);
 		free(input);
 	}
 	return (0);
