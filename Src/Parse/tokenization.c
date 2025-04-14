@@ -44,18 +44,12 @@ void	place_token(char *input, t_token **head)
 	t_token	*newtk;
 	char	**tokens;
 	char	*updated_input;
-	// char	**input_matrix;
 	int		i;
 
 	*head = NULL;
+	check_quotes(input);
 	updated_input = add_spaces(input);
-	printf("updated_input:%s\n", updated_input);
 	tokens = cracked_split(updated_input, ' ');
-	// input_matrix = add_spaces(tokens);
-	// free_split(tokens);
-	// i = -1;
-	// // while (tokens[++i])
-	// 	tokens = cracked_split(input_matrix[i], ' ');
 	i = -1;
 	while (tokens[++i])
 	{
@@ -82,19 +76,17 @@ void	assign_type_token(t_token *token)
 	}
 }
 
-/// @brief 
-/// @param input 
-/// @return 
+/// @brief Adds spaces between operaters in the input
+/// @param input String received from the Stdout
+/// @return The new input with the spaces
 char	*add_spaces(char *input)
 {
-	// int		i;
 	char	*newinput;
 	int		len;
 
-	// i = -1;
 	len = space_length(input);
-	// newinput = calloc(len + ft_strlen(input), sizeof(char));
 	newinput = space_put(input, len);
 	printf("spaces: %d\n", len);
+	// printf("new_imput: %s\n", newinput);
 	return (newinput);
 }

@@ -176,6 +176,7 @@ void	check_cmd_or_arg(t_token *token);
 char	*add_spaces(char *input);
 int		space_length(char *input);
 char	*space_put(char *input, int len);
+void	check_quotes(char *input);
 // char	**cracked_split(char const *s, char c);
 // void	working_quote(char const *s, int *len, char c);
 // char	*extract_single_quote(const char *s, int len);
