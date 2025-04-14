@@ -7,6 +7,7 @@ void	pipex_process(t_minishell minishell, t_tree_node *tree_head,
 {	
 	int id;
 
+	ft_printf("\nEntering pipe pro\n");
 	id = fork();
 	if (id < 0)
 		pipex_clean_up(minishell, 1); // fail fork abort WITHOUT EXIT
@@ -21,6 +22,7 @@ void	pipex_process(t_minishell minishell, t_tree_node *tree_head,
 			pipex_process(minishell, tree_head->right, pipex, idx);
 		multi_proc_wait(pipex, &minishell.exit_status);
 		pipex_clean_up(minishell, 1);
+		master_close();
 	}
 	waitpid(id, &minishell.exit_status, 0);
 }
@@ -28,18 +30,25 @@ void	pipex_process(t_minishell minishell, t_tree_node *tree_head,
 void	execute_pipex_cmd(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data *pipex, int idx)
 {
 	// EXECUTE THE COMMAND
+	ft_printf("\nEntering execute pipe cmd\n\n");
 	
 	// step 1: check redir and open needed --
+    printf("step 1 --\n");
+
 	int	redir_fd[2];
-	ft_bzero(redir_fd, 2);
+	// ft_bzero(redir_fd, 2);
+	redir_fd[0] = 0;
+	redir_fd[1] = 1;
 	redir_handler(minishell, cmd_node, &redir_fd[0], &redir_fd[1]);	
 	// --
 	
 	// step 2: create pipe and assign fds --
+    printf("step 2 --\n");
 	assign_pipe_fds(minishell, pipex, redir_fd, idx); // needs to know if its the last cmd
 	// --
 
 	// step 3: child pro, parse, dup execute --
+    printf("step 3 --\n");
 	pipex->pid[idx] = fork();
 	if (pipex->pid[idx] < 0)
 		pipex_clean_up(minishell, 1); // fail fork ABORT
@@ -48,6 +57,7 @@ void	execute_pipex_cmd(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data
 	// --
 	
 	// step 4: parent close what needs to be closed --
+    printf("step 4 --\n");
 	if (pipex->cur_pipe[1] > 2)
 		close(pipex->cur_pipe[1]);
 	// --
@@ -69,5 +79,6 @@ void	multi_proc_wait(t_pipe_data *pipex, int *status)
 void	pipex_clean_up(t_minishell minishell, int status)
 {
 	(void)minishell;
+	free_tree(minishell.tree_head);
 	exit(status);
 }

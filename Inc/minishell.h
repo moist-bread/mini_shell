@@ -63,8 +63,8 @@
 // STRUCTS
 
 /// @param cmd_n Amount of cmds
-/// @param in_pipe Stores
-/// @param out_pipe
+/// @param cur_pipe Stores
+/// @param next_pipe algo
 /// @param pid Stores child process ids
 /// @param cmd Command and its arguments
 /// @param path Path to said command
@@ -211,7 +211,9 @@ void assign_pipe_fds(t_minishell minishell, t_pipe_data *pipex, int *redir_fd, i
 void child_parse_and_exe(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data *pipex, int idx);
 char	*get_path(t_minishell minishell, char *cmds);
 
-
+void	free_tree_node_cont(t_node_cont cont);
+void	free_tree(t_tree_node *tree_head);
+void	tree_cont_init(t_node_cont *cont);
 // FILE NAME IN ALL CAPS
 // functions in the file
 

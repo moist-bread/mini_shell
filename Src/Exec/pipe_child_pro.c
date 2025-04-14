@@ -10,23 +10,32 @@ void assign_pipe_fds(t_minishell minishell, t_pipe_data *pipex, int *redir_fd, i
 		close (pipex->cur_pipe[0]);
 	if (redir_fd[0] > 2) // in redir
 	{
+    	printf("in redir --\n");
 		pipex->cur_pipe[0] = redir_fd[0];
 		if (pipex->next_pipe[0] > 2) // possible problem
 			close(pipex->next_pipe[0]);
 	}
-	else // no redir in, input from pipe/stdin if prev cmd was redir out or cur is first
+	else // no in redir, input from pipe/stdin if prev cmd was redir out or cur is first
 	{
+    	printf("no in redir --\n");
 		pipex->cur_pipe[0] = pipex->next_pipe[0];
-		pipex->next_pipe[0] = 0;
+		// pipex->next_pipe[0] = 0;
 	}
-	if (redir_fd[1] > 2 || idx + 1 < pipex->cmd_n) // out redir or last cmd
-		pipex->cur_pipe[1] = redir_fd[1];
-	else // no redir, not last
+	// am leaving fds open bc of this pipe PLEASE FIGURE IT OUT
+	
+    printf("create pipe --\n"); // standard case
+	if (pipe(new_pipe) == -1)
+		pipex_clean_up(minishell, 1); // pipe didnt create ABORT
+	pipex->cur_pipe[1] = new_pipe[1];
+	pipex->next_pipe[0] = new_pipe[0];
+	if (redir_fd[1] > 2 || idx + 1 == pipex->cmd_n) // out redir or last cmd
 	{
-		if (pipe(new_pipe) == -1)
-			pipex_clean_up(minishell, 1); // pipe didnt create ABORT
-		pipex->cur_pipe[1] = new_pipe[1];
-		pipex->next_pipe[0] = new_pipe[0];
+    	printf("out redir or last cmd --\n");
+		if (pipex->cur_pipe[1] > 2)
+			close (pipex->cur_pipe[1]);
+		if (pipex->next_pipe[0] > 2 && idx + 1 == pipex->cmd_n)
+			close (pipex->next_pipe[0]);
+		pipex->cur_pipe[1] = redir_fd[1];
 	}
 }
 
@@ -58,7 +67,7 @@ void child_parse_and_exe(t_minishell minishell, t_tree_node *cmd_node, t_pipe_da
 	
 	// executing --
 	if (execve(pipex->path, pipex->cmd, pipex->env) == -1)
-		pipex_clean_up(minishell, 1); // fail fork ABORT
+		pipex_clean_up(minishell, 1); // fail execution ABORT
 }
 
 char	*get_path(t_minishell minishell, char *cmds)
