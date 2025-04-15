@@ -30,18 +30,11 @@ int	space_length(char *input)
 		if (input[i] && ft_strchr("|<>", input[i]))
 		{
 			if (i > 0 && input[i - 1] != ' ' && !ft_strchr("|<>", input[i - 1]))
-			{
-				// printf("backspace%c i-1%c\n ", input[i], input[i - 1]);
 				spaces++;
-			}
 			if (input[i] == input[i + 1])
 				i++;
 			if (input[i + 1] && input[i + 1] != ' ')
-			{
-				// printf("frontspace%c\n", input[i]);
 				spaces++;
-			}
-			// printf("I:%c I1:%c\n", input[i],input[i+1]);
 		}
 		if (input[i])
 			i++;
