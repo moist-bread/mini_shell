@@ -83,6 +83,8 @@ re: fclean all
 
 rp: fclean parse
 
+rx: fclean exec
+
 .PHONY: all clean fclean re bonus exe rp
 
 
