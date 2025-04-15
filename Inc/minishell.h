@@ -193,7 +193,9 @@ void	free_matrix(void **matrix, int max);
 
 // PIPE PROCESS
 
-void	pipex_process(t_minishell minishell, t_tree_node *tree_head,
+void	pipex_process(t_minishell *minishell, t_tree_node *tree_head,
+		t_pipe_data *pipex);
+void read_and_exe_pipe_tree(t_minishell minishell, t_tree_node *tree_head,
 		t_pipe_data *pipex, int idx);
 void	execute_pipex_cmd(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data *pipex, int idx);
 void	multi_proc_wait(t_pipe_data *pipex, int *status);
@@ -208,7 +210,7 @@ void	master_close(void);
 // PIPE CHILD PROCESS
 
 void assign_pipe_fds(t_minishell minishell, t_pipe_data *pipex, int *redir_fd, int idx);
-void child_parse_and_exe(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data *pipex, int idx);
+void child_parse_and_exe(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data *pipex);
 char	*get_path(t_minishell minishell, char *cmds);
 
 void	free_tree_node_cont(t_node_cont cont);

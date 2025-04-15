@@ -63,11 +63,13 @@ int	main(int ac, char **av, char **env)
 
 	t_node_cont cont_5;
 	tree_cont_init(&cont_5);
-	cont_5.cmd = ft_strdup("ls");
+	cont_5.cmd = ft_strdup("banana");
 	minis.tree_head->right->right = newtreenode(cont_5);
 	minis.tree_head->right->right->type = CMD;
 
-	pipex_process(minis, minis.tree_head, &minis.tree_head->cont.pipe, 0);
+	pipex_process(&minis, minis.tree_head, &minis.tree_head->cont.pipe);
+	
+	printf("after pipex exit status: %d\n", minis.exit_status);
 	free_tree(minis.tree_head);
 	return (0);
 }
