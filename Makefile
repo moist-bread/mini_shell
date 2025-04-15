@@ -23,7 +23,8 @@ MAIN_C			=	minishell_main.c
 EXEC_MAIN_C		=	exec_main.c
 
 PARSE_MAIN_C	=	parse_main.c
-PARSE_FILES_C	= 	tokenization_utils.c tokenization.c checks.c \
+PARSE_FILES_C	= 	tokenization_utils.c tokenization.c checks.c space_utils.c \
+					check_utils.c types.c
 
 MAIN		=	$(addprefix	$(MINISHELL_DIR)/, $(MAIN_C))
 EXEC_MAIN	=	$(addprefix	$(EXEC_DIR)/, $(EXEC_MAIN_C))
@@ -39,7 +40,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS_MAIN) $(OBJS) $(LIBFT)
 	$(M_COMP)
-	@$(CC) $(CFLAGS) $(OBJS_MAIN) $(OBJS) $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN) $(OBJS) $(LIBFT) -o $(NAME)
 	$(M_DONE)
 
 $(OBJS_DIR)/%.o: $(SRC_DIR)/$(MINISHELL_DIR)/%.c | $(OBJS_DIR)
@@ -64,7 +65,7 @@ exec: $(OBJS_MAIN_EXEC) $(OBJS) $(LIBFT)
 
 parse: $(OBJS_MAIN_PARSE) $(OBJS) $(LIBFT)
 	$(M_COMP_P)
-	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN_PARSE) $(OBJS) $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN_PARSE) $(OBJS) $(LIBFT) $(RL) -o $(NAME)
 	$(M_DONE)
 
 clean:

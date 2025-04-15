@@ -43,10 +43,13 @@ void	place_token(char *input, t_token **head)
 {
 	t_token	*newtk;
 	char	**tokens;
+	char	*updated_input;
 	int		i;
 
 	*head = NULL;
-	tokens = cracked_split(input, ' ');
+	check_quotes(input);
+	updated_input = add_spaces(input);
+	tokens = cracked_split(updated_input, ' ');
 	i = -1;
 	while (tokens[++i])
 	{
@@ -55,20 +58,39 @@ void	place_token(char *input, t_token **head)
 	}
 }
 
-/// @brief Assigns a Type to the Node
-/// @param token Node of a list 
-void	assign_type_token(t_token *token)
+/// @brief Adds spaces between operaters in the input
+/// @param input String received from the Stdout
+/// @return The new input with the spaces
+char	*add_spaces(char *input)
 {
-	t_token	*temp;
+	char	*newinput;
+	int		len;
 
-	if(!token)
+	len = space_length(input);
+	newinput = space_put(input, len);
+	printf("spaces: %d\n", len);
+	return (newinput);
+}
+
+/// @brief Prints the node in order, there type and content
+/// @param tokens The token of the list 
+void	print_tokens(t_token *tokens)
+{
+	t_token	*curr;
+	int		i;
+
+	if (!tokens)
 		return ;
-	temp = token;
-	while (temp)
+	curr = tokens;
+	i = 0;
+	while (curr)
 	{
-		checks_built_in(temp);
-		check_types(temp);
-		check_cmd_or_arg(temp);
-		temp = temp->next;
+		printf("Token[%d]: %s", i, curr->cont);
+		printf("\t");
+		assign_name(curr->type);
+		printf("\t");
+		printf("ID: %u\n", curr->type);
+		curr = curr->next;
+		i++;
 	}
 }

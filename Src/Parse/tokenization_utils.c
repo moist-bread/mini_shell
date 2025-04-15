@@ -54,26 +54,21 @@ t_token	*newtoken(char *cont)
 	return (newtk);
 }
 
-/// @brief Prints the node in order, there type and content
-/// @param tokens The token of the list 
-void	print_tokens(t_token *tokens)
+/// @brief This functions clears the token list
+/// @param token Head node of the list
+void	clear_token_lst(t_token	**token)
 {
-	t_token	*curr;
-	int		i;
+	t_token *current;
 
-	if (!tokens)
-		return ;
-	curr = tokens;
-	i = 0;
-	while (curr)
+	if (!token || !*token)
+		return;
+	current = *token;
+	while (current)
 	{
-		printf("Token[%d]: %s", i, curr->cont);
-		printf("\t");
-		assign_name(curr->type);
-		printf("\t");
-		printf("ID: %u\n", curr->type);
-		curr = curr->next;
-		i++;
+		if (current->cont)
+			free(current->cont);
+		free(current);
+		current = current->next;
 	}
+	*token = NULL;
 }
-
