@@ -76,7 +76,7 @@ void	assigns_cmd_or_arg(t_token *token)
 		|| token->prev->type == REDIR_OUT_APPEND))
 	{
 		token->type = ARG;
-		check_types(token);
+		assigns_types(token);
 	}
 }
 

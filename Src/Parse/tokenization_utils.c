@@ -48,7 +48,7 @@ t_token	*newtoken(char *cont)
 	newtk = ft_calloc(1, sizeof(t_token));
 	if (!newtk)
 		return (NULL);
-	newtk->cont = cont;
+	newtk->cont = ft_strdup(cont);
 	newtk->next = NULL;
 	newtk->prev = NULL;
 	return (newtk);
@@ -56,19 +56,20 @@ t_token	*newtoken(char *cont)
 
 /// @brief This functions clears the token list
 /// @param token Head node of the list
-void	clear_token_lst(t_token	**token)
+void	clear_token_lst(t_token	*token)
 {
 	t_token *current;
+	t_token *next;
 
-	if (!token || !*token)
+	if (!token)
 		return;
-	current = *token;
+	current = token;
 	while (current)
 	{
+		next = current->next;
 		if (current->cont)
 			free(current->cont);
 		free(current);
-		current = current->next;
+		current = next;
 	}
-	*token = NULL;
 }
