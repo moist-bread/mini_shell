@@ -10,8 +10,8 @@ int	main(int ac, char **av, char **env)
 	
 	t_minishell minis;
 	
-	minis.env = env;
-	minis.exit_status = 0;
+	minishell_struct_init(&minis, env);
+	
 	
 	t_node_cont cont_1;
 	tree_cont_init(&cont_1);
@@ -57,8 +57,14 @@ int	main(int ac, char **av, char **env)
 	minis.tree_head->right->right->type = CMD;
 
 	pipex_process(&minis, minis.tree_head, &minis.tree_head->cont.pipe);
-	
 	printf("after pipex exit status: %d\n", minis.exit_status);
-	free_tree(minis.tree_head);
-	return (0);
+	
+	pipex_clean_up(minis, minis.exit_status);
+}
+
+void minishell_struct_init(t_minishell *minis, char **env)
+{
+	minis->tree_head = NULL;
+	minis->env = matrix_dup_char(env);
+	minis->exit_status = 0;
 }

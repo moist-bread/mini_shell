@@ -63,8 +63,8 @@
 // STRUCTS
 
 /// @param cmd_n Amount of cmds
-/// @param cur_pipe Stores
-/// @param next_pipe algo
+/// @param cur_pipe Stores IN fd and OUT fd
+/// @param next_pipe Read end of created pipe
 /// @param pid Stores child process ids
 /// @param cmd Command and its arguments
 /// @param path Path to said command
@@ -73,7 +73,7 @@ typedef struct s_pipe_data
 {
 	int					cmd_n;
 	int					cur_pipe[2];
-	int					next_pipe[2];
+	int					next_pipe;
 	int					*pid;
 	char				**cmd;
 	char				*path;
@@ -117,7 +117,7 @@ typedef struct s_token
 /// @brief Place where the content of t_node_type is stored
 /// @param cmd (char *) Main command to be executed
 /// @param args (char **) Versalite cmd arguments
-/// @param pipe Structure needed for pipe execution
+/// @param pipe (t_pipe_data) Needed for pipe execution
 /// @param file (char *) String for needed Infile/Outfile
 /// @param limiter (char *) Limiter string for here_doc
 typedef struct s_node_cont
@@ -180,9 +180,14 @@ void	check_cmd_or_arg(t_token *token);
 // TREE UTILS
 
 t_tree_node	*newtreenode(t_node_cont cont);
+void		free_tree_node_cont(t_node_cont cont);
+void		free_tree(t_tree_node *tree_head);
+void		tree_cont_init(t_node_cont *cont);
 
 // EXECUTION
 // put execution prototypes here
+
+void	minishell_struct_init(t_minishell *minis, char **env);
 
 // MATRIX UTILS
 
@@ -195,7 +200,7 @@ void	free_matrix(void **matrix, int max);
 
 void	pipex_process(t_minishell *minishell, t_tree_node *tree_head,
 		t_pipe_data *pipex);
-void read_and_exe_pipe_tree(t_minishell minishell, t_tree_node *tree_head,
+void	read_and_exe_pipe_tree(t_minishell minishell, t_tree_node *tree_head,
 		t_pipe_data *pipex, int idx);
 void	execute_pipex_cmd(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data *pipex, int idx);
 void	multi_proc_wait(t_pipe_data *pipex, int *status);
@@ -203,20 +208,15 @@ void	pipex_clean_up(t_minishell minishell, int status);
 
 // PIPE REDIR HANDLER
 
-void redir_handler(t_minishell minishell, t_tree_node *cmd_node, int *in, int *out);
-int	here_doc_redir(char *limiter);
+void	redir_handler(t_minishell minishell, t_tree_node *cmd_node, int *in, int *out);
+int		here_doc_redir(char *limiter);
 void	master_close(void);
 
 // PIPE CHILD PROCESS
 
-void assign_pipe_fds(t_minishell minishell, t_pipe_data *pipex, int *redir_fd, int idx);
-void child_parse_and_exe(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data *pipex);
+void	assign_pipe_fds(t_minishell minishell, t_pipe_data *pipex, int *redir_fd, int idx);
+void	child_parse_and_exe(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data *pipex);
 char	*get_path(t_minishell minishell, char *cmds);
-
-void	free_tree_node_cont(t_node_cont cont);
-void	free_tree(t_tree_node *tree_head);
-void	tree_cont_init(t_node_cont *cont);
-// FILE NAME IN ALL CAPS
-// functions in the file
+char	*get_env(char *search, char **env);
 
 #endif

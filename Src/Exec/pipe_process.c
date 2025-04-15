@@ -31,7 +31,6 @@ void read_and_exe_pipe_tree(t_minishell minishell, t_tree_node *tree_head,
 		read_and_exe_pipe_tree(minishell, tree_head->right, pipex, idx);
 	multi_proc_wait(pipex, &minishell.exit_status);
 	master_close();
-	printf("\nexit status in pipex: %d\n", minishell.exit_status);
 	pipex_clean_up(minishell, minishell.exit_status);
 }
 
@@ -78,13 +77,14 @@ void	multi_proc_wait(t_pipe_data *pipex, int *status)
 	*status = 0;
 	while (++i < pipex->cmd_n)
 		waitpid(pipex->pid[i], &exit_status, 0);
+	printf("exit without conversion: %d\n", exit_status);
 	if (WIFEXITED(exit_status))
 		*status = WEXITSTATUS(exit_status);
 }
 
 void	pipex_clean_up(t_minishell minishell, int status)
 {
-	// add free env
 	free_tree(minishell.tree_head);
+	free_split(minishell.env);
 	exit(status);
 }

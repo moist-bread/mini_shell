@@ -15,15 +15,14 @@ t_tree_node	*newtreenode(t_node_cont cont)
 	return (newnode);
 }
 
-void tree_cont_init(t_node_cont *cont)
+void	tree_cont_init(t_node_cont *cont)
 {
 	cont->cmd = NULL;
 	cont->args = NULL;
 	cont->pipe.cmd_n = 0;
 	cont->pipe.cur_pipe[0] = 0;
 	cont->pipe.cur_pipe[1] = 1;
-	cont->pipe.next_pipe[0] = 0;
-	cont->pipe.next_pipe[1] = 1;
+	cont->pipe.next_pipe = 0;
 	cont->pipe.pid = NULL;
 	cont->pipe.cmd = NULL;
 	cont->pipe.path = NULL;
@@ -48,18 +47,15 @@ void	free_tree_node_cont(t_node_cont cont)
 		free_split(cont.args);
 	if (cont.cmd)
 		free(cont.cmd);
-
 	if (cont.pipe.pid)
 		free(cont.pipe.pid);
 	if (cont.pipe.cmd)
 		free_split(cont.pipe.cmd);
 	if (cont.pipe.path)
 		free(cont.pipe.path);
-	
 	// when the env becomes custom made this will be needed
 	// if (cont.pipe.env)
 	// 	free_split(cont.pipe.env);
-	
 	if (cont.file)
 		free(cont.file);
 	if (cont.limiter)
