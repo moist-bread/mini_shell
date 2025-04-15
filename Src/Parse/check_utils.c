@@ -19,3 +19,11 @@ void	check_quotes(char *input)
 	if (quote % 2 != 0)
 		exit (1);
 }
+
+bool	is_token(t_token *token)
+{
+	if (token->type == PIPE || token->type == REDIR_HERE_DOC || token->type == REDIR_IN \
+	|| token->type == REDIR_OUT || token->type == REDIR_OUT_APPEND)
+		return (true);
+	return (false);
+}
