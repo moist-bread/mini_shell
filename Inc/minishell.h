@@ -169,9 +169,15 @@ void	place_token(char *input, t_token **head);
 void	print_tokens(t_token *tokens);
 void	assign_type_token(t_token *token);
 void	assign_name(int type);
-void	check_types(t_token *token);
-void	checks_built_in(t_token *token);
-void	check_cmd_or_arg(t_token *token);
+void	assigns_types(t_token *token);
+void	assigns_built_in(t_token *token);
+void	assigns_cmd_or_arg(t_token *token);
+char	*add_spaces(char *input);
+int		space_length(char *input);
+char	*space_put(char *input, int len);
+void	check_quotes(char *input);
+void	clear_token_lst(t_token	**token);
+void	ft_error_check(t_token *token);
 // char	**cracked_split(char const *s, char c);
 // void	working_quote(char const *s, int *len, char c);
 // char	*extract_single_quote(const char *s, int len);
@@ -223,4 +229,4 @@ int		error_code_for_exec(t_pipe_data *pipex);
 char	*get_env(char *search, char **env);
 char	**env_add_front(char *add, char **original);
 
-#endif
+#endif //MINISHELL_H
