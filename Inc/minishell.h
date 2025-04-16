@@ -217,6 +217,10 @@ void	master_close(void);
 void	assign_pipe_fds(t_minishell minishell, t_pipe_data *pipex, int *redir_fd, int idx);
 void	child_parse_and_exe(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data *pipex);
 char	*get_path(t_minishell minishell, char *cmds);
+int		error_code_for_exec(t_pipe_data *pipex);
+
+// ENV UTILS
 char	*get_env(char *search, char **env);
+char	**env_add_front(char *add, char **original);
 
 #endif
