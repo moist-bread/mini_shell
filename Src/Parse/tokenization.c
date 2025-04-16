@@ -22,7 +22,7 @@ char	*readinput(char	*input)
 
 /// @brief Creates the list of tokens
 /// @param input The string received from the Stdout
-void	create_tokens(char *input)
+t_token	*create_tokens(char *input)
 {
 	t_token *tokens;
 
@@ -30,8 +30,8 @@ void	create_tokens(char *input)
 	place_token(input, &tokens);
 	assign_type_token(tokens);
 	print_tokens(tokens);
-	// master_check();
-	// return (token);
+	master_check(tokens);
+	return (tokens);
 }
 
 /// @brief Places a node in a list
@@ -41,20 +41,27 @@ void	create_tokens(char *input)
 void	place_token(char *input, t_token **head)
 {
 	t_token	*newtk;
-	char	**tokens;
+	char	**newinput;
+	char	*adjacent;
 	char	*updated_input;
 	int		i;
 
 	*head = NULL;
 	check_quotes(input);
-	updated_input = add_spaces(input);
-	tokens = cracked_split(updated_input, ' ');
-	i = -1;
-	while (tokens[++i])
+	adjacent = merge_adjacent_segments(input);
+	updated_input = add_spaces(adjacent);
+	newinput = cracked_split(updated_input, ' ');
+	printf("new_input: %s\n", updated_input);
+	free(updated_input);
+	free(adjacent);
+	i = 0;
+	while (newinput[i])
 	{
-		newtk = newtoken(tokens[i]);
+		newtk = newtoken(newinput[i]);
 		tokenadd_back(head, newtk);
+		i++;
 	}
+	free_split(newinput);
 }
 
 /// @brief Adds spaces between operaters in the input

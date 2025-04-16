@@ -25,7 +25,9 @@
 // If Redir, Left Redir, cont the file name or LIMITER, 
 // Consult on the .h for the Types of Redir;
 // Check with rackel if is Build it for the correct Type;
-
+// If There Redir, Right is Arg, Check if next after Arg is Redir.
+// If is Redir do the normal, if not check if is Pipe,
+// If is Pipe start over.
 // -------------------------------------------------------------------------------------------------|
 
 // CHECKS ERROR
@@ -163,7 +165,7 @@ typedef struct s_minishell
 void	tokenadd_back(t_token **tklst, t_token *newtk);
 void	tokenadd_front(t_token **tklst, t_token *newtk);
 t_token	*newtoken(char *cont);
-void	create_tokens(char *input);
+t_token	*create_tokens(char *input);
 char	*readinput(char	*input);
 void	place_token(char *input, t_token **head);
 void	print_tokens(t_token *tokens);
@@ -176,8 +178,13 @@ char	*add_spaces(char *input);
 int		space_length(char *input);
 char	*space_put(char *input, int len);
 void	check_quotes(char *input);
-void	clear_token_lst(t_token	**token);
+void	clear_token_lst(t_token	*token);
 void	ft_error_check(t_token *token);
+void	master_check(t_token *token);
+bool	is_token(t_token *token);
+char	*merge_adjacent_segments(char *input);
+void	check_double_pipe(int *j, int *i, char *dest);
+// void	checks_here_doc(t_token	*token);
 // char	**cracked_split(char const *s, char c);
 // void	working_quote(char const *s, int *len, char c);
 // char	*extract_single_quote(const char *s, int len);

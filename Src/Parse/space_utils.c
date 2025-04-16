@@ -31,6 +31,8 @@ int	space_length(char *input)
 		{
 			if (i > 0 && input[i - 1] != ' ' && !ft_strchr("|<>", input[i - 1]))
 				spaces++;
+			if (input[i] == '|' && input[i + 1] == '|')
+				spaces++;
 			if (input[i] == input[i + 1])
 				i++;
 			if (input[i + 1] && input[i + 1] != ' ')
@@ -50,13 +52,32 @@ int	space_length(char *input)
 static	void	between_quotes(char *input, char *dest, int *i, int *j)
 {
 	char	quote;
+	// char	miniquote;
 
+	// miniquote = '\'';
+	// quote = '\"';
+	// if (miniquote == input[*i])
+	// {
+	// 	dest[(*j)++] = input[(*i)++];
+	// 	while (ft_isprint(input[*i]) && input[*i] != miniquote)
+	// 		dest[(*j)++] = input[(*i)++];
+	// 	if (input[*i] == miniquote)
+	// 		dest[(*j)++] = input[(*i++)];
+	// }
+	// else if (quote == input[*i])
+	// {
+	// 	dest[(*j)++] = input[(*i)++];
+	// 	while (ft_isprint(input[*i]) && input[*i] != quote)
+	// 		dest[(*j)++] = input[(*i)++];
+	// 	if (input[*i] == quote)
+	// 		dest[(*j)++] = input[(*i++)];
+	// }
 	quote = input[*i];
 	dest[(*j)++] = input[(*i)++];
-    while (ft_isprint(input[*i]) && input[*i] != quote)
-        dest[(*j)++] = input[(*i)++];
-    if (input[*i] == quote)
-        dest[(*j)++] = input[(*i++)];
+	while (ft_isprint(input[*i]) && input[*i] != quote)
+		dest[(*j)++] = input[(*i)++];
+	if (input[*i] == quote)
+		dest[(*j)++] = input[(*i++)];
 }
 
 /// @brief What happens between quotes, in my space_put function
@@ -66,18 +87,16 @@ static	void	between_quotes(char *input, char *dest, int *i, int *j)
 /// @param j increment
 static void	if_operators(char *input, char *dest, int *i, int *j)
 {
-	// if (*i > 0 && input[*i - 1] != ' ' && !ft_strchr("|<>", input[*i - 1]))
-    //     dest[(*j)++] = ' ';
-    // if (input[*i + 1] && input[*i] == input[*i + 1])
-    //     dest[(*j)++] = input[(*i)++];
-    // dest[(*j)++] = input[*i];
-    // if (input[*i + 1] && input[*i + 1] != ' ')
-    //     dest[(*j++)] = ' ';
 	if (*i > 0 && input[*i - 1] != ' ' && !ft_strchr("|<>", input[*i - 1]))
 		dest[(*j)++] = ' ';
-	dest[(*j)++] = input[(*i)++];
-	if (input[*i] && input[*i] == input[*i - 1])
+	if (input[*i] && input[*i] == '|' && input[*i + 1] == '|')
+		check_double_pipe(j, i, dest);
+	else
+	{
 		dest[(*j)++] = input[(*i)++];
+		if (input[*i] && input[*i] == input[*i - 1])
+			dest[(*j)++] = input[(*i)++];
+	}
 	if (input[*i] && input[*i] != ' ')
 		dest[(*j)++] = ' ';
 }
