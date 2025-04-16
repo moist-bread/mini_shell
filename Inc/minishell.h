@@ -33,6 +33,10 @@
 // CHECKS ERROR
 
 // Check what is after here_doc, strncmp, if for redirs ou pipe Error the syntax
+// If there is no space between quotes is considered 1 token:
+// Example: "easd"'O'""
+// Get ridof len in working quotes and do a funciton that gets me the lenght in get word;
+// Implement in split that needs to split spaces and tabs in the same String;
 
 // -------------------------------------------------------------------------------------------------|
 

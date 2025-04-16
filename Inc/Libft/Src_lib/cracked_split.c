@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 12:38:09 by andcarva          #+#    #+#             */
-/*   Updated: 2025/04/14 15:49:39 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/04/16 20:35:30 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,7 @@ static void	working_quote(char const *s, int *len, char c)
 		while (s[*len] && s[*len] != quote)
 			(*len)++;
 		if (s[*len] == quote)
-		{
-			if (*len > start)
 				(*len)++;
-			else
-				*len = start - 1;
-		}
 		else
 			*len = start - 1;
 	}
