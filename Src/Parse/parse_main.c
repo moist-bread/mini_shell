@@ -5,6 +5,8 @@
 int	main(int ac, char **av, char **env)
 {
 	char	*input = NULL;
+	t_token	*tokens;
+
 	(void)ac;
 	(void)av;
 	(void)env;
@@ -12,8 +14,9 @@ int	main(int ac, char **av, char **env)
 	while(1)
 	{
 		input = readinput(input);
-		create_tokens(input);
+		tokens = create_tokens(input);
 		free(input);
+		clear_token_lst(tokens);
 	}
 	return (0);
 }

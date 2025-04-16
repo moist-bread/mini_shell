@@ -7,6 +7,6 @@
 void	ft_error_check(t_token *token)
 {
 	clear_token_lst(token);
-	printf("Error of syntax\n");
+	printf("Syntax error\n");
 	exit(1);
 }

@@ -68,7 +68,7 @@ void	assigns_cmd_or_arg(t_token *token)
 		&& token->type != REDIR_HERE_DOC && token->type != REDIR_OUT_APPEND)
 		token->type = LIM;
 	else if (token->prev && token->prev->type == PIPE && token->type != BUILT_IN && token->type != REDIR_IN \
-		&& token->type != REDIR_OUT && token->type != REDIR_HERE_DOC \
+		&& token->type != REDIR_OUT && token->type != REDIR_HERE_DOC  && token->type != PIPE \
 		&& token->type != REDIR_OUT_APPEND)
 		token->type = CMD;
 	else if (token->prev && (token->prev->type == CMD || token->prev->type == BUILT_IN || token->prev->type == REDIR_IN \
