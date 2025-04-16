@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/10 16:47:11 by andcarva          #+#    #+#             */
-/*   Updated: 2025/04/07 17:23:40 by rduro-pe         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
@@ -70,7 +59,6 @@ void	write_to_pipe(char **av, char **env, t_pipex *pipex);
 void	the_pipe(char **av, char **env, t_pipex *pipex);
 
 // GET FUNC
-char	*get_path(char *cmds, char **env, int i);
 
 // ERROR FUNC
 void	ft_error_file(t_pipex *pipex, char *s);

@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   dif_process_bonus.c                                :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/20 15:47:18 by andcarva          #+#    #+#             */
-/*   Updated: 2025/04/07 14:20:41 by rduro-pe         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../../Inc/pipex.h"
 
@@ -91,18 +80,18 @@ void	loop_pipes(t_pipex_b *pipex_b, char **av, int *i)
 	}
 }
 
-void	exec_func(t_pipex_b *pipex_b, char **av, int i)
-{
-	pipex_b->cmds = ft_split_pipe(av[i], ' ');
-	if (!pipex_b->cmds || !pipex_b->cmds[0])
-		ft_error_file_bonus(pipex_b, "Error Pipex");
-	pipex_b->path = get_path(pipex_b->cmds[0], pipex_b->env, 0);
-	if (!pipex_b->path)
-		ft_error_file_bonus(pipex_b, "Error Pipex");
-	master_close();
-	if (execve(pipex_b->path, pipex_b->cmds, pipex_b->env) == -1)
-		ft_error_execve_bonus(pipex_b, "Error Pipex");
-}
+// void	exec_func(t_pipex_b *pipex_b, char **av, int i)
+// {
+// 	pipex_b->cmds = ft_split_pipe(av[i], ' ');
+// 	if (!pipex_b->cmds || !pipex_b->cmds[0])
+// 		ft_error_file_bonus(pipex_b, "Error Pipex");
+// 	pipex_b->path = get_path(pipex_b->cmds[0], pipex_b->env, 0);
+// 	if (!pipex_b->path)
+// 		ft_error_file_bonus(pipex_b, "Error Pipex");
+// 	master_close();
+// 	if (execve(pipex_b->path, pipex_b->cmds, pipex_b->env) == -1)
+// 		ft_error_execve_bonus(pipex_b, "Error Pipex");
+// }
 
 void	the_output(t_pipex_b *pipex_b, char **av, int i)
 {

@@ -1,5 +1,4 @@
 
-
 # -->┊( NAMES )
 NAME	=	minishell
 LIBFT	=	./Inc/Libft/libft.a
@@ -20,7 +19,8 @@ PARSE_DIR		=	Parse
 # -->┊( SOURCES AND OBJS )
 MAIN_C			=	minishell_main.c
 
-EXEC_MAIN_C		=	exec_main.c
+EXEC_MAIN_C		=	exec_main.c matrix_utils.c pipe_process.c pipe_redir_handler.c \
+					pipe_child_pro.c tree_utils.c env_utils.c
 
 PARSE_MAIN_C	=	parse_main.c
 PARSE_FILES_C	= 	tokenization_utils.c tokenization.c checks.c space_utils.c \
@@ -60,7 +60,7 @@ $(LIBFT):
 
 exec: $(OBJS_MAIN_EXEC) $(OBJS) $(LIBFT)
 	$(M_COMP_E)
-	@$(CC) $(CFLAGS) $(OBJS_MAIN_EXEC) $(OBJS) $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN_EXEC) $(OBJS) $(LIBFT) -o $(NAME)
 	$(M_DONE)
 
 parse: $(OBJS_MAIN_PARSE) $(OBJS) $(LIBFT)
@@ -83,6 +83,8 @@ fclean: clean
 re: fclean all
 
 rp: fclean parse
+
+rx: fclean exec
 
 .PHONY: all clean fclean re bonus exe rp
 
