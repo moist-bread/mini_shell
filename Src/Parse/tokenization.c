@@ -42,19 +42,19 @@ void	place_token(char *input, t_token **head)
 {
 	t_token	*newtk;
 	char	**newinput;
-	char	*adjacent;
+	// char	*adjacent;
 	char	*updated_input;
 	int		i;
 
 	*head = NULL;
 	check_quotes(input);
 	// printf("input_def: %s\n", input);
-	adjacent = merge_adjacent_segments(input);
+	// adjacent = merge_adjacent_segments(input);
 	// printf("input_def: %s\n", adjacent);
-	updated_input = add_spaces(adjacent);
+	updated_input = add_spaces(input);
 	newinput = cracked_split(updated_input, ' ');
 	free(updated_input);
-	free(adjacent);
+	// free(adjacent);
 	i = 0;
 	while (newinput[i])
 	{

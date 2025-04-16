@@ -71,7 +71,12 @@ static void	if_operators(char *input, char *dest, int *i, int *j)
 	if (*i > 0 && input[*i - 1] != ' ' && !ft_strchr("|<>", input[*i - 1]))
 		dest[(*j)++] = ' ';
 	if (input[*i] && input[*i] == '|' && input[*i + 1] == '|')
-		check_double_pipe(j, i, dest);
+	{
+		dest[(*j)++] = '|';
+		dest[(*j)++] = ' ';
+		dest[(*j)++] = '|';
+		*i += 2;
+	}
 	else
 	{
 		dest[(*j)++] = input[(*i)++];

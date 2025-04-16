@@ -52,7 +52,6 @@ char	*merge_adjacent_segments(char *input)
 		if (input[i] == '\'' || input[i] == '\"')
 		{
 			quote = input[i];
-			// printf("quote: %c\n", quote);
 			result[j++] = input[i++];
 			while (input[i] && input[i] != quote)
 				result[j++] = input[i++];
@@ -66,14 +65,14 @@ char	*merge_adjacent_segments(char *input)
 	return (result);
 }
 
-/// @brief Puts space between two Pipes
-/// @param j Increment
-/// @param i Increment
-/// @param dest The updated input 
-void	check_double_pipe(int *j, int *i, char *dest)
-{
-	dest[(*j)++] = '|';
-	dest[(*j)++] = ' ';
-	dest[(*j)++] = '|';
-	*i += 2;
-}
+// /// @brief Puts space between two Pipes
+// /// @param j Increment
+// /// @param i Increment
+// /// @param dest The updated input 
+// void	check_double_pipe(int *j, int *i, char *dest)
+// {
+// 	dest[(*j)++] = '|';
+// 	dest[(*j)++] = ' ';
+// 	dest[(*j)++] = '|';
+// 	*i += 2;
+// }
