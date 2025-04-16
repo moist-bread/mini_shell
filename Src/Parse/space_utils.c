@@ -52,29 +52,10 @@ int	space_length(char *input)
 static	void	between_quotes(char *input, char *dest, int *i, int *j)
 {
 	char	quote;
-	// char	miniquote;
-
-	// miniquote = '\'';
-	// quote = '\"';
-	// if (miniquote == input[*i])
-	// {
-	// 	dest[(*j)++] = input[(*i)++];
-	// 	while (ft_isprint(input[*i]) && input[*i] != miniquote)
-	// 		dest[(*j)++] = input[(*i)++];
-	// 	if (input[*i] == miniquote)
-	// 		dest[(*j)++] = input[(*i++)];
-	// }
-	// else if (quote == input[*i])
-	// {
-	// 	dest[(*j)++] = input[(*i)++];
-	// 	while (ft_isprint(input[*i]) && input[*i] != quote)
-	// 		dest[(*j)++] = input[(*i)++];
-	// 	if (input[*i] == quote)
-	// 		dest[(*j)++] = input[(*i++)];
-	// }
+	
 	quote = input[*i];
 	dest[(*j)++] = input[(*i)++];
-	while (ft_isprint(input[*i]) && input[*i] != quote)
+	while (input[*i] && ft_isprint(input[*i]) && input[*i] != quote)
 		dest[(*j)++] = input[(*i)++];
 	if (input[*i] == quote)
 		dest[(*j)++] = input[(*i++)];
@@ -127,7 +108,6 @@ char	*space_put(char *input, int len)
 			dest[j++] = input[i];
 		if (input[i])
 			i++;
-
 	}
 	dest[j] = '\0';
 	return (dest);
