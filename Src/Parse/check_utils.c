@@ -51,11 +51,13 @@ char	*merge_adjacent_segments(char *input)
 	{
 		if (input[i] == '\'' || input[i] == '\"')
 		{
-			quote = input[i++];
+			quote = input[i];
+			// printf("quote: %c\n", quote);
+			result[j++] = input[i++];
 			while (input[i] && input[i] != quote)
 				result[j++] = input[i++];
 			if (input[i] == quote)
-				i++;
+				result[j++] = input[i++];
 		}
 		else
 			result[j++] = input[i++];

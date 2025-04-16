@@ -48,10 +48,11 @@ void	place_token(char *input, t_token **head)
 
 	*head = NULL;
 	check_quotes(input);
+	printf("input_def: %s\n", input);
 	adjacent = merge_adjacent_segments(input);
+	printf("input_def: %s\n", adjacent);
 	updated_input = add_spaces(adjacent);
 	newinput = cracked_split(updated_input, ' ');
-	printf("new_input: %s\n", updated_input);
 	free(updated_input);
 	free(adjacent);
 	i = 0;
@@ -74,6 +75,7 @@ char	*add_spaces(char *input)
 
 	len = space_length(input);
 	newinput = space_put(input, len);
+	printf("updated_input: %s\n", newinput);
 	printf("spaces: %d\n", len);
 	return (newinput);
 }
