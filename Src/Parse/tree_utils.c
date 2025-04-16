@@ -53,9 +53,6 @@ void	free_tree_node_cont(t_node_cont cont)
 		free_split(cont.pipe.cmd);
 	if (cont.pipe.path)
 		free(cont.pipe.path);
-	// when the env becomes custom made this will be needed
-	// if (cont.pipe.env)
-	// 	free_split(cont.pipe.env);
 	if (cont.file)
 		free(cont.file);
 	if (cont.limiter)

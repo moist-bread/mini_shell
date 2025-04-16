@@ -58,7 +58,7 @@ void child_parse_and_exe(t_minishell minishell, t_tree_node *cmd_node, t_pipe_da
 	// executing --
 	// ADD OPTION FOR BUILT IN EXEC
 	if (execve(pipex->path, pipex->cmd, pipex->env) == -1)
-		pipex_clean_up(minishell, 1); // fail execution ABORT
+		pipex_clean_up(minishell, error_code_for_exec(pipex)); // fail execution ABORT
 }
 
 char	*get_path(t_minishell minishell, char *cmds)
@@ -88,16 +88,17 @@ char	*get_path(t_minishell minishell, char *cmds)
 	return (free_split(path), ft_strdup(cmds));
 }
 
-char	*get_env(char *search, char **env)
+int	error_code_for_exec(t_pipe_data *pipex)
 {
-	int	i;
-
-	i = 0;
-	if (!env)
-		return (NULL);
-	while (env[i] && ft_strncmp(env[i], search, ft_strlen(search)) != 0)
-		i++;
-	if (env[i])
-		return ((env[i] + ft_strlen(search)));
-	return (NULL);
+	if (access(pipex->path, F_OK) < 0)
+	{
+		// make an error message function
+		return(127);
+	}
+	else if (access(pipex->path, X_OK) < 0)
+	{
+		// make an error message function
+		return(126);
+	}
+	return (0);
 }

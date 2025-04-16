@@ -84,7 +84,8 @@ void	multi_proc_wait(t_pipe_data *pipex, int *status)
 
 void	pipex_clean_up(t_minishell minishell, int status)
 {
-	free_tree(minishell.tree_head);
+	if (minishell.tree_head)
+		free_tree(minishell.tree_head);
 	free_split(minishell.env);
 	exit(status);
 }
