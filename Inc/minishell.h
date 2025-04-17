@@ -99,12 +99,8 @@ void		check_double_pipe(int *j, int *i, char *dest);
 // char	*extract_single_quote(const char *s, int len);
 // int		handle_single_quote(const char **s);
 
-// TREE UTILS
 
-t_tree_node	*newtreenode(t_node_cont cont);
-void		free_tree_node_cont(t_node_cont cont);
-void		free_tree(t_tree_node *tree_head);
-void		tree_cont_init(t_node_cont *cont);
+// --------------------------EXECUTION--------------------------
 
 // STRUCT INIT
 

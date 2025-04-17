@@ -18,8 +18,6 @@ char	*readinput(char	*input)
 	return (input);
 }
 
-// t_token **create_tokens(char *input)
-
 /// @brief Creates the list of tokens
 /// @param input The string received from the Stdout
 t_token	*create_tokens(char *input)
@@ -42,19 +40,14 @@ void	place_token(char *input, t_token **head)
 {
 	t_token	*newtk;
 	char	**newinput;
-	// char	*adjacent;
 	char	*updated_input;
 	int		i;
 
 	*head = NULL;
 	check_quotes(input);
-	// printf("input_def: %s\n", input);
-	// adjacent = merge_adjacent_segments(input);
-	// printf("input_def: %s\n", adjacent);
 	updated_input = add_spaces(input);
-	newinput = cracked_split(updated_input, ' ');
+	newinput = cracked_split(updated_input);
 	free(updated_input);
-	// free(adjacent);
 	i = 0;
 	while (newinput[i])
 	{
@@ -75,8 +68,6 @@ char	*add_spaces(char *input)
 
 	len = space_length(input);
 	newinput = space_put(input, len);
-	// printf("updated_input: %s\n", newinput);
-	// printf("spaces: %d\n", len);
 	return (newinput);
 }
 

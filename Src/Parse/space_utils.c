@@ -72,10 +72,9 @@ static void	if_operators(char *input, char *dest, int *i, int *j)
 		dest[(*j)++] = ' ';
 	if (input[*i] && input[*i] == '|' && input[*i + 1] == '|')
 	{
-		dest[(*j)++] = '|';
+		dest[(*j)++] = input[(*i)++];
 		dest[(*j)++] = ' ';
-		dest[(*j)++] = '|';
-		*i += 2;
+		dest[(*j)++] = input[(*i)++];
 	}
 	else
 	{
