@@ -211,17 +211,17 @@ void	free_matrix(void **matrix, int max);
 
 // PIPE PROCESS
 
-void	pipex_process(t_minishell *minishell, t_tree_node *tree_head,
-		t_pipe_data *pipex);
+void	pipex_process(t_minishell *minishell, t_pipe_data *pipex);
 void	read_and_exe_pipe_tree(t_minishell minishell, t_tree_node *tree_head,
 		t_pipe_data *pipex, int idx);
 void	execute_pipex_cmd(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data *pipex, int idx);
 void	multi_proc_wait(t_pipe_data *pipex, int *status);
 void	pipex_clean_up(t_minishell minishell, int status);
 
-// PIPE REDIR HANDLER
+// REDIR HANDLER
 
 void	redir_handler(t_minishell minishell, t_tree_node *cmd_node, int *in, int *out);
+void	redir_opening(t_tree_node *cmd_node, int *in, int *out);
 int		here_doc_redir(char *limiter);
 void	master_close(void);
 

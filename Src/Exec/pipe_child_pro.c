@@ -1,5 +1,4 @@
 
-#include "../../Inc/pipex.h"
 #include "../../Inc/minishell.h"
 
 void assign_pipe_fds(t_minishell minishell, t_pipe_data *pipex, int *redir_fd, int idx)

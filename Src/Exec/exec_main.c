@@ -1,9 +1,10 @@
 
 #include "../../Inc/minishell.h"
 
-/*
+
 int	main(int ac, char **av, char **env)
 {
+	// main for pipex testing
 	t_minishell	minis;
 	t_node_cont	cont_1;
 	t_node_cont	cont_2;
@@ -44,22 +45,24 @@ int	main(int ac, char **av, char **env)
 	minis.tree_head->right->left->left->left = newtreenode(cont_7);
 	minis.tree_head->right->left->left->left->type = REDIR_OUT_APPEND;
 	tree_cont_init(&cont_5);
-	cont_5.cmd = ft_strdup("banana");
+	cont_5.cmd = ft_strdup("ls");
 	minis.tree_head->right->right = newtreenode(cont_5);
 	minis.tree_head->right->right->type = CMD;
-	pipex_process(&minis, minis.tree_head, &minis.tree_head->cont.pipe);
+	pipex_process(&minis, &minis.tree_head->cont.pipe);
 	printf("after pipex exit status: %d\n", minis.exit_status);
 	pipex_clean_up(minis, minis.exit_status);
-}*/
+}
+
 void	minishell_struct_init(t_minishell *minis, char **env)
 {
 	minis->tree_head = NULL;
 	minis->env = matrix_dup_char(env);
 	minis->exit_status = 0;
 }
-
+/* 
 int	main(int ac, char **av, char **env)
 {
+	// main for env testing
 	t_minishell	minis;
 	int			i;
 
@@ -77,4 +80,4 @@ int	main(int ac, char **av, char **env)
 	while (++i < 4)
 		printf("%s\n", minis.env[i]);
 	pipex_clean_up(minis, minis.exit_status);
-}
+} */

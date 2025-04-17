@@ -1,12 +1,20 @@
 
-#include "../../Inc/pipex.h"
 #include "../../Inc/minishell.h"
 
 void redir_handler(t_minishell minishell, t_tree_node *cmd_node, int *in, int *out)
 {
 	if (!cmd_node->left) // NO REDIR
-		return ;	
-	else if (cmd_node->left->type == REDIR_IN) // IN <
+		return ;
+	redir_opening(cmd_node, in, out);
+	if (*in == -1 || *out == -1) // NO MORE REDIRS ARE HANDLED and cmd doesnt execute? the one
+		pipex_clean_up(minishell, 1); // write bash: cmd_node->left->cont.file: perror IDK
+	if (cmd_node->left->left) // more redir
+		redir_handler(minishell, cmd_node->left, in, out);	
+}
+
+void redir_opening(t_tree_node *cmd_node, int *in, int *out)
+{
+	if (cmd_node->left->type == REDIR_IN) // IN <
 	{
 		if (*in > 2)
 			close(*in);	
@@ -30,10 +38,6 @@ void redir_handler(t_minishell minishell, t_tree_node *cmd_node, int *in, int *o
 			close(*out);	
 		*out = open(cmd_node->left->cont.file, O_RDWR | O_APPEND | O_CREAT, 0644);
 	}
-	if (*in == -1 || *out == -1) // NO MORE REDIRS ARE HANDLED and cmd doesnt execute? the one
-		pipex_clean_up(minishell, 1); // write bash: cmd_node->left->cont.file: perror IDK
-	if (cmd_node->left->left) // more redir
-		redir_handler(minishell, cmd_node->left, in, out);	
 }
 
 int	here_doc_redir(char *limiter)

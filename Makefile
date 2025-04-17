@@ -19,7 +19,7 @@ PARSE_DIR		=	Parse
 # -->┊( SOURCES AND OBJS )
 MAIN_C			=	minishell_main.c
 
-EXEC_MAIN_C		=	exec_main.c matrix_utils.c pipe_process.c pipe_redir_handler.c \
+EXEC_MAIN_C		=	exec_main.c matrix_utils.c pipe_process.c redir_handler.c \
 					pipe_child_pro.c tree_utils.c env_utils.c
 
 PARSE_MAIN_C	=	parse_main.c

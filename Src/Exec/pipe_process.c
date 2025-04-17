@@ -1,25 +1,30 @@
 
-#include "../../Inc/pipex.h"
 #include "../../Inc/minishell.h"
 
-void	pipex_process(t_minishell *minishell, t_tree_node *tree_head,
-		t_pipe_data *pipex)
+/// @brief Creates the pipe execution process and gets its exit status
+/// @param minishell Overarching Minishell Structure
+/// @param pipex Struct used for the execution of pipes
+void	pipex_process(t_minishell *minishell, t_pipe_data *pipex)
 {	
 	int id;
 	int	exit_status;
 
-	exit_status = 13;
 	ft_printf("\nEntering pipe pro\n");
 	id = fork();
 	if (id < 0)
 		pipex_clean_up(*minishell, 1); // fail fork abort WITHOUT EXIT
 	if (id == 0)
-		read_and_exe_pipe_tree(*minishell, tree_head, pipex, 0);
+		read_and_exe_pipe_tree(*minishell, minishell->tree_head, pipex, 0);
 	waitpid(id, &exit_status, 0);
 	if (WIFEXITED(exit_status))
 		minishell->exit_status = WEXITSTATUS(exit_status);
 }
 
+/// @brief Recurcivelly checks and initiates the execution of all commands in a pipe tree  
+/// @param minishell Overarching Minishell Structure
+/// @param tree_head Current PIPE type tree node to distribute from
+/// @param pipex Struct used for the execution of pipes
+/// @param idx Index for the command to be executed
 void read_and_exe_pipe_tree(t_minishell minishell, t_tree_node *tree_head,
 		t_pipe_data *pipex, int idx)
 {
