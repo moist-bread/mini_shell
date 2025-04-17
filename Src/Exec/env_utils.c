@@ -1,6 +1,10 @@
 
 #include "../../Inc/minishell.h"
 
+/// @brief Gets the Value associated with Name SEARCH
+/// @param search Name for which to search in the existing ENV
+/// @param env Environment
+/// @return Value corresponding to SEARCH name
 char	*get_env(char *search, char **env)
 {
 	int	i;
@@ -10,8 +14,8 @@ char	*get_env(char *search, char **env)
 		return (NULL);
 	while (env[i] && ft_strncmp(env[i], search, ft_strlen(search)) != 0)
 		i++;
-	if (env[i])
-		return ((env[i] + ft_strlen(search)));
+	if (env[i]) // find a way to check if its within non export range or nah
+		return ((env[i] + ft_strlen(search))); // aka its correctly formated
 	return (NULL);
 }
 
@@ -34,6 +38,10 @@ char **env_add_back(char **env, char *add)
 	return(NULL);
 }
 
+/// @brief Adds string ADD to the Beggining of matrix ORIGINAL
+/// @param add String to be added
+/// @param original Original matrix
+/// @return New matrix (add + original)
 char	**env_add_front(char *add, char **original)
 {
 	char	**new;

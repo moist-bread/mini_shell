@@ -211,28 +211,29 @@ void	free_matrix(void **matrix, int max);
 
 // PIPE PROCESS
 
-void	pipex_process(t_minishell *minishell, t_tree_node *tree_head,
-		t_pipe_data *pipex);
+void	pipex_process(t_minishell *minishell, t_pipe_data *pipex);
 void	read_and_exe_pipe_tree(t_minishell minishell, t_tree_node *tree_head,
 		t_pipe_data *pipex, int idx);
-void	execute_pipex_cmd(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data *pipex, int idx);
-void	multi_proc_wait(t_pipe_data *pipex, int *status);
-void	pipex_clean_up(t_minishell minishell, int status);
+void	setup_pipex_cmd(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data *pipex, int idx);
+void	process_waiting(int proc_n, int *ids, int *status);
+void	pipex_clean_up(t_minishell minishell, int status); // should change name
 
-// PIPE REDIR HANDLER
+// REDIR HANDLER
 
-void	redir_handler(t_minishell minishell, t_tree_node *cmd_node, int *in, int *out);
-int		here_doc_redir(char *limiter);
+void	redir_handler(t_minishell minishell, t_tree_node *node, int *in, int *out);
+void	redir_opening(t_minishell minishell, t_tree_node *node, int *in, int *out);
+int		here_doc_redir(t_minishell minishell, char *limiter);
 void	master_close(void);
 
 // PIPE CHILD PROCESS
 
 void	assign_pipe_fds(t_minishell minishell, t_pipe_data *pipex, int *redir_fd, int idx);
 void	child_parse_and_exe(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data *pipex);
-char	*get_path(t_minishell minishell, char *cmds);
+char	*get_path(t_minishell minishell, char *cmd);
 int		error_code_for_exec(t_pipe_data *pipex);
 
 // ENV UTILS
+
 char	*get_env(char *search, char **env);
 char	**env_add_front(char *add, char **original);
 

@@ -1,7 +1,11 @@
 
-#include "../../Inc/pipex.h"
 #include "../../Inc/minishell.h"
 
+/// @brief Creates a pipe and assigns it, and or the existing redirs, to the PIPEX struct
+/// @param minishell Overarching Minishell Structure
+/// @param pipex Struct used for the execution of pipes
+/// @param redir_fd Redirection fds associated with the current command
+/// @param idx Index for the command to be executed
 void assign_pipe_fds(t_minishell minishell, t_pipe_data *pipex, int *redir_fd, int idx)
 {
 	int new_pipe[2];
@@ -36,6 +40,10 @@ void assign_pipe_fds(t_minishell minishell, t_pipe_data *pipex, int *redir_fd, i
 	printf("pipex->next_pipe: %d\n", pipex->next_pipe);
 }
 
+/// @brief Parses the cmd information from CMD_NODE, dups needed fds, and executes said command
+/// @param minishell Overarching Minishell Structure
+/// @param cmd_node Current node of type CMD or BUILT_IN to be executed
+/// @param pipex Struct used for the execution of pipes
 void child_parse_and_exe(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data *pipex)
 {
 	// cmd parse --
@@ -61,7 +69,11 @@ void child_parse_and_exe(t_minishell minishell, t_tree_node *cmd_node, t_pipe_da
 		pipex_clean_up(minishell, error_code_for_exec(pipex)); // fail execution ABORT
 }
 
-char	*get_path(t_minishell minishell, char *cmds)
+/// @brief Searches for the true path to the CMD program
+/// @param minishell Overarching Minishell Structure
+/// @param cmd Command for which the path is being searched
+/// @return String with the commands corresponding path
+char	*get_path(t_minishell minishell, char *cmd)
 {
 	char	**path;
 	char	*joined;
@@ -70,14 +82,14 @@ char	*get_path(t_minishell minishell, char *cmds)
 
 	path = ft_split(get_env("PATH", minishell.env), ':');
 	if (!path)
-		return (ft_strdup(cmds));
+		return (ft_strdup(cmd));
 	i = -1;
 	while (path[++i])
 	{
 		bar = ft_strjoin(path[i], "/");
 		if (!bar)
 			pipex_clean_up(minishell, 1); // fail alloc ABORT
-		joined = ft_strjoin(bar, cmds);
+		joined = ft_strjoin(bar, cmd);
 		free(bar);
 		if (!joined)
 			pipex_clean_up(minishell, 1); // fail alloc ABORT
@@ -85,9 +97,12 @@ char	*get_path(t_minishell minishell, char *cmds)
 			return (free_split(path), joined);
 		free(joined);
 	}
-	return (free_split(path), ft_strdup(cmds));
+	return (free_split(path), ft_strdup(cmd));
 }
 
+/// @brief Displays an error message and determines the exit status
+/// @param pipex Struct used for the execution of pipes
+/// @return Exit status after execve() failure
 int	error_code_for_exec(t_pipe_data *pipex)
 {
 	if (access(pipex->path, F_OK) < 0)
