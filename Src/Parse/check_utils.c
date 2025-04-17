@@ -1,20 +1,29 @@
 
 #include "../../Inc/minishell.h"
 
-/// @brief Checks if the quotes are impar
+/// @brief Checks if the quotes are impar and gives an error if they are
 /// @param input String
 void	check_quotes(char *input)
 {
-	int	i;
-	int quote;
+	int		i;
+	int 	quote;
+	char	is_quote;
 
 	i = 0;
 	quote = 0;
 	while (input[i])
 	{
 		if (input[i] == '\"' || input[i] == '\'')
+		{
+			is_quote = input[i++];
 			quote++;
-		i++;
+			while (input[i] && input[i] != is_quote)
+				i++;
+			if (input[i] && input[i++] == is_quote)
+				quote++;
+		}
+		else
+			i++;
 	}
 	if (quote % 2 != 0)
 	{
@@ -64,15 +73,3 @@ char	*merge_adjacent_segments(char *input)
 	result[j] = '\0';
 	return (result);
 }
-
-// /// @brief Puts space between two Pipes
-// /// @param j Increment
-// /// @param i Increment
-// /// @param dest The updated input 
-// void	check_double_pipe(int *j, int *i, char *dest)
-// {
-// 	dest[(*j)++] = '|';
-// 	dest[(*j)++] = ' ';
-// 	dest[(*j)++] = '|';
-// 	*i += 2;
-// }

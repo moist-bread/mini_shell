@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 15:49:25 by andcarva          #+#    #+#             */
-/*   Updated: 2025/04/10 18:57:01 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/04/17 19:15:10 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <unistd.h>
 # include <stddef.h>
 # include <limits.h>
+# include <stdbool.h>
 # include <string.h>
 # include <stdint.h>
 # include "Printf_lib/ft_printf.h"
@@ -30,7 +31,6 @@ typedef struct s_list
 	struct s_list	*next;
 }	t_list;
 
-char	**cracked_split(char const *s, char c);
 void	free_split(char **split);
 int		ft_atoi(const char *str);
 void	ft_bzero(void *ptr, size_t size);

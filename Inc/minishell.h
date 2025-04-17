@@ -164,35 +164,18 @@ typedef struct s_minishell
 // TBD
 // (to be determined) functions without a place yet
 
-// PARSING
+// ------------------------PARSING----------------------------
+
+// TOKENS
 
 void	tokenadd_back(t_token **tklst, t_token *newtk);
 void	tokenadd_front(t_token **tklst, t_token *newtk);
 t_token	*newtoken(char *cont);
 t_token	*create_tokens(char *input);
-char	*readinput(char	*input);
 void	place_token(char *input, t_token **head);
 void	print_tokens(t_token *tokens);
-void	assign_type_token(t_token *token);
-void	assign_name(int type);
-void	assigns_types(t_token *token);
-void	assigns_built_in(t_token *token);
-void	assigns_cmd_or_arg(t_token *token);
-char	*add_spaces(char *input);
-int		space_length(char *input);
-char	*space_put(char *input, int len);
-void	check_quotes(char *input);
 void	clear_token_lst(t_token	*token);
-void	ft_error_check(t_token *token);
-void	master_check(t_token *token);
 bool	is_token(t_token *token);
-char	*merge_adjacent_segments(char *input);
-void	check_double_pipe(int *j, int *i, char *dest);
-// void	checks_here_doc(t_token	*token);
-// char	**cracked_split(char const *s, char c);
-// void	working_quote(char const *s, int *len, char c);
-// char	*extract_single_quote(const char *s, int len);
-// int		handle_single_quote(const char **s);
 
 // TREE UTILS
 
@@ -201,8 +184,48 @@ void		free_tree_node_cont(t_node_cont cont);
 void		free_tree(t_tree_node *tree_head);
 void		tree_cont_init(t_node_cont *cont);
 
-// EXECUTION
-// put execution prototypes here
+// ASSIGN TYPES
+
+void	assign_type_token(t_token *token);
+void	assign_name(int type);
+void	assigns_types(t_token *token);
+void	assigns_built_in(t_token *token);
+void	assigns_cmd_or_arg(t_token *token);
+
+// UTILS
+
+char	*add_spaces(char *input);
+int		space_length(char *input);
+char	*readinput(char	*input);
+char	*space_put(char *input, int len);
+
+// CHECKS
+
+void	check_quotes(char *input);
+void	master_check(t_token *token);
+
+// ERRORS
+
+void	ft_error_check(t_token *token);
+
+// SPLIT UTILS
+
+char	**cracked_split(char const *s);
+int		word_len(char const *s);
+int		skip_quote(const char *s);
+void	word_runner(const char **s);
+bool	is_sep(char c);
+
+// char	*merge_adjacent_segments(char *input);
+// void	check_double_pipe(int *j, int *i, char *dest);
+// void	checks_here_doc(t_token	*token);
+// char	**cracked_split(char const *s, char c);
+// void	working_quote(char const *s, int *len, char c);
+// char	*extract_single_quote(const char *s, int len);
+// int		handle_single_quote(const char **s);
+
+
+// --------------------------EXECUTION--------------------------
 
 void	minishell_struct_init(t_minishell *minis, char **env);
 
