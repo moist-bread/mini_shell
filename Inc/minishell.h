@@ -39,6 +39,8 @@
 // Example: "easd"'O'""
 // Get ridof len in working quotes and do a funciton that gets me the lenght in get word;
 // Implement in split that needs to split spaces and tabs in the same String;
+// This CMD:  >> banana cmd banana
+// Needs to be REDIR ARG CMD ARG but is doing REDIR ARG ARG ARG - Dont know what to do;
 
 // -------------------------------------------------------------------------------------------------|
 
@@ -131,6 +133,12 @@ void		redir_handler(t_minishell minishell, t_tree_node *node, int *in,
 void		master_close(void);
 
 // PIPE CHILD PROCESS
+t_tree_node	*newtreenode(t_node_cont cont);
+void		free_tree_node_cont(t_node_cont cont);
+void		free_tree(t_tree_node *tree_head);
+void		tree_cont_init(t_node_cont *cont);
+t_token		*iteri_till_pipe(t_token *token);
+void		**tree_alloc_args(t_token *token);
 
 void		assign_pipe_fds(t_minishell ms, t_pipe_data *pdata, int *redir_fd,
 				int idx);

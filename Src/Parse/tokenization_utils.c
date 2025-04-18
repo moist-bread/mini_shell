@@ -74,3 +74,23 @@ void	clear_token_lst(t_token	*token)
 		current = next;
 	}
 }
+
+/// @brief Goes through the token until it finds a PIPE
+/// @param token Node of the list 
+/// @return The token that have the PIPE or The start 
+///of the list if doesn't find something
+t_token	*iteri_till_pipe(t_token *token)
+{
+	t_token *start;
+
+	start = token;
+	if (!token)
+		return (NULL);
+	while (token)
+	{
+		if (token->type == PIPE)
+			return (token);
+		token = token->next;
+	}
+	return (start);
+}
