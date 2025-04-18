@@ -8,6 +8,7 @@ LIBFT	=	./Inc/Libft/libft.a
 CC		=	cc
 CFLAGS	=	-Wall -Wextra -Werror -g
 RL		=	-lreadline
+SUPP	=	--suppressions=readline.supp
 
 # -->┊( DIRECTORIES )
 SRC_DIR			=	Src
@@ -60,7 +61,7 @@ $(LIBFT):
 
 exec: $(OBJS_MAIN_EXEC) $(OBJS) $(LIBFT)
 	$(M_COMP_E)
-	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN_EXEC) $(OBJS) $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN_EXEC) $(OBJS) $(LIBFT) $(RL) -o $(NAME)
 	$(M_DONE)
 
 parse: $(OBJS_MAIN_PARSE) $(OBJS) $(LIBFT)
