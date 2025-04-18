@@ -4,8 +4,9 @@
 
 int	main(int ac, char **av, char **env)
 {
-	char	*input = NULL;
-	t_token	*tokens;
+	char		*input = NULL;
+	t_token		*tokens;
+	// t_node_cont	*node_cont;
 
 	(void)ac;
 	(void)av;
@@ -15,7 +16,8 @@ int	main(int ac, char **av, char **env)
 	{
 		input = readinput(input);
 		tokens = create_tokens(input);
-		free(input);
+		// create_tree(tokens, &node_cont);
+		// free(input);
 		clear_token_lst(tokens);
 	}
 	return (0);

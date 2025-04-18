@@ -37,6 +37,8 @@
 // Example: "easd"'O'""
 // Get ridof len in working quotes and do a funciton that gets me the lenght in get word;
 // Implement in split that needs to split spaces and tabs in the same String;
+// This CMD:  >> banana cmd banana
+// Needs to be REDIR ARG CMD ARG but is doing REDIR ARG ARG ARG - Dont know what to do;
 
 // -------------------------------------------------------------------------------------------------|
 
@@ -68,24 +70,6 @@
 
 // STRUCTS
 
-/// @param cmd_n Amount of cmds
-/// @param cur_pipe Stores IN fd and OUT fd
-/// @param next_pipe Read end of created pipe
-/// @param pid Stores child process ids
-/// @param cmd Command and its arguments
-/// @param path Path to said command
-/// @param env Environment
-typedef struct s_pipe_data
-{
-	int					cmd_n;
-	int					cur_pipe[2];
-	int					next_pipe;
-	int					*pid;
-	char				**cmd;
-	char				*path;
-	char				**env;
-}						t_pipe_data;
-
 /// @brief Enumeration of all possible node types
 /// @param CMD Commands
 /// @param ARG Versatile arguments
@@ -109,16 +93,23 @@ typedef enum s_node_type
 	BUILT_IN,
 }						t_node_type;
 
-/// @param type Node Type
-/// @param cont Node Content
-/// @param next Next Node
-typedef struct s_token
+/// @param cmd_n Amount of cmds
+/// @param cur_pipe Stores IN fd and OUT fd
+/// @param next_pipe Read end of created pipe
+/// @param pid Stores child process ids
+/// @param cmd Command and its arguments
+/// @param path Path to said command
+/// @param env Environment
+typedef struct s_pipe_data
 {
-	t_node_type			type;
-	char				*cont;
-	struct s_token		*next;
-	struct s_token		*prev;
-}						t_token;
+	int					cmd_n;
+	int					cur_pipe[2];
+	int					next_pipe;
+	int					*pid;
+	char				**cmd;
+	char				*path;
+	char				**env;
+}						t_pipe_data;
 
 /// @brief Place where the content of t_node_type is stored
 /// @param cmd (char *) Main command to be executed
@@ -134,6 +125,17 @@ typedef struct s_node_cont
 	char				*file;
 	char				*limiter;
 }						t_node_cont;
+
+/// @param type Node Type
+/// @param cont Node Content
+/// @param next Next Node
+typedef struct s_token
+{
+	t_node_type			type;
+	char				*cont;
+	struct s_token		*next;
+	struct s_token		*prev;
+}						t_token;
 
 /// @brief Abstract Syntax Tree Node
 /// @param type Node Type
@@ -183,6 +185,8 @@ t_tree_node	*newtreenode(t_node_cont cont);
 void		free_tree_node_cont(t_node_cont cont);
 void		free_tree(t_tree_node *tree_head);
 void		tree_cont_init(t_node_cont *cont);
+t_token		*iteri_till_pipe(t_token *token);
+void		**tree_alloc_args(t_token *token);
 
 // ASSIGN TYPES
 

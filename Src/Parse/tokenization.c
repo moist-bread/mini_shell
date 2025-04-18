@@ -29,6 +29,7 @@ t_token	*create_tokens(char *input)
 	assign_type_token(tokens);
 	print_tokens(tokens);
 	master_check(tokens);
+	free(input);
 	return (tokens);
 }
 
