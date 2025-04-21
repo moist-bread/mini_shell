@@ -89,7 +89,7 @@ void	print_tokens(t_token *tokens)
 		printf("\t");
 		assign_name(curr->type);
 		printf("\t");
-		printf("ID: %u\n", curr->type);
+		printf("(ID: %u)\n", curr->type);
 		curr = curr->next;
 		i++;
 	}
