@@ -2,7 +2,7 @@
 #include "../../Inc/minishell.h"
 
 
-int	main(int ac, char **av, char **env)
+/* int	main(int ac, char **av, char **env)
 {
 	// main for pipex testing
 	printf(YEL "Exec Main !" DEF "\n");
@@ -21,7 +21,7 @@ int	main(int ac, char **av, char **env)
 	minishell_struct_init(&minis, env);
 	tree_cont_init(&cont_1);
 	cont_1.pipe.cmd_n = 2;
-	cont_1.pipe.pid = ft_calloc(3, sizeof(int));
+	cont_1.pipe.pid = ft_calloc(2, sizeof(int));
 	cont_1.pipe.env = minis.env;
 	minis.tree_head = newtreenode(cont_1);
 	minis.tree_head->type = PIPE;
@@ -40,45 +40,44 @@ int	main(int ac, char **av, char **env)
 	cont_6.file = ft_strdup("LIM");
 	minis.tree_head->right->left->left = newtreenode(cont_6);
 	minis.tree_head->right->left->left->type = REDIR_HERE_DOC;
-	/* tree_cont_init(&cont_7);
-	cont_7.file = ft_strdup("gato");
-	minis.tree_head->right->left->left->left = newtreenode(cont_7);
-	minis.tree_head->right->left->left->left->type = REDIR_OUT; 
-	tree_cont_init(&cont_5);
-	cont_5.cmd = ft_strdup("ls");
-	minis.tree_head->right->right = newtreenode(cont_5);
-	minis.tree_head->right->right->type = CMD; */
+	// tree_cont_init(&cont_7);
+	// cont_7.file = ft_strdup("gato");
+	// minis.tree_head->right->left->left->left = newtreenode(cont_7);
+	// minis.tree_head->right->left->left->left->type = REDIR_OUT; 
+	// tree_cont_init(&cont_5);
+	// cont_5.cmd = ft_strdup("ls");
+	// minis.tree_head->right->right = newtreenode(cont_5);
+	// minis.tree_head->right->right->type = CMD;
 
 	pipex_process(&minis, &minis.tree_head->cont.pipe);
 	printf("after pipex exit status: %d\n", minis.exit_status);
 	pipex_clean_up(minis, minis.exit_status);
-}
+} */
+
+
 
 void	minishell_struct_init(t_minishell *minis, char **env)
 {
 	minis->tree_head = NULL;
-	minis->env = matrix_dup_char(env);
+	minis->env = matrix_dup_char(env); // make it cooler
+	minis->env_lim = ft_matrixlen(minis->env);
 	minis->exit_status = 0;
 }
 
-/* 
+
 int	main(int ac, char **av, char **env)
 {
 	// main for env testing
 	t_minishell	minis;
-	int			i;
 
 	(void)ac;
 	(void)av;
 	printf(YEL "(new) Exec Main !" DEF "\n");
 	minishell_struct_init(&minis, env);
-	i = -1;
-	while (++i < 3)
-		printf("%s\n", minis.env[i]);
-	minis.env = env_add_front("new sentence", minis.env);
+	// print_env(minis, 1);
 	printf("\n");
-	i = -1;
-	while (++i < 4)
-		printf("%s\n", minis.env[i]);
+	// minis.env = env_add_to_index(minis.env, "new sentence", 3);
+	// print_env(minis, 1);
+	
 	pipex_clean_up(minis, minis.exit_status);
-} */
+}

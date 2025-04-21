@@ -154,6 +154,7 @@ typedef struct s_minishell
 {
 	t_tree_node			*tree_head;
 	char				**env;
+	int					env_lim;
 	int					exit_status;
 }						t_minishell;
 
@@ -234,7 +235,14 @@ int		error_code_for_exec(t_pipe_data *pipex);
 
 // ENV UTILS
 
+void	export_built_in(t_minishell minishell, t_tree_node *node);
 char	*get_env(char *search, char **env);
 char	**env_add_front(char *add, char **original);
+char 	**env_add_to_index(char **env, char *add, size_t idx);
+void 	print_env(t_minishell minishell, int full_env_flag);
+char	*find_env(char **env, char *search);
+void	replace_env(char *old, char *new);
+char *get_export_name(char *arg);
+int correct_export_format(char *arg);
 
 #endif //MINISHELL_H
