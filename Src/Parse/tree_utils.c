@@ -1,10 +1,14 @@
 
 #include "../../Inc/minishell.h"
 
+/// @brief Creates a new tree_node
+/// @param cont The content of this new node 
+/// @return The newly created node
 t_tree_node	*newtreenode(t_node_cont cont)
 {
 	t_tree_node	*newnode;
 
+	// printf("Entered New Tree Node\n");
 	newnode = ft_calloc(1, sizeof(t_tree_node));
 	if (!newnode)
 		return (NULL);
@@ -15,6 +19,9 @@ t_tree_node	*newtreenode(t_node_cont cont)
 	return (newnode);
 }
 
+/// @brief Inicializes the pipe_data struct \
+/// and the tree_node struct
+/// @param cont The content of the content
 void	tree_cont_init(t_node_cont *cont)
 {
 	cont->cmd = NULL;
@@ -31,6 +38,8 @@ void	tree_cont_init(t_node_cont *cont)
 	cont->limiter = NULL;
 }
 
+/// @brief Frees the Binary Tree 
+/// @param tree_head The root of the Tree
 void	free_tree(t_tree_node *tree_head)
 {
 	if (tree_head->left)
@@ -41,6 +50,8 @@ void	free_tree(t_tree_node *tree_head)
 	free(tree_head);
 }
 
+/// @brief Frees the content of witch tree node
+/// @param cont The content
 void	free_tree_node_cont(t_node_cont cont)
 {
 	if (cont.args)
