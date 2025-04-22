@@ -2,12 +2,12 @@
 
 #include "../../Inc/minishell.h"
 
-void	print_tree(t_tree_node *root)
-{
-	if(!root)
-		return ;
+// void	print_tree(t_tree_node *root)
+// {
+// 	if(!root)
+// 		return ;
 
-}
+// }
 
 /// @brief Main function that creates the binary tree 
 /// @param tokens Node from the token list
