@@ -2,10 +2,13 @@
 
 #include "../../Inc/minishell.h"
 
-// void	print_tree(t_tree_node *root)
-// {
-// 	if(!root)
-// 		return ;
+
+/// @brief Function that prints the Binary Tree
+/// @param root The First Node of the Tree
+void	print_tree(t_tree_node *root)
+{
+	if(!root)
+		return ;
 
 // }
 
