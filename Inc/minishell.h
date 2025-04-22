@@ -133,8 +133,12 @@ void		redir_handler(t_minishell minishell, t_tree_node *node, int *in,
 void		master_close(void);
 
 // PIPE CHILD PROCESS
+void		print_tree(t_tree_node *tree_node, int depth, char *side);
 t_tree_node	*newtreenode(t_node_cont cont);
-void		place_treenode(t_token *tokens, t_tree_node **root, t_node_cont *cont);
+void		create_tree(t_token *tokens);
+t_node_cont	assign_tree_cont(t_token *token);
+void		if_command(t_token *tokens, t_tree_node *cmd_node);
+void		place_treenode(t_token *tokens, t_tree_node **root);
 void		free_tree_node_cont(t_node_cont cont);
 void		free_tree(t_tree_node *tree_head);
 void		tree_cont_init(t_node_cont *cont);
