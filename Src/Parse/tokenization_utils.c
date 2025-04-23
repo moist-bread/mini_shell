@@ -51,7 +51,7 @@ t_token	*newtoken(char *cont)
 	newtk->cont = ft_strdup(cont);
 	newtk->next = NULL;
 	newtk->prev = NULL;
-	newtk->type = 1;
+	newtk->type = ARG;
 	return (newtk);
 }
 

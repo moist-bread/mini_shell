@@ -41,6 +41,7 @@
 // Implement in split that needs to split spaces and tabs in the same String; - Done
 // This CMD:  >> banana cmd banana
 // Needs to be REDIR ARG CMD ARG but is doing REDIR ARG ARG ARG - Dont know what to do;
+// In the tree the last node redir is over writig the prrevious ones;
 
 // -------------------------------------------------------------------------------------------------|
 
@@ -134,16 +135,17 @@ void		master_close(void);
 
 // PIPE CHILD PROCESS
 void		print_tree(t_tree_node *tree_node, int depth, char *side);
+void   		tree_apply_print(t_tree_node *root, int depth, char *side);
 t_tree_node	*newtreenode(t_node_cont cont);
 void		create_tree(t_token *tokens);
 t_node_cont	assign_tree_cont(t_token *token);
 void		if_command(t_token *tokens, t_tree_node *cmd_node);
-void		place_treenode(t_token *tokens, t_tree_node **root);
+void		place_treenode(t_token *tokens, t_tree_node **root, bool pipe);
 void		free_tree_node_cont(t_node_cont cont);
 void		free_tree(t_tree_node *tree_head);
 void		tree_cont_init(t_node_cont *cont);
 t_token		*iteri_till_pipe(t_token *token);
-char		**tree_alloc_args(t_token *token, t_node_cont *cont);
+char		**tree_alloc_args(t_token *token);
 
 void		assign_pipe_fds(t_minishell ms, t_pipe_data *pdata, int *redir_fd,
 				int idx);
