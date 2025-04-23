@@ -56,32 +56,39 @@ void	assigns_types(t_token *token)
 		token->type = REDIR_OUT_APPEND;
 }
 
-/// @brief Checks if the token received CMD or ARG
-/// @param token Node of the list of tokens
-void	assigns_cmd_or_arg(t_token *token)
+// /// @brief Checks if the token received CMD or ARG
+// /// @param token Node of the list of tokens
+// void	assigns_cmd_or_arg(t_token *token)
+// {
+// 	if (token->prev == NULL && token->type != BUILT_IN && token->type != REDIR_IN \
+// 		&& token->type != REDIR_OUT && token->type != REDIR_HERE_DOC && token->type != REDIR_OUT_APPEND)
+// 			token->type = CMD;
+// 	else if (token->prev && token->prev->type == REDIR_HERE_DOC && token->type != BUILT_IN \
+// 		&& token->type != REDIR_IN && token->type != REDIR_OUT && token->type != PIPE \
+// 		&& token->type != REDIR_HERE_DOC && token->type != REDIR_OUT_APPEND)
+// 		token->type = LIM;
+// 	else if (token->prev && token->prev->prev && token->prev->type == ARG && \
+// 		(token->prev->prev->type >= REDIR_IN && token->prev->prev->type <= REDIR_OUT_APPEND))
+// 		{
+// 			token->type = CMD;
+// 			assigns_types(token);
+// 		}
+// 	else if (token->prev && token->prev->type == PIPE && token->type != BUILT_IN && token->type != REDIR_IN \
+// 		&& token->type != REDIR_OUT && token->type != REDIR_HERE_DOC  && token->type != PIPE \
+// 		&& token->type != REDIR_OUT_APPEND)
+// 		token->type = CMD;
+// 	else if (token->prev && (token->prev->type == CMD || token->prev->type == BUILT_IN || token->prev->type == REDIR_IN \
+// 		|| token->prev->type == REDIR_OUT || token->prev->type == REDIR_HERE_DOC \
+// 		|| token->prev->type == REDIR_OUT_APPEND))
+// 	{
+// 		token->type = ARG;
+// 		assigns_types(token);
+// 	}
+// }
+
+void	assigns_cmd_or_arg()
 {
-	if (token->prev == NULL && token->type != BUILT_IN && token->type != REDIR_IN \
-		&& token->type != REDIR_OUT && token->type != REDIR_HERE_DOC && token->type != REDIR_OUT_APPEND)
-			token->type = CMD;
-	else if (token->prev && token->prev->type == REDIR_HERE_DOC && token->type != BUILT_IN \
-		&& token->type != REDIR_IN && token->type != REDIR_OUT && token->type != PIPE \
-		&& token->type != REDIR_HERE_DOC && token->type != REDIR_OUT_APPEND)
-		token->type = LIM;
-	else if (token->prev && token->prev->prev && token->prev->type == ARG && (token->prev->prev->type == REDIR_IN 
-		|| token->prev->prev->type == REDIR_OUT || token->prev->prev->type == REDIR_HERE_DOC \
-		|| token->prev->prev->type == REDIR_OUT_APPEND))
-			token->type = CMD;
-	else if (token->prev && token->prev->type == PIPE && token->type != BUILT_IN && token->type != REDIR_IN \
-		&& token->type != REDIR_OUT && token->type != REDIR_HERE_DOC  && token->type != PIPE \
-		&& token->type != REDIR_OUT_APPEND)
-		token->type = CMD;
-	else if (token->prev && (token->prev->type == CMD || token->prev->type == BUILT_IN || token->prev->type == REDIR_IN \
-		|| token->prev->type == REDIR_OUT || token->prev->type == REDIR_HERE_DOC \
-		|| token->prev->type == REDIR_OUT_APPEND))
-	{
-		token->type = ARG;
-		assigns_types(token);
-	}
+	
 }
 
 /// @brief Assigns a name to the token, done for the debug
@@ -95,11 +102,11 @@ void	assign_name(int type)
 	else if (type == 2)
 		printf("Type: %s", "PIPE");
 	else if (type == 3)
-		printf("Type: %s", "REDIR_IN");
-	else if (type == 4)
-		printf("Type: %s", "REDIR_HERE_DOC");
-	else if (type == 5)
 		printf("Type: %s", "LIM");
+	else if (type == 4)
+		printf("Type: %s", "REDIR_IN");
+	else if (type == 5)
+		printf("Type: %s", "REDIR_HERE_DOC");
 	else if (type == 6)
 		printf("Type: %s", "REDIR_OUT");
 	else if (type == 7)

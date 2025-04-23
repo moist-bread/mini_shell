@@ -38,7 +38,7 @@ void	tree_cont_init(t_node_cont *cont)
 	cont->limiter = NULL;
 }
 
-/// @brief Frees the Binary Tree 
+/// @brief Frees the AST_Tree 
 /// @param tree_head The root of the Tree
 void	free_tree(t_tree_node *tree_head)
 {
