@@ -40,8 +40,9 @@
 // Get ridof len in working quotes and do a funciton that gets me the lenght in get word; - Done
 // Implement in split that needs to split spaces and tabs in the same String; - Done
 // This CMD:  >> banana cmd banana
-// Needs to be REDIR ARG CMD ARG but is doing REDIR ARG ARG ARG - Dont know what to do;
+// Needs to be REDIR ARG CMD ARG but is doing REDIR ARG ARG ARG - I think is Done;
 // In the tree the last node redir is over writig the prrevious ones;
+// > file > | a - Syntax Error - done
 
 // -------------------------------------------------------------------------------------------------|
 
@@ -154,6 +155,12 @@ void		child_parse_and_exe(t_minishell ms, t_tree_node *node,
 char		*get_path(t_minishell minishell, char *cmd);
 int			error_code_for_exec(char *path);
 
+void	assign_type_token(t_token *token);
+void	assign_name(int type);
+void	assigns_types(t_token *token);
+void	assigns_cmd(t_token *head);
+void	assigns_built_in(t_token *token);
+void	is_limtiter_or_arg(t_token **temp);
 // EXPORT
 
 void		export_built_in(t_minishell *ms, t_tree_node *node);

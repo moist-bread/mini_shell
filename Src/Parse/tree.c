@@ -1,5 +1,4 @@
 
-
 #include "../../Inc/minishell.h"
 
 /// @brief Main function that creates the AST_Tree 
@@ -33,7 +32,8 @@ t_node_cont	assign_tree_cont(t_token *token)
 	else if (token && token->type == LIM)
 		cont.limiter = token->cont;
 	else if (token && token->prev && (token->prev->type == REDIR_IN \
-	|| token->prev->type == REDIR_OUT || token->prev->type == REDIR_OUT_APPEND) && token->type == ARG)
+	|| token->prev->type == REDIR_OUT || token->prev->type == REDIR_OUT_APPEND) \
+	&& token->type == ARG)
 		cont.file = token->cont;
 	else if (token && token->type == PIPE)
 		cont.pipe_c = *token->cont;
