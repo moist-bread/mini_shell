@@ -73,3 +73,19 @@ char	*merge_adjacent_segments(char *input)
 	result[j] = '\0';
 	return (result);
 }
+
+void	is_limtiter_or_arg(t_token **temp)
+{
+	if ((*temp)->type == REDIR_HERE_DOC && (*temp)->next)
+	{
+		*temp = (*temp)->next;
+		(*temp)->type = LIM;
+		
+	}
+	else if (is_token(*temp) && (*temp)->next)
+	{
+		*temp = (*temp)->next;
+		(*temp)->type = ARG;
+		assigns_types(*temp);
+	}
+}
