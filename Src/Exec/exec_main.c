@@ -1,21 +1,20 @@
 
 #include "../../Inc/minishell.h"
 
-
 /* int	main(int ac, char **av, char **env)
 {
-	// main for pipex testing
-	printf(YEL "Exec Main !" DEF "\n");
-	(void)ac;
-	(void)av;
-
-	// handmade tree pls dont judge
 	t_minishell	minis;
 	t_node_cont	cont_1;
 	t_node_cont	cont_2;
 	t_node_cont	cont_3;
 	t_node_cont	cont_4;
 	t_node_cont	cont_6;
+
+	// main for pipex testing
+	printf(YEL "Exec Main !" DEF "\n");
+	(void)ac;
+	(void)av;
+	// handmade tree pls dont judge
 	//t_node_cont	cont_7;
 	//t_node_cont	cont_5;
 	minishell_struct_init(&minis, env);
@@ -43,19 +42,15 @@
 	// tree_cont_init(&cont_7);
 	// cont_7.file = ft_strdup("gato");
 	// minis.tree_head->right->left->left->left = newtreenode(cont_7);
-	// minis.tree_head->right->left->left->left->type = REDIR_OUT; 
+	// minis.tree_head->right->left->left->left->type = REDIR_OUT;
 	// tree_cont_init(&cont_5);
 	// cont_5.cmd = ft_strdup("ls");
 	// minis.tree_head->right->right = newtreenode(cont_5);
 	// minis.tree_head->right->right->type = CMD;
-
-	pipex_process(&minis, &minis.tree_head->cont.pipe);
+	pipe_process(&minis, &minis.tree_head->cont.pipe);
 	printf("after pipex exit status: %d\n", minis.exit_status);
-	pipex_clean_up(minis, minis.exit_status);
+	minishell_clean(minis, minis.exit_status);
 } */
-
-
-
 void	minishell_struct_init(t_minishell *minis, char **env)
 {
 	minis->tree_head = NULL;
@@ -64,40 +59,33 @@ void	minishell_struct_init(t_minishell *minis, char **env)
 	minis->exit_status = 0;
 }
 
-
 int	main(int ac, char **av, char **env)
 {
-	// main for env testing
-	t_minishell	minis;
+	t_minishell	ms;
+	t_node_cont	cont_1;
+	t_node_cont	cont_2;
 
+	// main for env testing
 	(void)ac;
 	(void)av;
 	printf(YEL "(new) Exec Main !" DEF "\n");
-	minishell_struct_init(&minis, env);
-
-	t_node_cont	cont_1;
+	minishell_struct_init(&ms, env);
 	tree_cont_init(&cont_1);
-	minis.tree_head = newtreenode(cont_1);
-	minis.tree_head->type = BUILT_IN;
-	minis.tree_head->cont.cmd = ft_strdup("export");
-
-	t_node_cont	cont_2;
+	ms.tree_head = newtreenode(cont_1);
+	ms.tree_head->type = BUILT_IN;
+	ms.tree_head->cont.cmd = ft_strdup("export");
 	tree_cont_init(&cont_2);
-	minis.tree_head->right = newtreenode(cont_2);
-	minis.tree_head->right->type = ARG;
-	minis.tree_head->right->cont.args = matrix_add_front("BANANA+=novacena", NULL);
-	minis.tree_head->right->cont.args = matrix_add_front("CENAMA", minis.tree_head->right->cont.args);
-	minis.tree_head->right->cont.args = matrix_add_front("BANANA=velhacena", minis.tree_head->right->cont.args);
-	minis.tree_head->right->cont.args = matrix_add_front("UMACENAMESMOMA", minis.tree_head->right->cont.args);
-
-	print_env(minis, 1);
+	ms.tree_head->right = newtreenode(cont_2);
+	ms.tree_head->right->type = ARG;
+	ms.tree_head->right->cont.args = matrix_add_front("BANANA+=novacena", NULL);
+	ms.tree_head->right->cont.args = matrix_add_front("ARGUMENTO+=isto", ms.tree_head->right->cont.args);
+	ms.tree_head->right->cont.args = matrix_add_front("OUTRACOISA=velhacena", ms.tree_head->right->cont.args);
+	ms.tree_head->right->cont.args = matrix_add_front("ARGUMENT", ms.tree_head->right->cont.args);
+	print_env(ms, 1);
 	printf("\n");
-
-	export_built_in(&minis, minis.tree_head);
-
-	print_env(minis, 1);
+	export_built_in(&ms, ms.tree_head);
+	print_env(ms, 1);
 	printf("\n");
-	print_env(minis, 0);
-	
-	pipex_clean_up(minis, minis.exit_status);
+	print_env(ms, 0);
+	minishell_clean(ms, ms.exit_status);
 }

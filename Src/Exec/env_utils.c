@@ -9,43 +9,58 @@ char	*get_env(char *search, char **env)
 {
 	int	i;
 
-	i = 0;
-	if (!env)
+	if (!env || !search)
 		return (NULL);
-	while (env[i] && ft_strncmp(env[i], search, ft_strlen(search)) != 0)
-		i++;
-	if (env[i]) // find a way to check if its within non export range or nah
-		return ((env[i] + ft_strlen(search))); // aka its correctly formated
+	i = find_env(env, search);
+	if (i != -1)
+		return ((env[i] + ft_strlen(search)));
 	return (NULL);
 }
 
 int	find_env(char **env, char *search)
 {
-	int len;
-	int i;
+	int	len;
+	int	i;
 
 	if (!env)
 		return (-1);
 	len = ft_strlen(search);
+	printf("find: %s\n", search);
 	i = 0;
-	while (env[i] && ft_strncmp(env[i], search, len))
+	while (env[i])
+	{
+		// printf("name: %s\n", env[i]);
+		// printf("end: %c\n", env[i][len]);
+		// printf("diff: %d\n", ft_strncmp(env[i], search, len - 1));
+		if (search[len - 1] == '=' && !ft_strncmp(env[i], search, len - 1)
+			&& (env[i][len - 1] == '=' || !env[i][len - 1]))
+			break ;
+		if (search[len - 1] != '=' && !ft_strncmp(env[i], search, len)
+			&& (env[i][len] == '=' || !env[i][len]))
+			break ;
 		i++;
+	}
 	if (env[i])
 		return (i);
 	return (-1);
 }
 
-void replace_env(char **env, int old_idx, char *new)
+void	replace_env(char **env, char *name, char *new)
 {
-	// do safe guards
+	int	old_idx;
+
+	if (!env || !name || !new)
+		return ; // explode
+	old_idx = find_env(env, name);
+	if (old_idx < 0)
+		return ;
 	free(env[old_idx]);
 	env[old_idx] = ft_strdup(new);
 	if (!env[old_idx])
-		return ; //explode
-
+		return ; // explode
 }
 
-void export_append(char **env, int old_idx, char *new)
+void	export_append(char **env, int old_idx, char *new)
 {
 	char	*appended;
 	int		new_len;
@@ -56,10 +71,12 @@ void export_append(char **env, int old_idx, char *new)
 	i = 0;
 	while (new[i] != '=')
 		i++;
+	if (!ft_strchr(env[old_idx], '='))
+		i--;
 	new_len = ft_strlen(&new[i + 1]) + ft_strlen(env[old_idx]);
 	appended = ft_calloc(new_len + 1, sizeof(char));
 	if (!appended)
-		return ; //explode
+		return ; // explode
 	j = -1;
 	while (env[old_idx][++j])
 		appended[j] = env[old_idx][j];
@@ -76,7 +93,7 @@ void export_append(char **env, int old_idx, char *new)
 /// @param idx Index for where to add
 /// @param len Length of ENV
 /// @return New ENV with added ADD
-char **env_add_to_index(char **env, char *add, size_t idx, size_t len)
+char	**env_add_to_index(char **env, char *add, size_t idx, size_t len)
 {
 	char	**new;
 	int		i;
@@ -97,7 +114,7 @@ char **env_add_to_index(char **env, char *add, size_t idx, size_t len)
 		{
 			new[++j] = ft_strdup(add);
 			if (!new[j])
-				return(free(new), env);
+				return (free(new), env);
 		}
 		new[++j] = env[i];
 	}
@@ -113,6 +130,7 @@ char	**env_add_front(char *add, char **original)
 {
 	char	**new;
 	int		i;
+
 	// this function is kinda useless
 	if (!add && !original)
 		return (NULL);
@@ -133,6 +151,6 @@ char	**env_add_front(char *add, char **original)
 		new[i + 1] = NULL;
 	else
 		new[1] = NULL;
-	free (original);
+	free(original);
 	return (new);
 }

@@ -11,13 +11,18 @@ void redir_handler(t_minishell minishell, t_tree_node *node, int *in, int *out)
 	if (!node->left) // NO REDIR
 		return ;
 	redir_opening(minishell, node->left, in, out);
-	if (*in == -1 || *out == -1) // NO MORE REDIRS ARE HANDLED and cur cmd doesnt execute?
-		pipex_clean_up(minishell, 1); // write bash: node->left->cont.file: perror IDK
+	if (*in == -1 || *out == -1)
+	{
+		// NO MORE REDIRS ARE HANDLED, cur cmd doesnt exec?
+		perror(node->left->cont.file);
+		minishell_clean(minishell, 1);
+	}	
 	if (node->left->left) // more redir
 		redir_handler(minishell, node->left, in, out);	
 }
 
-/// @brief Opens files specified by NODE and stores it in IN or OUT, according to the NODE type
+/// @brief Opens files specified by NODE and stores it in IN or OUT,
+/// according to the NODE type
 /// @param minishell Overarching Minishell Structure
 /// @param node Current REDIR node being handled
 /// @param in Var where to store input redirections
@@ -34,7 +39,7 @@ void redir_opening(t_minishell minishell, t_tree_node *node, int *in, int *out)
 	{
 		if (*in > 2)
 			close(*in);
-		*in = here_doc_redir(minishell, node->cont.file); // do it directly onto a pipe write end
+		*in = here_doc_redir(minishell, node->cont.file);
 	}
 	else if (node->type == REDIR_OUT) // OUT >
 	{
@@ -60,7 +65,7 @@ int	here_doc_redir(t_minishell minishell, char *limiter)
 	char *line;
 	
 	if(pipe(here_pipe) == -1)
-		pipex_clean_up(minishell, 1); // abort ?
+		minishell_clean(minishell, 1); // abort ?
 	while (1)
 	{
 		line = readline("> ");
@@ -72,8 +77,8 @@ int	here_doc_redir(t_minishell minishell, char *limiter)
 			ft_putstr_fd("\n", here_pipe[1]);
 			free(line);
 		}
-		else
-			break; // CTRL D CASE write a bunch of stuff about expected limiter
+		else // CTRL D CASE 
+			break; // write a bunch of stuff about expected limiter
 	}
 	if (line)
 		free(line);
