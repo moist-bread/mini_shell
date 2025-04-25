@@ -19,131 +19,79 @@ char	*get_env(char *search, char **env)
 	return (NULL);
 }
 
-// pov someone uses export 
-// step 1: check if its well formated
-// step 2: if good format, check if NAME already exists 
-// 		   if yes, if diff replace value, else nothing, else no add to good place
-//					(replace_env / nothing/ env_add_to_index)
-// step 3: if bad format check if string already exists
-//		   if yes, do nothing, else add to bad place (env_add_to_index)
-//					(nothing / env_add_to_index)
-
-// STEP 1: -- get name
-// STEP 2: -- check if it already exists
-// STEP 3: -- if exists and bad format NOTHING
-// STEP 4: -- if exists and good format compare content
-// STEP 5: -- if same content NOTHING
-// STEP 6: -- if diff content REPLACE
-
-// bro faz um por cada argumento...
-
-void export_built_in(t_minishell minishell, t_tree_node *node)
-{
-	char *name;
-	int i;
-
-	if (!node->right)
-		print_env(minishell, 1);
-	i = -1;
-	while (node->right->cont.args[++i])
-	{
-		name = get_export_name(node->right->cont.args[i]);
-		if (!get_env(name, minishell.env))// name not present
-		{
-			if (correct_export_format(node->right->cont.args[i])) // is good and doesnt exist
-				minishell.env = env_add_to_index(minishell.env, node->right->cont.args[i], minishell.env_lim++);
-			else // is bad and doesnt exist
-				minishell.env = env_add_to_index(minishell.env, node->right->cont.args[i], ft_matrixlen(minishell.env));
-		}
-		else if (correct_export_format(node->right->cont.args[i]) && \
-				strcmp(get_env(name, minishell.env), node->right->cont.args[i] \
-				+ ft_strlen(name))) // exists is good and diff
-		{
-			// CHANGE FOR FT_STRCMP // name exits, value diff
-			replace_env(find_env(minishell.env, name), node->right->cont.args[i]);// FIND AND REPLACE
-		}
-	}	
-}
-
-int correct_export_format(char *arg)
-{
-	if (!arg)
-		return(0);
-	return (1);
-}
-
-char *get_export_name(char *arg)
-{
-	int i;
-
-	i = -1;
-	while (arg[++i] && arg[i] != '=')
-		;
-	if (arg[i] == '=')
-		return (ft_strdup(arg)); // make it ft_strndup
-	else
-		return (ft_strdup(arg));
-}
-
-void print_env(t_minishell minishell, int full_env_flag)
-{
-	int i;
-
-	i = -1;
-	if (full_env_flag)
-		while (minishell.env[++i])
-			printf("%s\n", minishell.env[i]);
-	else
-		while (++i <= minishell.env_lim)
-			printf("%s\n", minishell.env[i]);
-}
-
-char	*find_env(char **env, char *search)
+int	find_env(char **env, char *search)
 {
 	int len;
 	int i;
 
 	if (!env)
-		return (NULL);
+		return (-1);
 	len = ft_strlen(search);
 	i = 0;
 	while (env[i] && ft_strncmp(env[i], search, len))
 		i++;
 	if (env[i])
-		return (env[i]);
-	return (NULL);
+		return (i);
+	return (-1);
 }
 
-void replace_env(char *old, char *new)
+void replace_env(char **env, int old_idx, char *new)
 {
-	free(old);
-	old = ft_strdup(new);
-	if (!old)
-		;//explode
+	// do safe guards
+	free(env[old_idx]);
+	env[old_idx] = ft_strdup(new);
+	if (!env[old_idx])
+		return ; //explode
 
+}
+
+void export_append(char **env, int old_idx, char *new)
+{
+	char	*appended;
+	int		new_len;
+	int		i;
+	int		j;
+
+	// do safe guards
+	i = 0;
+	while (new[i] != '=')
+		i++;
+	new_len = ft_strlen(&new[i + 1]) + ft_strlen(env[old_idx]);
+	appended = ft_calloc(new_len + 1, sizeof(char));
+	if (!appended)
+		return ; //explode
+	j = -1;
+	while (env[old_idx][++j])
+		appended[j] = env[old_idx][j];
+	j--;
+	while (j < new_len)
+		appended[++j] = new[++i];
+	free(env[old_idx]);
+	env[old_idx] = appended;
 }
 
 /// @brief Adds string ADD to the ENV on index IDX
 /// @param env Environment to be added to
 /// @param add String to be added to ENV
 /// @param idx Index for where to add
+/// @param len Length of ENV
 /// @return New ENV with added ADD
-char **env_add_to_index(char **env, char *add, size_t idx)
+char **env_add_to_index(char **env, char *add, size_t idx, size_t len)
 {
 	char	**new;
 	int		i;
 	int		j;
 
-	if (!add && !env)
+	if ((!add && !env) || len < 1 || idx > len)
 		return (NULL);
-	if (!add || idx > ft_matrixlen(env) + 1)
+	if (!add || idx > len + 1)
 		return (env);
-	new = malloc((ft_matrixlen(env) + 2) * sizeof(char *));
+	new = ft_calloc(len + 2, sizeof(char *));
 	if (!new)
 		return (NULL);
 	i = -1;
 	j = -1;
-	while (env && env[++i])
+	while (env && ++i <= (int)len)
 	{
 		if (i == (int)idx)
 		{
@@ -153,8 +101,7 @@ char **env_add_to_index(char **env, char *add, size_t idx)
 		}
 		new[++j] = env[i];
 	}
-	new[++j] = NULL;
-	free (env);
+	free(env);
 	return (new);
 }
 
@@ -166,7 +113,7 @@ char	**env_add_front(char *add, char **original)
 {
 	char	**new;
 	int		i;
-
+	// this function is kinda useless
 	if (!add && !original)
 		return (NULL);
 	if (!add)

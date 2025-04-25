@@ -21,7 +21,8 @@ PARSE_DIR		=	Parse
 MAIN_C			=	minishell_main.c
 
 EXEC_MAIN_C		=	exec_main.c matrix_utils.c pipe_process.c redir_handler.c \
-					pipe_child_pro.c tree_utils.c env_utils.c
+					pipe_child_pro.c tree_utils.c env_utils.c matrix_quick_sort.c \
+					export.c ft_strcmp.c ft_strndup.c
 
 PARSE_MAIN_C	=	parse_main.c
 PARSE_FILES_C	= 	tokenization_utils.c tokenization.c checks.c space_utils.c \

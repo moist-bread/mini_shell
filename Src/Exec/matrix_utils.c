@@ -17,7 +17,7 @@ char	**matrix_add_front(char *add, char **original)
 	i = -1;
 	while (original && original[++i])
 	{
-		new[i + 1] = ft_strdup(original[i]);
+		new[i + 1] = original[i];
 		if (!new[i + 1])
 			free_matrix((void **)new, i + 1);
 	}
@@ -25,6 +25,7 @@ char	**matrix_add_front(char *add, char **original)
 		new[i + 1] = NULL;
 	else
 		new[1] = NULL;
+	free(original);
 	return (new);
 }
 
