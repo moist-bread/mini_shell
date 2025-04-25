@@ -235,14 +235,29 @@ int		error_code_for_exec(t_pipe_data *pipex);
 
 // ENV UTILS
 
-void	export_built_in(t_minishell minishell, t_tree_node *node);
+void	export_built_in(t_minishell *minishell, t_tree_node *node);
 char	*get_env(char *search, char **env);
 char	**env_add_front(char *add, char **original);
-char 	**env_add_to_index(char **env, char *add, size_t idx);
+char 	**env_add_to_index(char **env, char *add, size_t idx, size_t len);
 void 	print_env(t_minishell minishell, int full_env_flag);
-char	*find_env(char **env, char *search);
-void	replace_env(char *old, char *new);
-char *get_export_name(char *arg);
-int correct_export_format(char *arg);
+int		find_env(char **env, char *search);
+void	 replace_env(char **env, int old_idx, char *new);
+char 	*get_export_name(char *arg);
+int 	correct_export_format(char *arg);
+void	export_append(char **env, int old_idx, char *new);
+void	invalid_export_message(char *arg);
+
+// NEW LIBFT
+
+int		ft_strcmp(char *s1, char *s2);
+char	*ft_strndup(char *src, size_t n);
+int 	invalid_export(char *arg);
+
+// MATRIX QUICK SORT
+
+char	**sort_matrix(char **original, int len);
+void	ft_string_swap(char **a, char **b);
+void	matrix_quick_sort(char **qs, int start, int pivot);
+
 
 #endif //MINISHELL_H
