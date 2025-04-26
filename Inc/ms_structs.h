@@ -2,6 +2,8 @@
 #ifndef MS_STRUCTS_H
 # define MS_STRUCTS_H
 
+# include <stdbool.h>
+
 // STRUCTS
 
 /// @param cmd_n Amount of cmds
@@ -86,6 +88,14 @@ typedef struct s_tree_node
 	struct s_tree_node	*right;
 }						t_tree_node;
 
+typedef struct s_env
+{
+	char				*key;
+	char				*value;
+	bool				env;
+	struct s_env		*next;
+}						t_env;
+
 /// @brief Overarching Minishell Structure
 /// @param tree_head Parsed Input Tree
 /// @param env Environment
@@ -94,7 +104,7 @@ typedef struct s_minishell
 {
 	t_tree_node			*tree_head;
 	char				**env;
-	int					env_lim;
+	int					env_start;
 	int					exit_status;
 }						t_minishell;
 

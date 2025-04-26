@@ -108,18 +108,19 @@ void		minishell_struct_init(t_minishell *minis, char **env);
 
 // MATRIX UTILS
 
+char		**matrix_add_to_index(char **env, char *add, size_t idx,
+				size_t len);
 char		**matrix_add_front(char *add, char **original);
 size_t		ft_matrixlen(char **matrix);
 char		**matrix_dup_char(char **original_matrix);
-void		free_matrix(void **matrix, int max);
 
 // PIPE PROCESS
 
-void		pipe_process(t_minishell *minishell, t_pipe_data *pipex);
+void		pipe_process(t_minishell *minishell, t_pipe_data *pdata);
 void		read_and_exe_pipe_tree(t_minishell minishell,
-				t_tree_node *tree_head, t_pipe_data *pipex, int idx);
+				t_tree_node *tree_head, t_pipe_data *pdata, int idx);
 void		setup_pipe_cmd(t_minishell minishell, t_tree_node *cmd_node,
-				t_pipe_data *pipex, int idx);
+				t_pipe_data *pdata, int idx);
 void		process_waiting(int proc_n, int *ids, int *status);
 void		minishell_clean(t_minishell minishell, int status);
 
@@ -142,21 +143,25 @@ char		*get_path(t_minishell minishell, char *cmd);
 int			error_code_for_exec(t_pipe_data *pdata);
 
 // EXPORT
+
 void		export_built_in(t_minishell *ms, t_tree_node *node);
-void		print_env(t_minishell minishell, int full_env_flag);
-char		*get_export_name(char *arg);
+void		print_env(t_minishell minishell, int export_flag);
 int			invalid_export(char *arg);
-void		invalid_export_message(char *arg);
+void		export_distribute(t_minishell *ms, char *arg, char *key);
 
-
-// ENV UTILS
+// GET ENV
 
 char		*get_env(char *search, char **env);
-char		**env_add_front(char *add, char **original);
-char		**env_add_to_index(char **env, char *add, size_t idx, size_t len);
-int			find_env(char **env, char *search);
-void		replace_env(char **env, char *name, char *new);
-void		export_append(char **env, int old_idx, char *new);
+int			get_env_idx(char **env, char *search);
+char		*get_export_key(char *var);
+char		*get_export_value(char *var);
+int			env_elem_len(char *var, int key_flag);
+
+// EXPORT UTILS
+
+void		export_append(t_minishell *ms, int idx, char *new);
+void		replace_env_value(t_minishell *ms, char *key, char *new, int idx);
+void		move_env_var(t_minishell *ms, int *old_idx, int new_idx);
 
 // NEW LIBFT
 
@@ -168,5 +173,7 @@ char		*ft_strndup(char *src, size_t n);
 char		**sort_matrix(char **original, int len);
 void		ft_string_swap(char **a, char **b);
 void		matrix_quick_sort(char **qs, int start, int pivot);
+
+// ENV UTILS
 
 #endif // MINISHELL_H
