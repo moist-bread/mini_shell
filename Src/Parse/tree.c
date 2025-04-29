@@ -21,12 +21,10 @@ void	create_tree(t_token *tokens)
 /// @return The content with the right stuff inside
 t_node_cont	assign_tree_cont(t_token *token)
 {
-	int	i;
 	t_node_cont	cont;
 
 	// printf("Entered Assign Tree Cont\n");
 	ft_bzero(&cont, sizeof(t_node_cont));
-	i = 0;
 	if (token && (token->type == CMD || token->type == BUILT_IN))
 		cont.cmd = token->cont;
 	else if (token && token->type == LIM)

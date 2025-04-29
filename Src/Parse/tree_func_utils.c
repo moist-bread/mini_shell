@@ -43,18 +43,14 @@ void	if_command(t_token *tokens, t_tree_node *cmd_node)
 	temp = tokens->next;
 	while (temp && temp->type != PIPE)
 	{
-		if (temp && (temp->type == REDIR_HERE_DOC || temp->type == REDIR_IN \
-			|| temp->type == REDIR_OUT \
-			|| temp->type == REDIR_OUT_APPEND))
+		if (temp && (temp->type <= REDIR_IN && temp->type >= REDIR_OUT_APPEND))
 		{
-			// printf("Creating REDIR node for: %s\n", temp->next->cont);
 			cmd_node->left = newtreenode(assign_tree_cont(temp->next));
 			printf("Creating REDIR node for: %s\n", cmd_node->right->cont.file);
 			temp = temp->next;
 		}
 		else if (temp && temp->type == ARG)
 		{
-			// printf("Temp: %s\n", temp->cont);
 			cmd_node->right = newtreenode(assign_tree_cont(temp));
 			printf("Creating ARG node for: %s\n", cmd_node->right->cont.args[0]);
 		}
@@ -68,10 +64,10 @@ void	if_command(t_token *tokens, t_tree_node *cmd_node)
 ///of the list if doesn't find something
 t_token	*iteri_till_pipe(t_token *token)
 {
-	t_token *start;
+	// t_token *start;
 
 	// printf("Entered Iteri PIPE\n");
-	start = token;
+	// start = token;
 	if (!token)
 		return (NULL);
 	while (token)

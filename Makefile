@@ -66,7 +66,7 @@ exec: $(OBJS_MAIN_EXEC) $(OBJS) $(LIBFT)
 
 parse: $(OBJS_MAIN_PARSE) $(OBJS) $(LIBFT)
 	$(M_COMP_P)
-	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN_PARSE) $(OBJS) $(LIBFT) $(RL) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS_MAIN_PARSE) $(OBJS) $(LIBFT) $(RL) -o $(NAME)
 	$(M_DONE)
 
 clean:

@@ -59,25 +59,25 @@ void	assigns_types(t_token *token)
 // /// @param token Node of the list of tokens
 // void	assigns_cmd_or_arg(t_token *token)
 // {
-// 	if (token->prev == NULL && token->type != BUILT_IN && token->type != REDIR_IN \
+// 	if (token->prev == NULL && token->type != BUILT_IN && token->type != REDIR_IN 
 // 		&& token->type != REDIR_OUT && token->type != REDIR_HERE_DOC && token->type != REDIR_OUT_APPEND)
 // 			token->type = CMD;
-// 	else if (token->prev && token->prev->type == REDIR_HERE_DOC && token->type != BUILT_IN \
-// 		&& token->type != REDIR_IN && token->type != REDIR_OUT && token->type != PIPE \
+// 	else if (token->prev && token->prev->type == REDIR_HERE_DOC && token->type != BUILT_IN
+// 		&& token->type != REDIR_IN && token->type != REDIR_OUT && token->type != PIPE 
 // 		&& token->type != REDIR_HERE_DOC && token->type != REDIR_OUT_APPEND)
 // 		token->type = LIM;
-// 	// else if (token->prev && token->prev->prev && token->prev->type == ARG && \
-// 	// 	(token->prev->prev->type >= REDIR_IN && token->prev->prev->type <= REDIR_OUT_APPEND))
-// 	// {
-// 	// 	token->type = CMD;
-// 	// 	assigns_types(token);
-// 	// }
-// 	else if (token->prev && token->prev->type == PIPE && token->type != BUILT_IN && token->type != REDIR_IN \
-// 		&& token->type != REDIR_OUT && token->type != REDIR_HERE_DOC  && token->type != PIPE \
+// 	else if (token->prev && token->prev->prev && token->prev->type == ARG && 
+// 		(token->prev->prev->type >= REDIR_IN && token->prev->prev->type <= REDIR_OUT_APPEND))
+// 	{
+// 		token->type = CMD;
+// 		assigns_types(token);
+// 	}
+// 	else if (token->prev && token->prev->type == PIPE && token->type != BUILT_IN && token->type != REDIR_IN 
+// 		&& token->type != REDIR_OUT && token->type != REDIR_HERE_DOC  && token->type != PIPE 
 // 		&& token->type != REDIR_OUT_APPEND)
 // 		token->type = CMD;
-// 	else if (token->prev && (token->prev->type == CMD || token->prev->type == BUILT_IN || token->prev->type == REDIR_IN \
-// 		|| token->prev->type == REDIR_OUT || token->prev->type == REDIR_HERE_DOC \
+// 	else if (token->prev && (token->prev->type == CMD || token->prev->type == BUILT_IN || token->prev->type == REDIR_IN 
+// 		|| token->prev->type == REDIR_OUT || token->prev->type == REDIR_HERE_DOC 
 // 		|| token->prev->type == REDIR_OUT_APPEND))
 // 	{
 // 		token->type = ARG;
