@@ -19,7 +19,7 @@ t_tree_node	*newtreenode(t_node_cont cont)
 	return (newnode);
 }
 
-/// @brief Inicializes the pipe_data struct \
+/// @brief Inicializes the pipe_data struct
 /// and the tree_node struct
 /// @param cont The content of the content
 void	tree_cont_init(t_node_cont *cont)
