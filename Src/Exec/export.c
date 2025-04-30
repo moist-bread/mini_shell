@@ -100,10 +100,9 @@ void	export_distribute(t_minishell *ms, char *arg, char *key)
 		if (ft_strchr(arg, '=')) // key not present (is good)
 		{
 			printf("key not present (is good)\n");
-			// strjoin shbang in case of append
 			if (arg[key_len - 1] == '+')
 				ft_memmove(&arg[key_len - 1], &arg[key_len],
-					ft_strlen(&arg[key_len]));
+					ft_strlen(&arg[key_len - 1]));
 			ms->env = matrix_add_to_index(ms->env, arg, env_len, env_len);
 		}
 		else // key not present (is bad)

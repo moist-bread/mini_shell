@@ -176,4 +176,10 @@ void		matrix_quick_sort(char **qs, int start, int pivot);
 
 // ENV UTILS
 
+void		unset_built_in(t_minishell *ms, t_tree_node *node);
+void		remove_env_var(t_minishell *ms, size_t idx, size_t len);
+void		echo_built_in(t_minishell *ms, t_tree_node *node);
+int			echo_validate_options(char *arg);
+void		env_built_in(t_minishell *ms, t_tree_node *node);
+
 #endif // MINISHELL_H

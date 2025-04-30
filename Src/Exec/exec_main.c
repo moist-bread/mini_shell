@@ -51,6 +51,7 @@
 	printf("after pipe exit status: %d\n", minis.exit_status);
 	minishell_clean(minis, minis.exit_status);
 } */
+
 void	minishell_struct_init(t_minishell *minis, char **env)
 {
 	minis->tree_head = NULL;
@@ -58,14 +59,13 @@ void	minishell_struct_init(t_minishell *minis, char **env)
 	minis->env_start = 0;
 	minis->exit_status = 0;
 }
-
-int	main(int ac, char **av, char **env)
+/* int	main(int ac, char **av, char **env)
 {
 	t_minishell	ms;
 	t_node_cont	cont_1;
 	t_node_cont	cont_2;
 
-	// main for env testing
+	// main for export and unset testing
 	(void)ac;
 	(void)av;
 	printf(YEL "(new) Exec Main !" DEF "\n\n");
@@ -77,8 +77,8 @@ int	main(int ac, char **av, char **env)
 	tree_cont_init(&cont_2);
 	ms.tree_head->right = newtreenode(cont_2);
 	ms.tree_head->right->type = ARG;
-	ms.tree_head->right->cont.args = matrix_add_front("BANANO+=BANANA", NULL);
-	ms.tree_head->right->cont.args = matrix_add_front("BANANO+=muita", ms.tree_head->right->cont.args);
+	ms.tree_head->right->cont.args = matrix_add_front("COISA=COISA", NULL);
+	ms.tree_head->right->cont.args = matrix_add_front("BANANO=muita", ms.tree_head->right->cont.args);
 	ms.tree_head->right->cont.args = matrix_add_front("BANANA", ms.tree_head->right->cont.args);
 	ms.tree_head->right->cont.args = matrix_add_front("ARG=umento", ms.tree_head->right->cont.args);
 	print_env(ms, 1);
@@ -90,5 +90,80 @@ int	main(int ac, char **av, char **env)
 	print_env(ms, 1);
 	printf("\n");
 	print_env(ms, 0);
+
+	t_node_cont	cont_3;
+	t_node_cont	cont_4;
+
+	if (ms.tree_head)
+		free_tree(ms.tree_head);
+	tree_cont_init(&cont_3);
+	ms.tree_head = newtreenode(cont_3);
+	ms.tree_head->type = BUILT_IN;
+	ms.tree_head->cont.cmd = ft_strdup("unset");
+	tree_cont_init(&cont_4);
+	ms.tree_head->right = newtreenode(cont_4);
+	ms.tree_head->right->type = ARG;
+	ms.tree_head->right->cont.args = matrix_add_front("ARG", NULL);
+	ms.tree_head->right->cont.args = matrix_add_front("OUTRO", ms.tree_head->right->cont.args);
+	ms.tree_head->right->cont.args = matrix_add_front("BANANA", ms.tree_head->right->cont.args);
+	
+	unset_built_in(&ms, ms.tree_head);
+
+	printf("\n");
+	print_env(ms, 1);
+	printf("\n");
+	print_env(ms, 0);
+
+	minishell_clean(ms, ms.exit_status);
+} */
+
+
+int	main(int ac, char **av, char **env)
+{
+	t_minishell	ms;
+	t_node_cont	cont_1;
+	t_node_cont	cont_2;
+
+	// main for echo and env testing
+	(void)ac;
+	(void)av;
+	printf(YEL "(new) Exec Main !" DEF "\n\n");
+	minishell_struct_init(&ms, env);
+	tree_cont_init(&cont_1);
+	ms.tree_head = newtreenode(cont_1);
+	ms.tree_head->type = BUILT_IN;
+	ms.tree_head->cont.cmd = ft_strdup("echo");
+	tree_cont_init(&cont_2);
+	ms.tree_head->right = newtreenode(cont_2);
+	ms.tree_head->right->type = ARG;
+	ms.tree_head->right->cont.args = matrix_add_front("ARG=umento", NULL);
+	ms.tree_head->right->cont.args = matrix_add_front("BANANO=muita", ms.tree_head->right->cont.args);
+	ms.tree_head->right->cont.args = matrix_add_front("BANANA", ms.tree_head->right->cont.args);
+	ms.tree_head->right->cont.args = matrix_add_front("-nnnnnannnn", ms.tree_head->right->cont.args);
+	
+	echo_built_in(&ms, ms.tree_head);
+
+	
+	t_node_cont	cont_3;
+	t_node_cont	cont_4;
+
+	if (ms.tree_head)
+		free_tree(ms.tree_head);
+	tree_cont_init(&cont_3);
+	ms.tree_head = newtreenode(cont_3);
+	ms.tree_head->type = BUILT_IN;
+	ms.tree_head->cont.cmd = ft_strdup("env");
+
+	env_built_in(&ms, ms.tree_head);
+
+	tree_cont_init(&cont_4);
+	ms.tree_head->right = newtreenode(cont_4);
+	ms.tree_head->right->type = ARG;
+	ms.tree_head->right->cont.args = matrix_add_front("ARG", NULL);
+	ms.tree_head->right->cont.args = matrix_add_front("OUTRO", ms.tree_head->right->cont.args);
+	ms.tree_head->right->cont.args = matrix_add_front("-BANANA", ms.tree_head->right->cont.args);
+	
+	env_built_in(&ms, ms.tree_head);
+
 	minishell_clean(ms, ms.exit_status);
 }

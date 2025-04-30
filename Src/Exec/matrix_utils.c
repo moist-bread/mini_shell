@@ -22,7 +22,7 @@ char	**matrix_add_to_index(char **matrix, char *add, size_t idx, size_t len)
 		return (matrix);
 	i = -1;
 	j = -1;
-	while (matrix && ++i <= (int)len)
+	while (++i <= (int)len)
 	{
 		if (i == (int)idx)
 		{
