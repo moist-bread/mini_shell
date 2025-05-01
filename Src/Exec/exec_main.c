@@ -117,7 +117,7 @@ void	minishell_struct_init(t_minishell *minis, char **env)
 	minishell_clean(ms, ms.exit_status);
 } */
 
-
+/* 
 int	main(int ac, char **av, char **env)
 {
 	t_minishell	ms;
@@ -166,4 +166,43 @@ int	main(int ac, char **av, char **env)
 	env_built_in(&ms, ms.tree_head);
 
 	minishell_clean(ms, ms.exit_status);
+} */
+
+
+int	main(int ac, char **av, char **env)
+{
+	(void)env;
+	(void)ac;
+	(void)av;
+	
+	printf(YEL "(new) Testing exit built in main !" DEF "\n\n");
+
+	/* if (!av[1])
+		return (printf("whomp whomp\n"));
+	printf("number: %s\n", av[1]); */
+	
+	t_minishell	ms;
+	t_node_cont	cont_1;
+	t_node_cont	cont_2;
+	
+	minishell_struct_init(&ms, env);
+	tree_cont_init(&cont_1);
+	ms.tree_head = newtreenode(cont_1);
+	ms.tree_head->type = BUILT_IN;
+	ms.tree_head->cont.cmd = ft_strdup("exit");
+	tree_cont_init(&cont_2);
+	ms.tree_head->right = newtreenode(cont_2);
+	ms.tree_head->right->type = ARG;
+	ms.tree_head->right->cont.args = matrix_add_front("ARG=umento", NULL);
+	ms.tree_head->right->cont.args = matrix_add_front("BANANO=muita", ms.tree_head->right->cont.args);
+	ms.tree_head->right->cont.args = matrix_add_front("BANANA", ms.tree_head->right->cont.args);
+	ms.tree_head->right->cont.args = matrix_add_front("10", ms.tree_head->right->cont.args);
+	
+	master_distributer(&ms);
+	free_split(ms.env);
+	/* long n;
+	if (long_check(av[1], &n) )
+		printf("%ld IS WITHIN LONG!\n", n);
+	else
+		printf("overflowing . . .\n"); */
 }

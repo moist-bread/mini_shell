@@ -167,6 +167,7 @@ void		move_env_var(t_minishell *ms, int *old_idx, int new_idx);
 
 int			ft_strcmp(char *s1, char *s2);
 char		*ft_strndup(char *src, size_t n);
+int			ft_iswhitespace(int c);
 
 // MATRIX QUICK SORT
 
@@ -181,5 +182,15 @@ void		remove_env_var(t_minishell *ms, size_t idx, size_t len);
 void		echo_built_in(t_minishell *ms, t_tree_node *node);
 int			echo_validate_options(char *arg);
 void		env_built_in(t_minishell *ms, t_tree_node *node);
+
+// EXIT
+
+void		exit_built_in(t_minishell *ms, t_tree_node *node);
+int			long_check(char *argv, long *arg_n);
+int			long_overflow_check(char *arg, long *arg_n);
+
+// DISTRIBUTER
+
+void		master_distributer(t_minishell *ms);
 
 #endif // MINISHELL_H
