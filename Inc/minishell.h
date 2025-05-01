@@ -264,4 +264,14 @@ char		**sort_matrix(char **original, int len);
 void		ft_string_swap(char **a, char **b);
 void		matrix_quick_sort(char **qs, int start, int pivot);
 
+// EXIT
+
+void		exit_built_in(t_minishell *ms, t_tree_node *node);
+int			long_check(char *argv, long *arg_n);
+int			long_overflow_check(char *arg, long *arg_n);
+
+// DISTRIBUTER
+
+void		master_distributer(t_minishell *ms);
+
 #endif // MINISHELL_H
