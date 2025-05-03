@@ -1,6 +1,9 @@
 
 #include "../../Inc/minishell.h"
 
+/// @brief Prints the current Environment
+/// @param ms Overarching Minishell Structure
+/// @param node Current env node to be executed
 void	env_built_in(t_minishell *ms, t_tree_node *node)
 {
 	printf(YEL "\nEntering env built in" DEF "\n\n");

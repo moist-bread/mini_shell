@@ -1,6 +1,9 @@
 
 #include "../../Inc/minishell.h"
 
+/// @brief Looks at the Input Tree sends it to the
+/// corresponding executer
+/// @param ms Overarching Minishell Structure
 void	master_distributer(t_minishell *ms)
 {
 	if (!ms->tree_head)

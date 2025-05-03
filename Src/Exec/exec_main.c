@@ -52,13 +52,6 @@
 	minishell_clean(minis, minis.exit_status);
 } */
 
-void	minishell_struct_init(t_minishell *minis, char **env)
-{
-	minis->tree_head = NULL;
-	minis->env = matrix_dup_char(env); // make it cooler
-	minis->env_start = 0;
-	minis->exit_status = 0;
-}
 /* int	main(int ac, char **av, char **env)
 {
 	t_minishell	ms;
@@ -189,14 +182,14 @@ int	main(int ac, char **av, char **env)
 	tree_cont_init(&cont_1);
 	ms.tree_head = newtreenode(cont_1);
 	ms.tree_head->type = BUILT_IN;
-	ms.tree_head->cont.cmd = ft_strdup("exit");
+	ms.tree_head->cont.cmd = ft_strdup("echo");
 	tree_cont_init(&cont_2);
 	ms.tree_head->right = newtreenode(cont_2);
 	ms.tree_head->right->type = ARG;
 	ms.tree_head->right->cont.args = matrix_add_front("ARG=umento", NULL);
 	ms.tree_head->right->cont.args = matrix_add_front("BANANO=muita", ms.tree_head->right->cont.args);
 	ms.tree_head->right->cont.args = matrix_add_front("BANANA", ms.tree_head->right->cont.args);
-	ms.tree_head->right->cont.args = matrix_add_front("10", ms.tree_head->right->cont.args);
+	ms.tree_head->right->cont.args = matrix_add_front("-nnnnn", ms.tree_head->right->cont.args);
 	
 	master_distributer(&ms);
 	free_split(ms.env);

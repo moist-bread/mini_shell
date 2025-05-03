@@ -2,6 +2,8 @@
 
 #include "../../Inc/minishell.h"
 
+static int	long_overflow_check(char *arg, long *arg_n);
+
 // "exit banana": exits, status 2
 // "exit banana banana muitabanana 35 70": exits, status 2
 // "exit "   40   2"": exits, status 2
@@ -17,6 +19,9 @@
 
 // long overflow 9223372036854775807 -9223372036854775808,
 
+/// @brief Exits the program, or not, according to NODE
+/// @param ms Overarching Minishell Structure
+/// @param node Current exit node to be executed
 void	exit_built_in(t_minishell *ms, t_tree_node *node)
 {
 	long	arg_n;
@@ -37,6 +42,10 @@ void	exit_built_in(t_minishell *ms, t_tree_node *node)
 		minishell_clean(*ms, 2); // numeric argument required 2
 }
 
+/// @brief Checks if ARG is a long and stores it in ARG_N
+/// @param arg String to be checked
+/// @param arg_n Where the number in ARG is to be stored
+/// @return 1 if its a long, 0 if not
 int	long_check(char *arg, long *arg_n)
 {
 	int	i;
@@ -59,7 +68,11 @@ int	long_check(char *arg, long *arg_n)
 	return (1);
 }
 
-int	long_overflow_check(char *arg, long *arg_n)
+/// @brief Verifies if the number in ARG is within the range of a long
+/// @param arg String to be checked
+/// @param arg_n Where the number in ARG is to be stored
+/// @return 1 if there's overflow, 0 when there isn't overflow
+static int	long_overflow_check(char *arg, long *arg_n)
 {
 	long	num;
 	int		sign;
@@ -73,8 +86,9 @@ int	long_overflow_check(char *arg, long *arg_n)
 	{
 		if (num > LONG_MAX / 10)
 			return (1);
+		// can i hard code this 8 7?
 		if (num == LONG_MAX / 10 && ((sign == -1 && *arg - '0' > -(LONG_MIN
-						% 10)) || (sign == 1 && *arg - '0' > LONG_MAX % 10))) // can i hard code this 8 7?
+						% 10)) || (sign == 1 && *arg - '0' > LONG_MAX % 10)))
 			return (1);
 		num = num * 10 + (*arg - '0');
 		arg++;

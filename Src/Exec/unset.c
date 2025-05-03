@@ -1,6 +1,9 @@
 
 #include "../../Inc/minishell.h"
 
+/// @brief Removes Variables from Environment according to NODE
+/// @param ms Overarching Minishell Structure
+/// @param node Current usnet node to be executed
 void	unset_built_in(t_minishell *ms, t_tree_node *node)
 {
 	int	env_idx;

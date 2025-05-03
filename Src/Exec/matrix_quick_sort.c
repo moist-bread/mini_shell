@@ -1,6 +1,12 @@
 
 #include "../../Inc/minishell.h"
 
+static void	matrix_quick_sort(char **qs, int start, int pivot);
+
+/// @brief Makes a sorted copy of ORIGINAL using Quick Sort
+/// @param original Matrix to be Sorted
+/// @param len Length of Matrix
+/// @note (the individual strings are not duplicated)
 char	**sort_matrix(char **original, int len)
 {
 	char	**sorted;
@@ -33,7 +39,7 @@ void	ft_string_swap(char **a, char **b)
 	*b = swp;
 }
 
-void	matrix_quick_sort(char **qs, int start, int pivot)
+static void	matrix_quick_sort(char **qs, int start, int pivot)
 {
 	int	i;
 	int	j;

@@ -1,6 +1,9 @@
 
 #include "../../Inc/minishell.h"
 
+static void redir_opening(t_minishell minishell, t_tree_node *node, int *in, int *out);
+static int	here_doc_redir(t_minishell minishell, char *limiter);
+
 /// @brief Recurcivelly checks and opens all redirections associated with NODE
 /// @param minishell Overarching Minishell Structure
 /// @param node Current tree node being checked for redirections
@@ -27,7 +30,7 @@ void redir_handler(t_minishell minishell, t_tree_node *node, int *in, int *out)
 /// @param node Current REDIR node being handled
 /// @param in Var where to store input redirections
 /// @param out Var where to store output redirections
-void redir_opening(t_minishell minishell, t_tree_node *node, int *in, int *out)
+static void redir_opening(t_minishell minishell, t_tree_node *node, int *in, int *out)
 {
 	if (node->type == REDIR_IN) // IN <
 	{
@@ -59,7 +62,7 @@ void redir_opening(t_minishell minishell, t_tree_node *node, int *in, int *out)
 /// @param minishell Overarching Minishell Structure
 /// @param limiter sentence that stops the here_doc
 /// @return Read end fd of opened pipe
-int	here_doc_redir(t_minishell minishell, char *limiter)
+static int	here_doc_redir(t_minishell minishell, char *limiter)
 {
 	int here_pipe[2];
 	char *line;
