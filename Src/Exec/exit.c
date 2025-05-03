@@ -86,6 +86,7 @@ static int	long_overflow_check(char *arg, long *arg_n)
 	{
 		if (num > LONG_MAX / 10)
 			return (1);
+		// can i hard code this 8 7?
 		if (num == LONG_MAX / 10 && ((sign == -1 && *arg - '0' > -(LONG_MIN
 						% 10)) || (sign == 1 && *arg - '0' > LONG_MAX % 10)))
 			return (1);

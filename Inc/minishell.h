@@ -197,7 +197,7 @@ char		**sort_matrix(char **original, int len);
 void		ft_string_swap(char **a, char **b);
 
 
-// MS INIT
+// STRUCT INIT
 
 void		minishell_struct_init(t_minishell *minis, char **env);
 
@@ -222,9 +222,6 @@ void		minishell_clean(t_minishell minishell, int status);
 
 void		redir_handler(t_minishell minishell, t_tree_node *node, int *in,
 				int *out);
-void		redir_opening(t_minishell minishell, t_tree_node *node, int *in,
-				int *out);
-int			here_doc_redir(t_minishell minishell, char *limiter);
 void		master_close(void);
 
 // PIPE CHILD PROCESS
@@ -262,13 +259,18 @@ char		*ft_strndup(char *src, size_t n);
 
 char		**sort_matrix(char **original, int len);
 void		ft_string_swap(char **a, char **b);
-void		matrix_quick_sort(char **qs, int start, int pivot);
+
+// ENV UTILS
+
+void		unset_built_in(t_minishell *ms, t_tree_node *node);
+void		remove_env_var(t_minishell *ms, size_t idx, size_t len);
+void		echo_built_in(t_minishell *ms, t_tree_node *node);
+void		env_built_in(t_minishell *ms, t_tree_node *node);
 
 // EXIT
 
 void		exit_built_in(t_minishell *ms, t_tree_node *node);
 int			long_check(char *argv, long *arg_n);
-int			long_overflow_check(char *arg, long *arg_n);
 
 // DISTRIBUTER
 
