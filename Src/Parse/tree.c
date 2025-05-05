@@ -8,7 +8,7 @@ void	create_tree(t_token *tokens)
 {
 	t_tree_node	*tree_node;
 	
-	// printf("Entered Create Tree\n");
+	printf("Entered Create Tree\n");
 	tree_node = NULL;
 	place_treenode(tokens, &tree_node, false);
 	tree_apply_print(tree_node, 0, "Root");
@@ -23,7 +23,7 @@ t_node_cont	assign_tree_cont(t_token *token)
 {
 	t_node_cont	cont;
 
-	// printf("Entered Assign Tree Cont\n");
+	printf("Entered Assign Tree Cont\n");
 	ft_bzero(&cont, sizeof(t_node_cont));
 	if (token && (token->type == CMD || token->type == BUILT_IN))
 		cont.cmd = token->cont;
@@ -48,25 +48,25 @@ void	place_treenode(t_token *tokens, t_tree_node **root, bool pipe)
 {
 	t_token		*pipe_token;
 	t_tree_node	*new_tree_node;
-	t_node_cont	tree_cont;
 
-	// printf("Entered Place Tree Node\n");
+	printf("Entered Place Tree Node\n");
 	pipe_token = NULL;
-	tree_cont_init(&tree_cont);
 	if (pipe == false)
 		pipe_token = iteri_till_pipe(tokens);
 	if (pipe_token && pipe_token->type == PIPE)
 	{
-		tree_cont = assign_tree_cont(pipe_token);
-		new_tree_node = newtreenode(tree_cont);
+		new_tree_node = newtreenode(assign_tree_cont(pipe_token));
+		new_tree_node->type = pipe_token->type;
+		if (pipe_token->next)
+			place_treenode(pipe_token->next, &new_tree_node->right, false);
 		place_treenode(tokens, &new_tree_node->left, true);
-		place_treenode(pipe_token->next, &new_tree_node->right, false);
 		*root = new_tree_node;
 	}
 	else
 	{
-		tree_cont = assign_tree_cont(tokens);
-		new_tree_node = newtreenode(tree_cont);
+		printf("ELSE\n");
+		new_tree_node = newtreenode(assign_tree_cont(tokens));
+		new_tree_node->type = tokens->type;
 		if (new_tree_node->cont.cmd)
 			if_command(tokens, new_tree_node);
 		*root = new_tree_node;

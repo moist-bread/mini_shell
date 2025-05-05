@@ -28,6 +28,8 @@
 // If There Redir, Right is Arg, Check if next after Arg is Redir.
 // If is Redir do the normal, if not check if is Pipe,
 // If is Pipe start over.
+// If theres no CMD but REDIR exists vreate CMD node NULL and the REDIR stays in the left:
+// EX: > outfile | > outfile
 // -------------------------------------------------------------------------------------------------|
 
 // CHECKS ERROR
@@ -200,6 +202,7 @@ char		**tree_alloc_args(t_token *token);
 // ASSIGN TYPES
 
 void	assign_type_token(t_token *token);
+void	assign_tree_type(t_token *token, t_tree_node *tree);
 void	assign_name(int type);
 void	assigns_types(t_token *token);
 void	assigns_cmd(t_token *head);
