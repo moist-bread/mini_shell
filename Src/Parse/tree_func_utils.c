@@ -1,6 +1,31 @@
 
 #include "../../Inc/minishell.h"
 
+/// @brief Counts the number of arguments that the CMD contain
+/// @param token The node that has the arguments
+/// @param temp Temporary node 
+/// @return Returns the number of arguments
+static int	tree_arg_len(t_token *token, t_token *temp)
+{
+	t_token *content;
+	int	i;
+
+	i = 0;
+	content = token;
+	while (content && content->type != PIPE)
+	{
+		if (temp->type == ARG)
+		{
+			if (temp->prev && temp->type == ARG \
+			&& temp->prev->type >= REDIR_IN && temp->prev->type <= REDIR_OUT_APPEND)
+				i--;
+			i++;
+		}
+		content = content->next;
+	}
+	return (i);
+}
+
 /// @brief Allocates memory if the content is ARG 
 /// @param token The Node from the token list
 /// @param cont The content
@@ -8,27 +33,25 @@
 char	**tree_alloc_args(t_token *token)
 {
 	t_token *temp;
-	t_token *content;
 	char	**args;
 	int		i;
 
+	// printf("TREE ALLOC\n");
 	temp = token;
-	content = token;
-	i = 0;
-	while (content && content->type == ARG && content->type != PIPE)
-	{
-		i++;
-		content = content->next;
-	}
+	i = tree_arg_len(token, temp);
 	args = ft_calloc(i + 1, sizeof(char *));
 	if (!args)
 		return (NULL);
 	i = 0;
-	while (temp && temp->type == ARG && temp->type != PIPE)
+	while (temp && temp->type != PIPE)
 	{
-		args[i] = temp->cont;
-		i++;
-		temp = temp->next;
+			if (temp->prev && temp->type == ARG \
+			&& temp->prev->type >= REDIR_IN && temp->prev->type <= REDIR_OUT_APPEND)
+				temp = temp->next;
+		 	if (temp->type == ARG)
+				args[i++] = temp->cont;
+		if (temp->type != PIPE)
+			temp = temp->next;
 	}
 	return (args);
 }
@@ -39,20 +62,29 @@ char	**tree_alloc_args(t_token *token)
 void	if_command(t_token *tokens, t_tree_node *cmd_node)
 {
 	t_token		*temp;
+	bool		st_arg;
 
+	st_arg = false;
 	temp = tokens->next;
 	while (temp && temp->type != PIPE)
 	{
-		if (temp && (temp->type <= REDIR_IN && temp->type >= REDIR_OUT_APPEND))
+		if (temp && (temp->type >= REDIR_IN && temp->type <= REDIR_OUT_APPEND))
 		{
 			cmd_node->left = newtreenode(assign_tree_cont(temp->next));
-			printf("Creating REDIR node for: %s\n", cmd_node->right->cont.file);
+			cmd_node->left->type = temp->type;
+			printf("Creating REDIR node for: %s\n", cmd_node->left->cont.file);
 			temp = temp->next;
+			cmd_node = cmd_node->left;
 		}
-		else if (temp && temp->type == ARG)
+		else if (temp && temp->type == ARG && st_arg == false)
 		{
 			cmd_node->right = newtreenode(assign_tree_cont(temp));
-			printf("Creating ARG node for: %s\n", cmd_node->right->cont.args[0]);
+			cmd_node->right->type = ARG;
+			st_arg = true; 
+			printf("Creating ARG node for: ");
+			for (int i = 0; cmd_node->right->cont.args[i]; i++)
+				printf("%s ",cmd_node->right->cont.args[i]);
+			printf("\n");
 		}
 		temp = temp->next;
 	}
@@ -92,15 +124,15 @@ void	print_tree(t_tree_node *tree_node, int depth, char *side)
 	while (i++ <= depth)
 		printf("\t");
 	if (tree_node->cont.cmd)
-		printf("CMD ");
+		assign_name(tree_node->type);
 	else if (tree_node->cont.file)
-		printf("REDIR ");
+		assign_name(tree_node->type);
 	else if (tree_node->cont.limiter)
-		printf("HEREDOC ");
+		assign_name(tree_node->type);
 	else if (tree_node->cont.args)
-		printf("ARG ");
+		assign_name(tree_node->type);
 	else
-		printf("PIPE ");
+		assign_name(tree_node->type);
 	printf("(%s)\n", side);
 
 	i = 1;
