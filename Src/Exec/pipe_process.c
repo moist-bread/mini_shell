@@ -26,7 +26,7 @@ void	pipe_process(t_minishell *minishell, t_pipe_data *pdata)
 void	read_and_exe_pipe_tree(t_minishell minishell, t_tree_node *tree_head,
 		t_pipe_data *pdata, int idx)
 {
-	if (tree_head->left && tree_head->left->type == CMD)
+	if (tree_head->left && tree_head->left->type == CMD) // ADD BUILT IN
 		setup_pipe_cmd(minishell, tree_head->left, pdata, idx++);
 	if (tree_head->right && tree_head->right->type == CMD)
 		setup_pipe_cmd(minishell, tree_head->right, pdata, idx++);

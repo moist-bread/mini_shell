@@ -21,7 +21,7 @@
 	tree_cont_init(&cont_1);
 	cont_1.pipe.cmd_n = 2;
 	cont_1.pipe.pid = ft_calloc(2, sizeof(int));
-	cont_1.pipe.env = minis.env[minis.env_start];
+	cont_1.pipe.env = &minis.env[minis.env_start];
 	minis.tree_head = newtreenode(cont_1);
 	minis.tree_head->type = PIPE;
 	tree_cont_init(&cont_2);
@@ -162,17 +162,14 @@ int	main(int ac, char **av, char **env)
 } */
 
 
+/*
 int	main(int ac, char **av, char **env)
 {
 	(void)env;
 	(void)ac;
 	(void)av;
 	
-	printf(YEL "(new) Testing exit built in main !" DEF "\n\n");
-
-	/* if (!av[1])
-		return (printf("whomp whomp\n"));
-	printf("number: %s\n", av[1]); */
+	printf(YEL "Testing exit built in main !" DEF "\n\n");
 	
 	t_minishell	ms;
 	t_node_cont	cont_1;
@@ -191,11 +188,63 @@ int	main(int ac, char **av, char **env)
 	ms.tree_head->right->cont.args = matrix_add_front("BANANA", ms.tree_head->right->cont.args);
 	ms.tree_head->right->cont.args = matrix_add_front("-nnnnn", ms.tree_head->right->cont.args);
 	
-	master_distributer(&ms);
+	master_distributer(&ms, ms.tree_head);
+	if (ms.tree_head)
+		free_tree(ms.tree_head);
 	free_split(ms.env);
-	/* long n;
-	if (long_check(av[1], &n) )
-		printf("%ld IS WITHIN LONG!\n", n);
-	else
-		printf("overflowing . . .\n"); */
+} 
+*/
+
+
+int	main(int ac, char **av, char **env)
+{
+	(void)env;
+	(void)ac;
+	(void)av;
+	
+	printf(YEL "Testing cmd executer main !" DEF "\n\n");
+
+	// handmade tree
+	t_minishell	ms;
+	t_node_cont	cont_1;
+	t_node_cont	cont_2;
+	t_node_cont	cont_3;
+	minishell_struct_init(&ms, env);
+	tree_cont_init(&cont_1);
+	ms.tree_head = newtreenode(cont_1);
+	ms.tree_head->type = CMD;
+	ms.tree_head->cont.cmd = ft_strdup("ls");
+	tree_cont_init(&cont_2);
+	ms.tree_head->right = newtreenode(cont_2);
+	ms.tree_head->right->type = ARG;
+	ms.tree_head->right->cont.args = matrix_add_front("./Inc", NULL);
+	ms.tree_head->right->cont.args = matrix_add_front("-la", ms.tree_head->right->cont.args);
+	tree_cont_init(&cont_3);
+	cont_3.file = ft_strdup("gato");
+	ms.tree_head->left = newtreenode(cont_3);
+	ms.tree_head->left->type = REDIR_OUT;
+	
+	// execution
+	master_distributer(&ms, ms.tree_head);
+	if (ms.tree_head) // prep for next input
+	{
+		free_tree(ms.tree_head);
+		ms.tree_head = NULL;
+	}
+
+	// handmade tree part 2
+	tree_cont_init(&cont_1);
+	ms.tree_head = newtreenode(cont_1);
+	ms.tree_head->type = BUILT_IN;
+	ms.tree_head->cont.cmd = ft_strdup("pwd");
+	tree_cont_init(&cont_2);
+	ms.tree_head->right = newtreenode(cont_2);
+	ms.tree_head->right->type = ARG;
+	ms.tree_head->right->cont.args = matrix_add_front("-Inc", NULL);
+	// ms.tree_head->right->cont.args = matrix_add_front("-la", ms.tree_head->right->cont.args);
+
+	master_distributer(&ms, ms.tree_head);
+
+	// clean up
+	minishell_clean(ms, ms.exit_status);
 }

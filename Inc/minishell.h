@@ -137,7 +137,7 @@ void		assign_pipe_fds(t_minishell ms, t_pipe_data *pdata, int *redir_fd,
 void		child_parse_and_exe(t_minishell ms, t_tree_node *node,
 				t_pipe_data *pdata);
 char		*get_path(t_minishell minishell, char *cmd);
-int			error_code_for_exec(t_pipe_data *pdata);
+int			error_code_for_exec(char *path);
 
 // EXPORT
 
@@ -185,6 +185,9 @@ int			long_check(char *argv, long *arg_n);
 
 // DISTRIBUTER
 
-void		master_distributer(t_minishell *ms);
+int			master_distributer(t_minishell *ms, t_tree_node *node);
+void		command_process(t_minishell *ms, t_tree_node *node);
+void		cmd_parse_and_exe(t_minishell ms, t_tree_node *node, int *redir);
+void		pwd_built_in(t_minishell *ms, t_tree_node *node);
 
 #endif // MINISHELL_H

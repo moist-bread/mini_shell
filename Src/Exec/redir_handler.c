@@ -19,9 +19,9 @@ void redir_handler(t_minishell minishell, t_tree_node *node, int *in, int *out)
 		// NO MORE REDIRS ARE HANDLED, cur cmd doesnt exec?
 		perror(node->left->cont.file);
 		minishell_clean(minishell, 1);
-	}	
+	}
 	if (node->left->left) // more redir
-		redir_handler(minishell, node->left, in, out);	
+		redir_handler(minishell, node->left, in, out);
 }
 
 /// @brief Opens files specified by NODE and stores it in IN or OUT,
