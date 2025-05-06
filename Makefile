@@ -24,7 +24,8 @@ EXEC_MAIN_C		=	exec_main.c matrix_utils.c pipe_process.c pipe_redir_handler.c \
 
 PARSE_MAIN_C	=	parse_main.c
 PARSE_FILES_C	= 	tokenization_utils.c tokenization.c checks.c space_utils.c \
-					check_utils.c types.c errors.c
+					check_types_utils.c types.c errors.c cracked_split.c cracked_split_utils.c \
+					tree.c tree_utils.c tree_func_utils.c
 
 MAIN		=	$(addprefix	$(MINISHELL_DIR)/, $(MAIN_C))
 EXEC_MAIN	=	$(addprefix	$(EXEC_DIR)/, $(EXEC_MAIN_C))
@@ -65,7 +66,7 @@ exec: $(OBJS_MAIN_EXEC) $(OBJS) $(LIBFT)
 
 parse: $(OBJS_MAIN_PARSE) $(OBJS) $(LIBFT)
 	$(M_COMP_P)
-	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN_PARSE) $(OBJS) $(LIBFT) $(RL) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS_MAIN_PARSE) $(OBJS) $(LIBFT) $(RL) -o $(NAME)
 	$(M_DONE)
 
 clean:

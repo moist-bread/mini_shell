@@ -28,11 +28,21 @@
 // If There Redir, Right is Arg, Check if next after Arg is Redir.
 // If is Redir do the normal, if not check if is Pipe,
 // If is Pipe start over.
+// If theres no CMD but REDIR exists vreate CMD node NULL and the REDIR stays in the left:
+// EX: > outfile | > outfile
 // -------------------------------------------------------------------------------------------------|
 
 // CHECKS ERROR
 
-// Check what is after here_doc, strncmp, if for redirs ou pipe Error the syntax
+// Check what is after here_doc, strncmp, if for redirs ou pipe Error the syntax - Done
+// If there is no space between quotes is considered 1 token: - Done
+// Example: "easd"'O'""
+// Get ridof len in working quotes and do a funciton that gets me the lenght in get word; - Done
+// Implement in split that needs to split spaces and tabs in the same String; - Done
+// This CMD:  >> banana cmd banana
+// Needs to be REDIR ARG CMD ARG but is doing REDIR ARG ARG ARG - I think is Done;
+// In the tree the last node redir is over writig the prrevious ones;
+// > file > | a - Syntax Error - done
 
 // -------------------------------------------------------------------------------------------------|
 
@@ -64,6 +74,29 @@
 
 // STRUCTS
 
+/// @brief Enumeration of all possible node types
+/// @param CMD Commands
+/// @param ARG Versatile arguments
+/// @param PIPE |
+/// @param REDIR_IN <
+/// @param REDIR_HERE_DOC <<
+/// @param LIM Arg after here_doc
+/// @param REDIR_OUT >
+/// @param REDIR_OUT_APPEND >>
+/// @param BUILT_IN echo cd pwd export unset env exit
+typedef enum s_node_type
+{
+	CMD,
+	ARG,
+	PIPE,
+	LIM,
+	REDIR_IN,
+	REDIR_HERE_DOC,
+	REDIR_OUT,
+	REDIR_OUT_APPEND,
+	BUILT_IN,
+}						t_node_type;
+
 /// @param cmd_n Amount of cmds
 /// @param cur_pipe Stores IN fd and OUT fd
 /// @param next_pipe Read end of created pipe
@@ -82,28 +115,21 @@ typedef struct s_pipe_data
 	char				**env;
 }						t_pipe_data;
 
-/// @brief Enumeration of all possible node types
-/// @param CMD Commands
-/// @param ARG Versatile arguments
-/// @param PIPE |
-/// @param REDIR_IN <
-/// @param REDIR_HERE_DOC <<
-/// @param LIM Arg after here_doc
-/// @param REDIR_OUT >
-/// @param REDIR_OUT_APPEND >>
-/// @param BUILT_IN echo cd pwd export unset env exit
-typedef enum s_node_type
+/// @brief Place where the content of t_node_type is stored
+/// @param cmd (char *) Main command to be executed
+/// @param args (char **) Versalite cmd arguments
+/// @param pipe (t_pipe_data) Needed for pipe execution
+/// @param file (char *) String for needed Infile/Outfile
+/// @param limiter (char *) Limiter string for here_doc
+typedef struct s_node_cont
 {
-	CMD,
-	ARG,
-	PIPE,
-	REDIR_IN,
-	REDIR_HERE_DOC,
-	LIM,
-	REDIR_OUT,
-	REDIR_OUT_APPEND,
-	BUILT_IN,
-}						t_node_type;
+	char				*cmd;
+	char				**args;
+	char				pipe_c;
+	t_pipe_data			pipe;
+	char				*file;
+	char				*limiter;
+}						t_node_cont;
 
 /// @param type Node Type
 /// @param cont Node Content
@@ -115,21 +141,6 @@ typedef struct s_token
 	struct s_token		*next;
 	struct s_token		*prev;
 }						t_token;
-
-/// @brief Place where the content of t_node_type is stored
-/// @param cmd (char *) Main command to be executed
-/// @param args (char **) Versalite cmd arguments
-/// @param pipe (t_pipe_data) Needed for pipe execution
-/// @param file (char *) String for needed Infile/Outfile
-/// @param limiter (char *) Limiter string for here_doc
-typedef struct s_node_cont
-{
-	char				*cmd;
-	char				**args;
-	t_pipe_data			pipe;
-	char				*file;
-	char				*limiter;
-}						t_node_cont;
 
 /// @brief Abstract Syntax Tree Node
 /// @param type Node Type
@@ -160,45 +171,78 @@ typedef struct s_minishell
 // TBD
 // (to be determined) functions without a place yet
 
-// PARSING
+// ------------------------PARSING----------------------------
+
+// TOKENS
 
 void	tokenadd_back(t_token **tklst, t_token *newtk);
 void	tokenadd_front(t_token **tklst, t_token *newtk);
 t_token	*newtoken(char *cont);
 t_token	*create_tokens(char *input);
-char	*readinput(char	*input);
 void	place_token(char *input, t_token **head);
 void	print_tokens(t_token *tokens);
+void	clear_token_lst(t_token	*token);
+bool	is_token(t_token *token);
+
+// TREE UTILS
+
+void		print_tree(t_tree_node *tree_node, int depth, char *side);
+void   		tree_apply_print(t_tree_node *root, int depth, char *side);
+t_tree_node	*newtreenode(t_node_cont cont);
+void		create_tree(t_token *tokens);
+t_node_cont	assign_tree_cont(t_token *token);
+void		if_command(t_token *tokens, t_tree_node *cmd_node);
+void		place_treenode(t_token *tokens, t_tree_node **root, bool pipe);
+void		free_tree_node_cont(t_node_cont cont);
+void		free_tree(t_tree_node *tree_head);
+void		tree_cont_init(t_node_cont *cont);
+t_token		*iteri_till_pipe(t_token *token);
+char		**tree_alloc_args(t_token *token);
+
+// ASSIGN TYPES
+
 void	assign_type_token(t_token *token);
+void	assign_tree_type(t_token *token, t_tree_node *tree);
 void	assign_name(int type);
 void	assigns_types(t_token *token);
+void	assigns_cmd(t_token *head);
 void	assigns_built_in(t_token *token);
-void	assigns_cmd_or_arg(t_token *token);
+void	is_limtiter_or_arg(t_token **temp);
+
+// UTILS
+
 char	*add_spaces(char *input);
 int		space_length(char *input);
+char	*readinput(char	*input);
 char	*space_put(char *input, int len);
+
+// CHECKS
+
 void	check_quotes(char *input);
-void	clear_token_lst(t_token	*token);
-void	ft_error_check(t_token *token);
 void	master_check(t_token *token);
-bool	is_token(t_token *token);
-char	*merge_adjacent_segments(char *input);
-void	check_double_pipe(int *j, int *i, char *dest);
+
+// ERRORS
+
+void	ft_error_check(t_token *token);
+
+// SPLIT UTILS
+
+char	**cracked_split(char const *s);
+int		word_len(char const *s);
+int		skip_quote(const char *s);
+void	word_runner(const char **s);
+bool	is_sep(char c);
+
+// char	*merge_adjacent_segments(char *input);
+// void	check_double_pipe(int *j, int *i, char *dest);
 // void	checks_here_doc(t_token	*token);
 // char	**cracked_split(char const *s, char c);
 // void	working_quote(char const *s, int *len, char c);
 // char	*extract_single_quote(const char *s, int len);
 // int		handle_single_quote(const char **s);
 
-// TREE UTILS
 
-t_tree_node	*newtreenode(t_node_cont cont);
-void		free_tree_node_cont(t_node_cont cont);
-void		free_tree(t_tree_node *tree_head);
-void		tree_cont_init(t_node_cont *cont);
-
-// EXECUTION
-// put execution prototypes here
+// --------------------------EXECUTION--------------------------
 
 void	minishell_struct_init(t_minishell *minis, char **env);
 

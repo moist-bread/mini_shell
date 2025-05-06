@@ -52,29 +52,10 @@ int	space_length(char *input)
 static	void	between_quotes(char *input, char *dest, int *i, int *j)
 {
 	char	quote;
-	// char	miniquote;
-
-	// miniquote = '\'';
-	// quote = '\"';
-	// if (miniquote == input[*i])
-	// {
-	// 	dest[(*j)++] = input[(*i)++];
-	// 	while (ft_isprint(input[*i]) && input[*i] != miniquote)
-	// 		dest[(*j)++] = input[(*i)++];
-	// 	if (input[*i] == miniquote)
-	// 		dest[(*j)++] = input[(*i++)];
-	// }
-	// else if (quote == input[*i])
-	// {
-	// 	dest[(*j)++] = input[(*i)++];
-	// 	while (ft_isprint(input[*i]) && input[*i] != quote)
-	// 		dest[(*j)++] = input[(*i)++];
-	// 	if (input[*i] == quote)
-	// 		dest[(*j)++] = input[(*i++)];
-	// }
+	
 	quote = input[*i];
 	dest[(*j)++] = input[(*i)++];
-	while (ft_isprint(input[*i]) && input[*i] != quote)
+	while (input[*i] && ft_isprint(input[*i]) && input[*i] != quote)
 		dest[(*j)++] = input[(*i)++];
 	if (input[*i] == quote)
 		dest[(*j)++] = input[(*i++)];
@@ -90,7 +71,11 @@ static void	if_operators(char *input, char *dest, int *i, int *j)
 	if (*i > 0 && input[*i - 1] != ' ' && !ft_strchr("|<>", input[*i - 1]))
 		dest[(*j)++] = ' ';
 	if (input[*i] && input[*i] == '|' && input[*i + 1] == '|')
-		check_double_pipe(j, i, dest);
+	{
+		dest[(*j)++] = input[(*i)++];
+		dest[(*j)++] = ' ';
+		dest[(*j)++] = input[(*i)++];
+	}
 	else
 	{
 		dest[(*j)++] = input[(*i)++];
@@ -127,7 +112,6 @@ char	*space_put(char *input, int len)
 			dest[j++] = input[i];
 		if (input[i])
 			i++;
-
 	}
 	dest[j] = '\0';
 	return (dest);

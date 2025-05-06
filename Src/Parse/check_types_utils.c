@@ -1,20 +1,29 @@
 
 #include "../../Inc/minishell.h"
 
-/// @brief Checks if the quotes are impar
+/// @brief Checks if the quotes are impar and gives an error if they are
 /// @param input String
 void	check_quotes(char *input)
 {
-	int	i;
-	int quote;
+	int		i;
+	int 	quote;
+	char	is_quote;
 
 	i = 0;
 	quote = 0;
 	while (input[i])
 	{
 		if (input[i] == '\"' || input[i] == '\'')
+		{
+			is_quote = input[i++];
 			quote++;
-		i++;
+			while (input[i] && input[i] != is_quote)
+				i++;
+			if (input[i] && input[i++] == is_quote)
+				quote++;
+		}
+		else
+			i++;
 	}
 	if (quote % 2 != 0)
 	{
@@ -51,11 +60,12 @@ char	*merge_adjacent_segments(char *input)
 	{
 		if (input[i] == '\'' || input[i] == '\"')
 		{
-			quote = input[i++];
+			quote = input[i];
+			result[j++] = input[i++];
 			while (input[i] && input[i] != quote)
 				result[j++] = input[i++];
 			if (input[i] == quote)
-				i++;
+				result[j++] = input[i++];
 		}
 		else
 			result[j++] = input[i++];
@@ -64,14 +74,18 @@ char	*merge_adjacent_segments(char *input)
 	return (result);
 }
 
-/// @brief Puts space between two Pipes
-/// @param j Increment
-/// @param i Increment
-/// @param dest The updated input 
-void	check_double_pipe(int *j, int *i, char *dest)
+void	is_limtiter_or_arg(t_token **temp)
 {
-	dest[(*j)++] = '|';
-	dest[(*j)++] = ' ';
-	dest[(*j)++] = '|';
-	*i += 2;
+	if ((*temp)->type == REDIR_HERE_DOC && (*temp)->next)
+	{
+		*temp = (*temp)->next;
+		(*temp)->type = LIM;
+		
+	}
+	else if (is_token(*temp) && (*temp)->next)
+	{
+		*temp = (*temp)->next;
+		(*temp)->type = ARG;
+		assigns_types(*temp);
+	}
 }
