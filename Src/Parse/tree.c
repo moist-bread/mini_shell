@@ -40,6 +40,32 @@ t_node_cont	assign_tree_cont(t_token *token)
 	return (cont);
 }
 
+/// @brief The functions that assigns the nodes when theres no pipe or left side
+/// of the first pipe
+/// @param tokens Node from the token list
+/// @param new_tree_node New node of the AST_Tree
+/// @param root The root of the AST_Tree
+static void	if_not_pipe(t_token *tokens, t_tree_node *new_tree_node, t_tree_node **root)
+{
+	t_token *cmd_token;
+	
+	cmd_token = tokens;
+	while (cmd_token && cmd_token->type != PIPE && cmd_token->type != CMD && cmd_token->type != BUILT_IN)
+		cmd_token = cmd_token->next;
+	if (cmd_token && (cmd_token->type == CMD || cmd_token->type == BUILT_IN))
+	{
+		new_tree_node = newtreenode(assign_tree_cont(cmd_token));
+		new_tree_node->type = cmd_token->type;
+	}
+	else
+	{
+		new_tree_node = newtreenode(assign_tree_cont(NULL));
+		new_tree_node->type = CMD;
+	}
+	if_command(tokens, new_tree_node);
+	*root = new_tree_node;
+}
+
 /// @brief This functions puts the new tree_node in the right place in the AST_Tree
 /// @param tokens Node from the token list
 /// @param root The first node of the AST_Tree
@@ -49,8 +75,9 @@ void	place_treenode(t_token *tokens, t_tree_node **root, bool pipe)
 	t_token		*pipe_token;
 	t_tree_node	*new_tree_node;
 
-	printf("Entered Place Tree Node\n");
+	// printf("Entered Place Tree Node\n");
 	pipe_token = NULL;
+	new_tree_node = NULL;
 	if (pipe == false)
 		pipe_token = iteri_till_pipe(tokens);
 	if (pipe_token && pipe_token->type == PIPE)
@@ -63,12 +90,5 @@ void	place_treenode(t_token *tokens, t_tree_node **root, bool pipe)
 		*root = new_tree_node;
 	}
 	else
-	{
-		printf("ELSE\n");
-		new_tree_node = newtreenode(assign_tree_cont(tokens));
-		new_tree_node->type = tokens->type;
-		if (new_tree_node->cont.cmd)
-			if_command(tokens, new_tree_node);
-		*root = new_tree_node;
-	}
+		if_not_pipe(tokens, new_tree_node, root);
 }
