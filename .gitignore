@@ -58,6 +58,10 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+readline.supp
+file
+outfile
+infile
 
 Includes/LICENSE
 Includes/README.md
