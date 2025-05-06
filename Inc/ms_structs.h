@@ -60,12 +60,14 @@ typedef struct s_token
 /// @param cmd (char *) Main command to be executed
 /// @param args (char **) Versalite cmd arguments
 /// @param pipe (t_pipe_data) Needed for pipe execution
+/// @param pipe_c (t_pipe_data) Needed for pipe execution
 /// @param file (char *) String for needed Infile/Outfile
 /// @param limiter (char *) Limiter string for here_doc
 typedef struct s_node_cont
 {
 	char				*cmd;
 	char				**args;
+	char				pipe_c;
 	t_pipe_data			pipe;
 	char				*file;
 	char				*limiter;
@@ -94,7 +96,7 @@ typedef struct s_minishell
 {
 	t_tree_node			*tree_head;
 	char				**env;
-	int					env_lim;
+	int					env_start;
 	int					exit_status;
 }						t_minishell;
 
