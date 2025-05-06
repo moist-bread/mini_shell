@@ -4,13 +4,15 @@
 
 // NOTES: ANDRE
 
-// char *input = "< infile cat | cat | "ls -l" > out"; 
+// char *input = "< infile cat | cat | "ls -l" > out";
 // cracked slpit returns t_node just for basic token and sep is space.
 // Nodes:
-// 1 - "<"; 2 - "infile"; 3 - "cat"; 4 - "|"; 5 - "cat"; etc; 
+// 1 - "<"; 2 - "infile"; 3 - "cat"; 4 - "|"; 5 - "cat"; etc;
 // funcs that check the new list of tokens.
 // Funcs:
-// Check Pipes and redir for spaces, if they dont have it put space after and before
+// Check Pipes and redir for spaces,
+// if they
+//	dont have it put space after and before
 // Diverse check enquanto corro a lista the tokens;
 // Assign types to the tokens;
 // Func That will create the tree for varios Casos;
@@ -21,8 +23,8 @@
 // Other pipes just the type and the correspondant left and right nodes;
 // If Pipe, Left always cmds;
 // If Pipe, Right next Operator or The final cmds;
-// If Cmd, Left Redir, Right Args "Flags e afins" 
-// If Redir, Left Redir, cont the file name or LIMITER, 
+// If Cmd, Left Redir, Right Args "Flags e afins"
+// If Redir, Left Redir, cont the file name or LIMITER,
 // Consult on the .h for the Types of Redir;
 // Check with rackel if is Build it for the correct Type;
 // If There Redir, Right is Arg, Check if next after Arg is Redir.
@@ -48,22 +50,7 @@
 
 // LIBS
 # include "Libft/libft.h"
-# include <curses.h>
-# include <dirent.h>
-# include <readline/history.h>
-# include <readline/readline.h>
-# include <signal.h>
-# include <stdarg.h>
-# include <stdbool.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <sys/ioctl.h>
-# include <sys/stat.h>
-# include <sys/wait.h>
-# include <term.h>
-# include <termios.h>
-# include <unistd.h>
+# include "ms_structs.h"
 
 // DEFINES
 // colors
@@ -71,49 +58,6 @@
 # define BLU "\e[0;34m"
 # define CYN "\e[0;36m"
 # define DEF "\e[0m"
-
-// STRUCTS
-
-/// @brief Enumeration of all possible node types
-/// @param CMD Commands
-/// @param ARG Versatile arguments
-/// @param PIPE |
-/// @param REDIR_IN <
-/// @param REDIR_HERE_DOC <<
-/// @param LIM Arg after here_doc
-/// @param REDIR_OUT >
-/// @param REDIR_OUT_APPEND >>
-/// @param BUILT_IN echo cd pwd export unset env exit
-typedef enum s_node_type
-{
-	CMD,
-	ARG,
-	PIPE,
-	LIM,
-	REDIR_IN,
-	REDIR_HERE_DOC,
-	REDIR_OUT,
-	REDIR_OUT_APPEND,
-	BUILT_IN,
-}						t_node_type;
-
-/// @param cmd_n Amount of cmds
-/// @param cur_pipe Stores IN fd and OUT fd
-/// @param next_pipe Read end of created pipe
-/// @param pid Stores child process ids
-/// @param cmd Command and its arguments
-/// @param path Path to said command
-/// @param env Environment
-typedef struct s_pipe_data
-{
-	int					cmd_n;
-	int					cur_pipe[2];
-	int					next_pipe;
-	int					*pid;
-	char				**cmd;
-	char				*path;
-	char				**env;
-}						t_pipe_data;
 
 /// @brief Place where the content of t_node_type is stored
 /// @param cmd (char *) Main command to be executed
@@ -130,46 +74,6 @@ typedef struct s_node_cont
 	char				*file;
 	char				*limiter;
 }						t_node_cont;
-
-/// @param type Node Type
-/// @param cont Node Content
-/// @param next Next Node
-typedef struct s_token
-{
-	t_node_type			type;
-	char				*cont;
-	struct s_token		*next;
-	struct s_token		*prev;
-}						t_token;
-
-/// @brief Abstract Syntax Tree Node
-/// @param type Node Type
-/// @param cont Node Content
-/// @param prev Previous tree node
-/// @param left Left branch
-/// @param right Right branch
-typedef struct s_tree_node
-{
-	t_node_type			type;
-	t_node_cont			cont;
-	struct s_tree_node	*prev;
-	struct s_tree_node	*left;
-	struct s_tree_node	*right;
-}						t_tree_node;
-
-/// @brief Overarching Minishell Structure
-/// @param tree_head Parsed Input Tree
-/// @param env Environment
-/// @param exit_status Exit Status of the latest process
-typedef struct s_minishell
-{
-	t_tree_node			*tree_head;
-	char				**env;
-	int					exit_status;
-}						t_minishell;
-
-// TBD
-// (to be determined) functions without a place yet
 
 // ------------------------PARSING----------------------------
 
@@ -241,43 +145,107 @@ bool	is_sep(char c);
 // char	*extract_single_quote(const char *s, int len);
 // int		handle_single_quote(const char **s);
 
+char		*get_env(char *search, char **env);
+int			get_env_idx(char **env, char *search);
+char		*get_export_key(char *var);
+char		*get_export_value(char *var);
+int			env_elem_len(char *var, int key_flag);
 
-// --------------------------EXECUTION--------------------------
+// EXPORT UTILS
 
-void	minishell_struct_init(t_minishell *minis, char **env);
+void		export_append(t_minishell *ms, int idx, char *new);
+void		replace_env_value(t_minishell *ms, char *key, char *new, int idx);
+void		move_env_var(t_minishell *ms, int *old_idx, int new_idx);
+
+// NEW LIBFT
+
+int			ft_strcmp(char *s1, char *s2);
+char		*ft_strndup(char *src, size_t n);
+int			ft_iswhitespace(int c);
+
+// MATRIX QUICK SORT
+
+char		**sort_matrix(char **original, int len);
+void		ft_string_swap(char **a, char **b);
+
+
+// STRUCT INIT
+
+void		minishell_struct_init(t_minishell *minis, char **env);
 
 // MATRIX UTILS
 
-char	**matrix_add_front(char *add, char **original);
-size_t	ft_matrixlen(char **matrix);
-char	**matrix_dup_char(char **original_matrix);
-void	free_matrix(void **matrix, int max);
+char		**matrix_add_front(char *add, char **original);
+size_t		ft_matrixlen(char **matrix);
+char		**matrix_dup_char(char **original_matrix);
+void		free_matrix(void **matrix, int max);
 
 // PIPE PROCESS
 
-void	pipex_process(t_minishell *minishell, t_tree_node *tree_head,
-		t_pipe_data *pipex);
-void	read_and_exe_pipe_tree(t_minishell minishell, t_tree_node *tree_head,
-		t_pipe_data *pipex, int idx);
-void	execute_pipex_cmd(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data *pipex, int idx);
-void	multi_proc_wait(t_pipe_data *pipex, int *status);
-void	pipex_clean_up(t_minishell minishell, int status);
+void		pipe_process(t_minishell *minishell, t_pipe_data *pipex);
+void		read_and_exe_pipe_tree(t_minishell minishell,
+				t_tree_node *tree_head, t_pipe_data *pipex, int idx);
+void		setup_pipe_cmd(t_minishell minishell, t_tree_node *cmd_node,
+				t_pipe_data *pipex, int idx);
+void		process_waiting(int proc_n, int *ids, int *status);
+void		minishell_clean(t_minishell minishell, int status);
 
-// PIPE REDIR HANDLER
+// REDIR HANDLER
 
-void	redir_handler(t_minishell minishell, t_tree_node *cmd_node, int *in, int *out);
-int		here_doc_redir(char *limiter);
-void	master_close(void);
+void		redir_handler(t_minishell minishell, t_tree_node *node, int *in,
+				int *out);
+void		master_close(void);
 
 // PIPE CHILD PROCESS
 
-void	assign_pipe_fds(t_minishell minishell, t_pipe_data *pipex, int *redir_fd, int idx);
-void	child_parse_and_exe(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data *pipex);
-char	*get_path(t_minishell minishell, char *cmds);
-int		error_code_for_exec(t_pipe_data *pipex);
+void		assign_pipe_fds(t_minishell ms, t_pipe_data *pdata, int *redir_fd,
+				int idx);
+void		child_parse_and_exe(t_minishell ms, t_tree_node *node,
+				t_pipe_data *pdata);
+char		*get_path(t_minishell minishell, char *cmd);
+int			error_code_for_exec(t_pipe_data *pdata);
+
+// EXPORT
+void		export_built_in(t_minishell *ms, t_tree_node *node);
+void		print_env(t_minishell minishell, int full_env_flag);
+char		*get_export_name(char *arg);
+int			invalid_export(char *arg);
+void		invalid_export_message(char *arg);
+
 
 // ENV UTILS
-char	*get_env(char *search, char **env);
-char	**env_add_front(char *add, char **original);
 
-#endif //MINISHELL_H
+char		*get_env(char *search, char **env);
+char		**env_add_front(char *add, char **original);
+char		**env_add_to_index(char **env, char *add, size_t idx, size_t len);
+int			find_env(char **env, char *search);
+void		replace_env(char **env, char *name, char *new);
+void		export_append(char **env, int old_idx, char *new);
+
+// EXIT
+
+int			ft_strcmp(char *s1, char *s2);
+char		*ft_strndup(char *src, size_t n);
+
+// DISTRIBUTER
+
+char		**sort_matrix(char **original, int len);
+void		ft_string_swap(char **a, char **b);
+
+// ENV UTILS
+
+void		unset_built_in(t_minishell *ms, t_tree_node *node);
+void		remove_env_var(t_minishell *ms, size_t idx, size_t len);
+void		echo_built_in(t_minishell *ms, t_tree_node *node);
+void		env_built_in(t_minishell *ms, t_tree_node *node);
+
+// EXIT
+
+void		exit_built_in(t_minishell *ms, t_tree_node *node);
+int			long_check(char *argv, long *arg_n);
+
+// DISTRIBUTER
+
+void		master_distributer(t_minishell *ms);
+
+#endif // MINISHELL_H

@@ -8,6 +8,7 @@ LIBFT	=	./Inc/Libft/libft.a
 CC		=	cc
 CFLAGS	=	-Wall -Wextra -Werror -g
 RL		=	-lreadline
+SUPP	=	--suppressions=readline.supp
 
 # -->┊( DIRECTORIES )
 SRC_DIR			=	Src
@@ -19,8 +20,12 @@ PARSE_DIR		=	Parse
 # -->┊( SOURCES AND OBJS )
 MAIN_C			=	minishell_main.c
 
-EXEC_MAIN_C		=	exec_main.c matrix_utils.c pipe_process.c pipe_redir_handler.c \
-					pipe_child_pro.c tree_utils.c env_utils.c
+EXEC_MAIN_C		=	exec_main.c struct_init.c distributer.c \
+					pipe_process.c redir_handler.c pipe_child_pro.c \
+					matrix_utils.c matrix_quick_sort.c \
+					tree_utils.c \
+					export.c export_utils.c env.c get_env.c unset.c echo.c exit.c directory.c \
+					ft_strcmp.c ft_strndup.c ft_iswhitespace.c
 
 PARSE_MAIN_C	=	parse_main.c
 PARSE_FILES_C	= 	tokenization_utils.c tokenization.c checks.c space_utils.c \
@@ -61,7 +66,7 @@ $(LIBFT):
 
 exec: $(OBJS_MAIN_EXEC) $(OBJS) $(LIBFT)
 	$(M_COMP_E)
-	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN_EXEC) $(OBJS) $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN_EXEC) $(OBJS) $(LIBFT) $(RL) -o $(NAME)
 	$(M_DONE)
 
 parse: $(OBJS_MAIN_PARSE) $(OBJS) $(LIBFT)

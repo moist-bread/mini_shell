@@ -48,6 +48,7 @@ void	free_tree(t_tree_node *tree_head)
 		free_tree(tree_head->right);
 	free_tree_node_cont(tree_head->cont);
 	free(tree_head);
+	tree_head = NULL;
 }
 
 /// @brief Frees the content of witch tree node
