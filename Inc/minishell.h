@@ -51,22 +51,6 @@
 // LIBS
 # include "Libft/libft.h"
 # include "ms_structs.h"
-# include <curses.h>
-# include <dirent.h>
-# include <readline/history.h>
-# include <readline/readline.h>
-# include <signal.h>
-# include <stdarg.h>
-# include <stdbool.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <sys/ioctl.h>
-# include <sys/stat.h>
-# include <sys/wait.h>
-# include <term.h>
-# include <termios.h>
-# include <unistd.h>
 
 // DEFINES
 // colors
@@ -75,68 +59,37 @@
 # define CYN "\e[0;36m"
 # define DEF "\e[0m"
 
-// PARSING
+/// @brief Place where the content of t_node_type is stored
+/// @param cmd (char *) Main command to be executed
+/// @param args (char **) Versalite cmd arguments
+/// @param pipe (t_pipe_data) Needed for pipe execution
+/// @param file (char *) String for needed Infile/Outfile
+/// @param limiter (char *) Limiter string for here_doc
+typedef struct s_node_cont
+{
+	char				*cmd;
+	char				**args;
+	char				pipe_c;
+	t_pipe_data			pipe;
+	char				*file;
+	char				*limiter;
+}						t_node_cont;
 
-void		tokenadd_back(t_token **tklst, t_token *newtk);
-void		tokenadd_front(t_token **tklst, t_token *newtk);
-t_token		*newtoken(char *cont);
-t_token		*create_tokens(char *input);
-char		*readinput(char *input);
-void		place_token(char *input, t_token **head);
-void		print_tokens(t_token *tokens);
-void		assign_type_token(t_token *token);
-void		assign_name(int type);
-void		assigns_types(t_token *token);
-void		assigns_built_in(t_token *token);
-void		assigns_cmd_or_arg(t_token *token);
-char		*add_spaces(char *input);
-int			space_length(char *input);
-char		*space_put(char *input, int len);
-void		check_quotes(char *input);
-void		clear_token_lst(t_token *token);
-void		ft_error_check(t_token *token);
-void		master_check(t_token *token);
-bool		is_token(t_token *token);
-char		*merge_adjacent_segments(char *input);
-void		check_double_pipe(int *j, int *i, char *dest);
-// void	checks_here_doc(t_token	*token);
-// char	**cracked_split(char const *s, char c);
-// void	working_quote(char const *s, int *len, char c);
-// char	*extract_single_quote(const char *s, int len);
-// int		handle_single_quote(const char **s);
+// ------------------------PARSING----------------------------
 
+// TOKENS
 
-// --------------------------EXECUTION--------------------------
+void	tokenadd_back(t_token **tklst, t_token *newtk);
+void	tokenadd_front(t_token **tklst, t_token *newtk);
+t_token	*newtoken(char *cont);
+t_token	*create_tokens(char *input);
+void	place_token(char *input, t_token **head);
+void	print_tokens(t_token *tokens);
+void	clear_token_lst(t_token	*token);
+bool	is_token(t_token *token);
 
-// STRUCT INIT
+// TREE UTILS
 
-void		minishell_struct_init(t_minishell *minis, char **env);
-
-// MATRIX UTILS
-
-char		**matrix_add_to_index(char **env, char *add, size_t idx,
-				size_t len);
-char		**matrix_add_front(char *add, char **original);
-size_t		ft_matrixlen(char **matrix);
-char		**matrix_dup_char(char **original_matrix);
-
-// PIPE PROCESS
-
-void		pipe_process(t_minishell *minishell, t_pipe_data *pdata);
-void		read_and_exe_pipe_tree(t_minishell minishell,
-				t_tree_node *tree_head, t_pipe_data *pdata, int idx);
-void		setup_pipe_cmd(t_minishell minishell, t_tree_node *cmd_node,
-				t_pipe_data *pdata, int idx);
-void		process_waiting(int proc_n, int *ids, int *status);
-void		minishell_clean(t_minishell minishell, int status);
-
-// REDIR HANDLER
-
-void		redir_handler(t_minishell minishell, t_tree_node *node, int *in,
-				int *out);
-void		master_close(void);
-
-// PIPE CHILD PROCESS
 void		print_tree(t_tree_node *tree_node, int depth, char *side);
 void   		tree_apply_print(t_tree_node *root, int depth, char *side);
 t_tree_node	*newtreenode(t_node_cont cont);
@@ -150,12 +103,7 @@ void		tree_cont_init(t_node_cont *cont);
 t_token		*iteri_till_pipe(t_token *token);
 char		**tree_alloc_args(t_token *token);
 
-void		assign_pipe_fds(t_minishell ms, t_pipe_data *pdata, int *redir_fd,
-				int idx);
-void		child_parse_and_exe(t_minishell ms, t_tree_node *node,
-				t_pipe_data *pdata);
-char		*get_path(t_minishell minishell, char *cmd);
-int			error_code_for_exec(char *path);
+// ASSIGN TYPES
 
 void	assign_type_token(t_token *token);
 void	assign_tree_type(t_token *token, t_tree_node *tree);
@@ -164,14 +112,38 @@ void	assigns_types(t_token *token);
 void	assigns_cmd(t_token *head);
 void	assigns_built_in(t_token *token);
 void	is_limtiter_or_arg(t_token **temp);
-// EXPORT
 
-void		export_built_in(t_minishell *ms, t_tree_node *node);
-void		print_env(t_minishell minishell, int export_flag);
-int			invalid_export(char *arg);
-void		export_distribute(t_minishell *ms, char *arg, char *key);
+// UTILS
 
-// GET ENV
+char	*add_spaces(char *input);
+int		space_length(char *input);
+char	*readinput(char	*input);
+char	*space_put(char *input, int len);
+
+// CHECKS
+
+void	check_quotes(char *input);
+void	master_check(t_token *token);
+
+// ERRORS
+
+void	ft_error_check(t_token *token);
+
+// SPLIT UTILS
+
+char	**cracked_split(char const *s);
+int		word_len(char const *s);
+int		skip_quote(const char *s);
+void	word_runner(const char **s);
+bool	is_sep(char c);
+
+// char	*merge_adjacent_segments(char *input);
+// void	check_double_pipe(int *j, int *i, char *dest);
+// void	checks_here_doc(t_token	*token);
+// char	**cracked_split(char const *s, char c);
+// void	working_quote(char const *s, int *len, char c);
+// char	*extract_single_quote(const char *s, int len);
+// int		handle_single_quote(const char **s);
 
 char		*get_env(char *search, char **env);
 int			get_env_idx(char **env, char *search);
