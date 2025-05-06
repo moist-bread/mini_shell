@@ -121,6 +121,6 @@ void	export_distribute(t_minishell *ms, char *arg, char *key)
 			'='))
 	{
 		printf("key is present, different value\n");
-		replace_env_value(ms, key, arg, env_idx);
+		replace_env_value(ms, key, get_export_value(arg), env_idx);
 	}
 }

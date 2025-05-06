@@ -17,7 +17,7 @@ int	master_distributer(t_minishell *ms, t_tree_node *node)
 		if (!ft_strcmp("echo", node->cont.cmd))
 			echo_built_in(ms, node);
 		else if (!ft_strcmp("cd", node->cont.cmd))
-			; // coming soon
+			cd_built_in(ms, node); // coming soon
 		else if (!ft_strcmp("pwd", node->cont.cmd))
 			pwd_built_in(ms, node); // coming soon
 		else if (!ft_strcmp("export", node->cont.cmd))

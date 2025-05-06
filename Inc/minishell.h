@@ -189,5 +189,6 @@ int			master_distributer(t_minishell *ms, t_tree_node *node);
 void		command_process(t_minishell *ms, t_tree_node *node);
 void		cmd_parse_and_exe(t_minishell ms, t_tree_node *node, int *redir);
 void		pwd_built_in(t_minishell *ms, t_tree_node *node);
+void		cd_built_in(t_minishell *ms, t_tree_node *node);
 
 #endif // MINISHELL_H

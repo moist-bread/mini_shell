@@ -88,17 +88,10 @@ typedef struct s_tree_node
 	struct s_tree_node	*right;
 }						t_tree_node;
 
-typedef struct s_env
-{
-	char				*key;
-	char				*value;
-	bool				env;
-	struct s_env		*next;
-}						t_env;
-
 /// @brief Overarching Minishell Structure
 /// @param tree_head Parsed Input Tree
 /// @param env Environment
+/// @param env_start Environment 
 /// @param exit_status Exit Status of the latest process
 typedef struct s_minishell
 {
