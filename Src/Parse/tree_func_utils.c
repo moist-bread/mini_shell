@@ -36,24 +36,45 @@ char	**tree_alloc_args(t_token *token)
 	char	**args;
 	int		i;
 
-	// printf("TREE ALLOC\n");
 	temp = token;
 	i = tree_arg_len(token, temp);
 	args = ft_calloc(i + 1, sizeof(char *));
 	if (!args)
-		return (NULL);
+	return (NULL);
 	i = 0;
 	while (temp && temp->type != PIPE)
 	{
-			if (temp->prev && temp->type == ARG \
+		if (temp->prev && temp->type == ARG \
 			&& temp->prev->type >= REDIR_IN && temp->prev->type <= REDIR_OUT_APPEND)
-				temp = temp->next;
-		 	if (temp->type == ARG)
-				args[i++] = temp->cont;
-		if (temp->type != PIPE)
+			temp = temp->next;
+		if (temp && temp->type == ARG)
+			args[i++] = temp->cont;
+		if (temp && temp->type != PIPE)
 			temp = temp->next;
 	}
+	printf("TREE ALLOC\n");
 	return (args);
+}
+
+/// @brief It creates the node of the AST_Tree if is any kind of Redir
+/// @param temp Temporary Node
+/// @param cmd_node Cmd node of the AST_Tree
+/// @param last_redir The last created Node of the AST_Tree that is type Redir
+static void	if_redir(t_token **temp, t_tree_node *cmd_node, t_tree_node	**last_redir)
+{
+	t_tree_node *redir_node;
+
+	if (!(*temp) || !(*temp)->next)
+		return;
+	redir_node = newtreenode(assign_tree_cont((*temp)->next));
+	redir_node->type = (*temp)->type;
+	printf("Creating REDIR node for: %s\n", redir_node->cont.file);
+	if (!cmd_node->left)
+		cmd_node->left = redir_node;
+	else if (*last_redir)
+		(*last_redir)->left = redir_node;
+	*last_redir = redir_node;
+	*temp = (*temp)->next;
 }
 
 /// @brief The fuction will assingn the content if the Node is a CMD node
@@ -62,28 +83,25 @@ char	**tree_alloc_args(t_token *token)
 void	if_command(t_token *tokens, t_tree_node *cmd_node)
 {
 	t_token		*temp;
+	t_tree_node	*last_redir;
 	bool		st_arg;
-
+	
 	st_arg = false;
-	temp = tokens->next;
+	last_redir = NULL;
+	temp = tokens;
 	while (temp && temp->type != PIPE)
 	{
 		if (temp && (temp->type >= REDIR_IN && temp->type <= REDIR_OUT_APPEND))
-		{
-			cmd_node->left = newtreenode(assign_tree_cont(temp->next));
-			cmd_node->left->type = temp->type;
-			printf("Creating REDIR node for: %s\n", cmd_node->left->cont.file);
-			temp = temp->next;
-			cmd_node = cmd_node->left;
-		}
+			if_redir(&temp, cmd_node, &last_redir);
 		else if (temp && temp->type == ARG && st_arg == false)
 		{
+			printf("Creating ARG node for: ");
 			cmd_node->right = newtreenode(assign_tree_cont(temp));
 			cmd_node->right->type = ARG;
 			st_arg = true; 
 			printf("Creating ARG node for: ");
 			for (int i = 0; cmd_node->right->cont.args[i]; i++)
-				printf("%s ",cmd_node->right->cont.args[i]);
+			printf("%s ",cmd_node->right->cont.args[i]);
 			printf("\n");
 		}
 		temp = temp->next;
@@ -96,10 +114,6 @@ void	if_command(t_token *tokens, t_tree_node *cmd_node)
 ///of the list if doesn't find something
 t_token	*iteri_till_pipe(t_token *token)
 {
-	// t_token *start;
-
-	// printf("Entered Iteri PIPE\n");
-	// start = token;
 	if (!token)
 		return (NULL);
 	while (token)
@@ -111,56 +125,3 @@ t_token	*iteri_till_pipe(t_token *token)
 	return (NULL);
 }
 
-/// @brief Function that prints the AST_Tree
-/// @param tree_node The First Node of the Tree
-void	print_tree(t_tree_node *tree_node, int depth, char *side)
-{
-	int	i;
-
-	// printf("Entered Print Tree\n");
-	i = 1;
-	if(!tree_node)
-		return ;
-	while (i++ <= depth)
-		printf("\t");
-	if (tree_node->cont.cmd)
-		assign_name(tree_node->type);
-	else if (tree_node->cont.file)
-		assign_name(tree_node->type);
-	else if (tree_node->cont.limiter)
-		assign_name(tree_node->type);
-	else if (tree_node->cont.args)
-		assign_name(tree_node->type);
-	else
-		assign_name(tree_node->type);
-	printf("(%s)\n", side);
-
-	i = 1;
-	while (i++ <= depth)
-		printf("\t");
-	
-	if (tree_node->cont.cmd)
-		printf("CONT: %s\n", tree_node->cont.cmd);
-	else if (tree_node->cont.pipe_c)
-		printf("CONT: %c\n", tree_node->cont.pipe_c);
-	else if (tree_node->cont.file)
-		printf("CONT: %s\n", tree_node->cont.file);
-	else if (tree_node->cont.limiter)
-		printf("CONT: %s\n", tree_node->cont.limiter);
-	else if (tree_node->cont.args)
-	{
-		printf("CONT: ");
-		for (int i = 0; tree_node->cont.args[i]; i++)
-			printf("%s ", tree_node->cont.args[i]);
-		printf("\n");
-	}
-}
-
-void    tree_apply_print(t_tree_node *root, int depth, char *side)
-{
-    if (root->right)
-        tree_apply_print(root->right, depth + 1, "Right");
-    print_tree(root, depth, side);
-	if (root->left)
-    	tree_apply_print(root->left, depth + 1, "Left");
-}
