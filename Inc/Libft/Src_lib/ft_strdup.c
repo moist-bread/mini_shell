@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:20:20 by andcarva          #+#    #+#             */
-/*   Updated: 2025/04/03 15:09:19 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/04/17 15:43:52 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*ft_strdup(char *src)
 	int		len;
 	char	*dup;
 
+	if (!src)
+		return (NULL);
 	i = 0;
 	len = 0;
 	while (src[len] != '\0')

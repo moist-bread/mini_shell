@@ -4,13 +4,15 @@
 
 // NOTES: ANDRE
 
-// char *input = "< infile cat | cat | "ls -l" > out"; 
+// char *input = "< infile cat | cat | "ls -l" > out";
 // cracked slpit returns t_node just for basic token and sep is space.
 // Nodes:
-// 1 - "<"; 2 - "infile"; 3 - "cat"; 4 - "|"; 5 - "cat"; etc; 
+// 1 - "<"; 2 - "infile"; 3 - "cat"; 4 - "|"; 5 - "cat"; etc;
 // funcs that check the new list of tokens.
 // Funcs:
-// Check Pipes and redir for spaces, if they dont have it put space after and before
+// Check Pipes and redir for spaces,
+// if they
+//	dont have it put space after and before
 // Diverse check enquanto corro a lista the tokens;
 // Assign types to the tokens;
 // Func That will create the tree for varios Casos;
@@ -21,23 +23,34 @@
 // Other pipes just the type and the correspondant left and right nodes;
 // If Pipe, Left always cmds;
 // If Pipe, Right next Operator or The final cmds;
-// If Cmd, Left Redir, Right Args "Flags e afins" 
-// If Redir, Left Redir, cont the file name or LIMITER, 
+// If Cmd, Left Redir, Right Args "Flags e afins"
+// If Redir, Left Redir, cont the file name or LIMITER,
 // Consult on the .h for the Types of Redir;
 // Check with rackel if is Build it for the correct Type;
 // If There Redir, Right is Arg, Check if next after Arg is Redir.
 // If is Redir do the normal, if not check if is Pipe,
 // If is Pipe start over.
+// If theres no CMD but REDIR exists vreate CMD node NULL and the REDIR stays in the left:
+// EX: > outfile | > outfile
 // -------------------------------------------------------------------------------------------------|
 
 // CHECKS ERROR
 
-// Check what is after here_doc, strncmp, if for redirs ou pipe Error the syntax
+// Check what is after here_doc, strncmp, if for redirs ou pipe Error the syntax - Done
+// If there is no space between quotes is considered 1 token: - Done
+// Example: "easd"'O'""
+// Get ridof len in working quotes and do a funciton that gets me the lenght in get word; - Done
+// Implement in split that needs to split spaces and tabs in the same String; - Done
+// This CMD:  >> banana cmd banana
+// Needs to be REDIR ARG CMD ARG but is doing REDIR ARG ARG ARG - I think is Done;
+// In the tree the last node redir is over writig the prrevious ones;
+// > file > | a - Syntax Error - done
 
 // -------------------------------------------------------------------------------------------------|
 
 // LIBS
 # include "Libft/libft.h"
+# include "ms_structs.h"
 # include <curses.h>
 # include <dirent.h>
 # include <readline/history.h>
@@ -62,178 +75,166 @@
 # define CYN "\e[0;36m"
 # define DEF "\e[0m"
 
-// STRUCTS
+// ------------------------PARSING----------------------------
 
-/// @param cmd_n Amount of cmds
-/// @param cur_pipe Stores IN fd and OUT fd
-/// @param next_pipe Read end of created pipe
-/// @param pid Stores child process ids
-/// @param cmd Command and its arguments
-/// @param path Path to said command
-/// @param env Environment
-typedef struct s_pipe_data
-{
-	int					cmd_n;
-	int					cur_pipe[2];
-	int					next_pipe;
-	int					*pid;
-	char				**cmd;
-	char				*path;
-	char				**env;
-}						t_pipe_data;
-
-/// @brief Enumeration of all possible node types
-/// @param CMD Commands
-/// @param ARG Versatile arguments
-/// @param PIPE |
-/// @param REDIR_IN <
-/// @param REDIR_HERE_DOC <<
-/// @param LIM Arg after here_doc
-/// @param REDIR_OUT >
-/// @param REDIR_OUT_APPEND >>
-/// @param BUILT_IN echo cd pwd export unset env exit
-typedef enum s_node_type
-{
-	CMD,
-	ARG,
-	PIPE,
-	REDIR_IN,
-	REDIR_HERE_DOC,
-	LIM,
-	REDIR_OUT,
-	REDIR_OUT_APPEND,
-	BUILT_IN,
-}						t_node_type;
-
-/// @param type Node Type
-/// @param cont Node Content
-/// @param next Next Node
-typedef struct s_token
-{
-	t_node_type			type;
-	char				*cont;
-	struct s_token		*next;
-	struct s_token		*prev;
-}						t_token;
-
-/// @brief Place where the content of t_node_type is stored
-/// @param cmd (char *) Main command to be executed
-/// @param args (char **) Versalite cmd arguments
-/// @param pipe (t_pipe_data) Needed for pipe execution
-/// @param file (char *) String for needed Infile/Outfile
-/// @param limiter (char *) Limiter string for here_doc
-typedef struct s_node_cont
-{
-	char				*cmd;
-	char				**args;
-	t_pipe_data			pipe;
-	char				*file;
-	char				*limiter;
-}						t_node_cont;
-
-/// @brief Abstract Syntax Tree Node
-/// @param type Node Type
-/// @param cont Node Content
-/// @param prev Previous tree node
-/// @param left Left branch
-/// @param right Right branch
-typedef struct s_tree_node
-{
-	t_node_type			type;
-	t_node_cont			cont;
-	struct s_tree_node	*prev;
-	struct s_tree_node	*left;
-	struct s_tree_node	*right;
-}						t_tree_node;
-
-/// @brief Overarching Minishell Structure
-/// @param tree_head Parsed Input Tree
-/// @param env Environment
-/// @param exit_status Exit Status of the latest process
-typedef struct s_minishell
-{
-	t_tree_node			*tree_head;
-	char				**env;
-	int					exit_status;
-}						t_minishell;
-
-// TBD
-// (to be determined) functions without a place yet
-
-// PARSING
+// TOKENS
 
 void	tokenadd_back(t_token **tklst, t_token *newtk);
 void	tokenadd_front(t_token **tklst, t_token *newtk);
 t_token	*newtoken(char *cont);
 t_token	*create_tokens(char *input);
-char	*readinput(char	*input);
 void	place_token(char *input, t_token **head);
 void	print_tokens(t_token *tokens);
+void	clear_token_lst(t_token	*token);
+bool	is_token(t_token *token);
+
+// TREE UTILS
+
+void		print_tree(t_tree_node *tree_node, int depth, char *side);
+void   		tree_apply_print(t_tree_node *root, int depth, char *side);
+t_tree_node	*newtreenode(t_node_cont cont);
+void		create_tree(t_token *tokens);
+t_node_cont	assign_tree_cont(t_token *token);
+void		if_command(t_token *tokens, t_tree_node *cmd_node);
+void		place_treenode(t_token *tokens, t_tree_node **root, bool pipe);
+void		free_tree_node_cont(t_node_cont cont);
+void		free_tree(t_tree_node *tree_head);
+void		tree_cont_init(t_node_cont *cont);
+t_token		*iteri_till_pipe(t_token *token);
+char		**tree_alloc_args(t_token *token);
+
+// ASSIGN TYPES
+
 void	assign_type_token(t_token *token);
+void	assign_tree_type(t_token *token, t_tree_node *tree);
 void	assign_name(int type);
 void	assigns_types(t_token *token);
+void	assigns_cmd(t_token *head);
 void	assigns_built_in(t_token *token);
-void	assigns_cmd_or_arg(t_token *token);
+void	is_limtiter_or_arg(t_token **temp);
+
+// UTILS
+
 char	*add_spaces(char *input);
 int		space_length(char *input);
+char	*readinput(char	*input);
 char	*space_put(char *input, int len);
+
+// CHECKS
+
 void	check_quotes(char *input);
-void	clear_token_lst(t_token	*token);
-void	ft_error_check(t_token *token);
 void	master_check(t_token *token);
-bool	is_token(t_token *token);
-char	*merge_adjacent_segments(char *input);
-void	check_double_pipe(int *j, int *i, char *dest);
+
+// ERRORS
+
+void	ft_error_check(t_token *token);
+
+// SPLIT UTILS
+
+char	**cracked_split(char const *s);
+int		word_len(char const *s);
+int		skip_quote(const char *s);
+void	word_runner(const char **s);
+bool	is_sep(char c);
+
+// char	*merge_adjacent_segments(char *input);
+// void	check_double_pipe(int *j, int *i, char *dest);
 // void	checks_here_doc(t_token	*token);
 // char	**cracked_split(char const *s, char c);
 // void	working_quote(char const *s, int *len, char c);
 // char	*extract_single_quote(const char *s, int len);
 // int		handle_single_quote(const char **s);
 
-// TREE UTILS
+// --------------------------EXECUTION--------------------------
 
-t_tree_node	*newtreenode(t_node_cont cont);
-void		free_tree_node_cont(t_node_cont cont);
-void		free_tree(t_tree_node *tree_head);
-void		tree_cont_init(t_node_cont *cont);
 
-// EXECUTION
-// put execution prototypes here
+// STRUCT INIT
 
-void	minishell_struct_init(t_minishell *minis, char **env);
+void		minishell_struct_init(t_minishell *minis, char **env);
 
 // MATRIX UTILS
 
-char	**matrix_add_front(char *add, char **original);
-size_t	ft_matrixlen(char **matrix);
-char	**matrix_dup_char(char **original_matrix);
-void	free_matrix(void **matrix, int max);
+char		**matrix_add_to_index(char **env, char *add, size_t idx,
+				size_t len);
+char		**matrix_add_front(char *add, char **original);
+size_t		ft_matrixlen(char **matrix);
+char		**matrix_dup_char(char **original_matrix);
 
 // PIPE PROCESS
 
-void	pipex_process(t_minishell *minishell, t_tree_node *tree_head,
-		t_pipe_data *pipex);
-void	read_and_exe_pipe_tree(t_minishell minishell, t_tree_node *tree_head,
-		t_pipe_data *pipex, int idx);
-void	execute_pipex_cmd(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data *pipex, int idx);
-void	multi_proc_wait(t_pipe_data *pipex, int *status);
-void	pipex_clean_up(t_minishell minishell, int status);
+void		pipe_process(t_minishell *minishell, t_pipe_data *pdata);
+void		read_and_exe_pipe_tree(t_minishell minishell,
+				t_tree_node *tree_head, t_pipe_data *pdata, int idx);
+void		setup_pipe_cmd(t_minishell minishell, t_tree_node *cmd_node,
+				t_pipe_data *pdata, int idx);
+void		process_waiting(int proc_n, int *ids, int *status);
+void		minishell_clean(t_minishell minishell, int status);
 
-// PIPE REDIR HANDLER
+// REDIR HANDLER
 
-void	redir_handler(t_minishell minishell, t_tree_node *cmd_node, int *in, int *out);
-int		here_doc_redir(char *limiter);
-void	master_close(void);
+void		redir_handler(t_minishell minishell, t_tree_node *node, int *in,
+				int *out);
+void		master_close(void);
 
 // PIPE CHILD PROCESS
 
-void	assign_pipe_fds(t_minishell minishell, t_pipe_data *pipex, int *redir_fd, int idx);
-void	child_parse_and_exe(t_minishell minishell, t_tree_node *cmd_node, t_pipe_data *pipex);
-char	*get_path(t_minishell minishell, char *cmds);
-int		error_code_for_exec(t_pipe_data *pipex);
+void		assign_pipe_fds(t_minishell ms, t_pipe_data *pdata, int *redir_fd,
+				int idx);
+void		child_parse_and_exe(t_minishell ms, t_tree_node *node,
+				t_pipe_data *pdata);
+char		*get_path(t_minishell minishell, char *cmd);
+int			error_code_for_exec(char *path);
+
+// EXPORT
+
+void		export_built_in(t_minishell *ms, t_tree_node *node);
+void		print_env(t_minishell minishell, int export_flag);
+int			invalid_export(char *arg);
+void		export_distribute(t_minishell *ms, char *arg, char *key);
+
+// GET ENV
+
+char		*get_env(char *search, char **env);
+int			get_env_idx(char **env, char *search);
+char		*get_export_key(char *var);
+char		*get_export_value(char *var);
+int			env_elem_len(char *var, int key_flag);
+
+// EXPORT UTILS
+
+void		export_append(t_minishell *ms, int idx, char *new);
+void		replace_env_value(t_minishell *ms, char *key, char *new, int idx);
+void		move_env_var(t_minishell *ms, int *old_idx, int new_idx);
+
+// NEW LIBFT
+
+int			ft_strcmp(char *s1, char *s2);
+char		*ft_strndup(char *src, size_t n);
+int			ft_iswhitespace(int c);
+
+// MATRIX QUICK SORT
+
+char		**sort_matrix(char **original, int len);
+void		ft_string_swap(char **a, char **b);
 
 // ENV UTILS
-char	*get_env(char *search, char **env);
-char	**env_add_front(char *add, char **original);
 
-#endif //MINISHELL_H
+void		unset_built_in(t_minishell *ms, t_tree_node *node);
+void		remove_env_var(t_minishell *ms, size_t idx, size_t len);
+void		echo_built_in(t_minishell *ms, t_tree_node *node);
+void		env_built_in(t_minishell *ms, t_tree_node *node);
+
+// EXIT
+
+void		exit_built_in(t_minishell *ms, t_tree_node *node);
+int			long_check(char *argv, long *arg_n);
+
+// DISTRIBUTER
+
+int			master_distributer(t_minishell *ms, t_tree_node *node);
+void		command_process(t_minishell *ms, t_tree_node *node);
+void		cmd_parse_and_exe(t_minishell ms, t_tree_node *node, int *redir);
+void		pwd_built_in(t_minishell *ms, t_tree_node *node);
+void	cd_built_in(t_minishell *ms, t_tree_node *node);
+
+#endif // MINISHELL_H

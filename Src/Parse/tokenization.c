@@ -18,8 +18,6 @@ char	*readinput(char	*input)
 	return (input);
 }
 
-// t_token **create_tokens(char *input)
-
 /// @brief Creates the list of tokens
 /// @param input The string received from the Stdout
 t_token	*create_tokens(char *input)
@@ -30,7 +28,9 @@ t_token	*create_tokens(char *input)
 	place_token(input, &tokens);
 	assign_type_token(tokens);
 	print_tokens(tokens);
+	printf("\n");
 	master_check(tokens);
+	free(input);
 	return (tokens);
 }
 
@@ -42,18 +42,14 @@ void	place_token(char *input, t_token **head)
 {
 	t_token	*newtk;
 	char	**newinput;
-	char	*adjacent;
 	char	*updated_input;
 	int		i;
 
 	*head = NULL;
 	check_quotes(input);
-	adjacent = merge_adjacent_segments(input);
-	updated_input = add_spaces(adjacent);
-	newinput = cracked_split(updated_input, ' ');
-	printf("new_input: %s\n", updated_input);
+	updated_input = add_spaces(input);
+	newinput = cracked_split(updated_input);
 	free(updated_input);
-	free(adjacent);
 	i = 0;
 	while (newinput[i])
 	{
@@ -74,7 +70,6 @@ char	*add_spaces(char *input)
 
 	len = space_length(input);
 	newinput = space_put(input, len);
-	printf("spaces: %d\n", len);
 	return (newinput);
 }
 
@@ -95,7 +90,7 @@ void	print_tokens(t_token *tokens)
 		printf("\t");
 		assign_name(curr->type);
 		printf("\t");
-		printf("ID: %u\n", curr->type);
+		printf("(ID: %u)\n", curr->type);
 		curr = curr->next;
 		i++;
 	}

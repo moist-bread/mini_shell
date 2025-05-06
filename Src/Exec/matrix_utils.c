@@ -1,6 +1,41 @@
 
 #include "../../Inc/minishell.h"
 
+static void	free_matrix(void **matrix, int max);
+
+/// @brief Adds string ADD to the MATRIX on index IDX
+/// @param matrix Char ** to be added to
+/// @param add String to be added to MATRIX
+/// @param idx Index for where to add
+/// @param len Length of MATRIX
+/// @return New MATRIX with added ADD
+char	**matrix_add_to_index(char **matrix, char *add, size_t idx, size_t len)
+{
+	char	**new;
+	int		i;
+	int		j;
+
+	if (!add || !matrix || len < 1 || idx > len + 1)
+		return (matrix);
+	new = ft_calloc(len + 2, sizeof(char *));
+	if (!new)
+		return (matrix);
+	i = -1;
+	j = -1;
+	while (++i <= (int)len)
+	{
+		if (i == (int)idx)
+		{
+			new[++j] = ft_strdup(add);
+			if (!new[j])
+				return (free(new), matrix);
+		}
+		new[++j] = matrix[i];
+	}
+	free(matrix);
+	return (new);
+}
+
 char	**matrix_add_front(char *add, char **original)
 {
 	char	**new;
@@ -17,7 +52,7 @@ char	**matrix_add_front(char *add, char **original)
 	i = -1;
 	while (original && original[++i])
 	{
-		new[i + 1] = ft_strdup(original[i]);
+		new[i + 1] = original[i];
 		if (!new[i + 1])
 			free_matrix((void **)new, i + 1);
 	}
@@ -25,6 +60,7 @@ char	**matrix_add_front(char *add, char **original)
 		new[i + 1] = NULL;
 	else
 		new[1] = NULL;
+	free(original);
 	return (new);
 }
 
@@ -61,7 +97,7 @@ size_t	ft_matrixlen(char **matrix)
 	return (i);
 }
 
-void	free_matrix(void **matrix, int max)
+static void	free_matrix(void **matrix, int max)
 {
 	int	i;
 
