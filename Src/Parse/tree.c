@@ -4,7 +4,7 @@
 /// @brief Main function that creates the AST_Tree 
 /// @param tokens Node from the token list
 /// @param cont The content
-void	create_tree(t_token *tokens)
+t_tree_node	*create_tree(t_token *tokens)
 {
 	t_tree_node	*tree_node;
 	
@@ -13,6 +13,7 @@ void	create_tree(t_token *tokens)
 	place_treenode(tokens, &tree_node, false);
 	tree_apply_print(tree_node, 0, "Root");
 	printf("\n");
+	return (tree_node);
 }
 
 /// @brief Assigns the content to the right place in the struct

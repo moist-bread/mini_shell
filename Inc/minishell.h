@@ -83,21 +83,21 @@
 
 // TOKENS
 
-void		tokenadd_back(t_token **tklst, t_token *newtk);
-void		tokenadd_front(t_token **tklst, t_token *newtk);
-t_token		*newtoken(char *cont);
-t_token		*create_tokens(char *input);
-void		place_token(char *input, t_token **head);
-void		print_tokens(t_token *tokens);
-void		clear_token_lst(t_token *token);
-bool		is_token(t_token *token);
+void	tokenadd_back(t_token **tklst, t_token *newtk);
+void	tokenadd_front(t_token **tklst, t_token *newtk);
+t_token	*newtoken(char *cont);
+t_token	*create_tokens(char *input, char **env);
+void	place_token(char *input, t_token **head, char **env);
+void	print_tokens(t_token *tokens);
+void	clear_token_lst(t_token	*token);
+bool	is_token(t_token *token);
 
 // TREE UTILS
 
 void		print_tree(t_tree_node *tree_node, int depth, char *side);
 void		tree_apply_print(t_tree_node *root, int depth, char *side);
 t_tree_node	*newtreenode(t_node_cont cont);
-void		create_tree(t_token *tokens);
+t_tree_node	*create_tree(t_token *tokens);
 t_node_cont	assign_tree_cont(t_token *token);
 void		if_command(t_token *tokens, t_tree_node *cmd_node);
 void		place_treenode(t_token *tokens, t_tree_node **root, bool pipe);
@@ -107,15 +107,19 @@ void		tree_cont_init(t_node_cont *cont);
 t_token		*iteri_till_pipe(t_token *token);
 char		**tree_alloc_args(t_token *token);
 
+// EXPANSIONS
+
+char	*process_quote_expansions(char *input, char **env);
+char	*the_expansion(char	*input, char **env);
+
 // ASSIGN TYPES
 
-void		assign_type_token(t_token *token);
-void		assign_tree_type(t_token *token, t_tree_node *tree);
-void		assign_name(int type);
-void		assigns_types(t_token *token);
-void		assigns_cmd(t_token *head);
-void		assigns_built_in(t_token *token);
-void		is_limtiter_or_arg(t_token **temp);
+void	assign_type_token(t_token *token);
+void	assign_name(int type);
+void	assigns_types(t_token *token);
+void	assigns_cmd(t_token *head);
+void	assigns_built_in(t_token *token);
+void	is_limtiter_or_arg(t_token **temp);
 
 // UTILS
 
@@ -135,19 +139,11 @@ void		ft_error_check(t_token *token);
 
 // SPLIT UTILS
 
-char		**cracked_split(char const *s);
-int			word_len(char const *s);
-int			skip_quote(const char *s);
-void		word_runner(const char **s);
-bool		is_sep(char c);
-
-// char	*merge_adjacent_segments(char *input);
-// void	check_double_pipe(int *j, int *i, char *dest);
-// void	checks_here_doc(t_token	*token);
-// char	**cracked_split(char const *s, char c);
-// void	working_quote(char const *s, int *len, char c);
-// char	*extract_single_quote(const char *s, int len);
-// int		handle_single_quote(const char **s);
+char	**cracked_split(char const *s);
+int		word_len(char const *s);
+int		skip_quote(const char *s);
+void	word_runner(const char **s);
+bool	is_sep(char c);
 
 // --------------------------EXECUTION--------------------------
 

@@ -20,12 +20,12 @@ char	*readinput(char	*input)
 
 /// @brief Creates the list of tokens
 /// @param input The string received from the Stdout
-t_token	*create_tokens(char *input)
+t_token	*create_tokens(char *input, char **env)
 {
 	t_token *tokens;
 
 	tokens = NULL;
-	place_token(input, &tokens);
+	place_token(input, &tokens, env);
 	assign_type_token(tokens);
 	print_tokens(tokens);
 	printf("\n");
@@ -38,14 +38,16 @@ t_token	*create_tokens(char *input)
 /// @param input String received from the Stdout 
 /// @param head Beggining of the list
 /// @return The head of the list
-void	place_token(char *input, t_token **head)
+void	place_token(char *input, t_token **head, char **env)
 {
 	t_token	*newtk;
 	char	**newinput;
 	char	*updated_input;
+	// char	*expanded_input;
 	int		i;
 
 	*head = NULL;
+	(void)env;
 	check_quotes(input);
 	updated_input = add_spaces(input);
 	newinput = cracked_split(updated_input);
@@ -53,8 +55,10 @@ void	place_token(char *input, t_token **head)
 	i = 0;
 	while (newinput[i])
 	{
+		// expanded_input = process_quote_expansions(newinput[i], env);
 		newtk = newtoken(newinput[i]);
 		tokenadd_back(head, newtk);
+		// free(expanded_input);
 		i++;
 	}
 	free_split(newinput);

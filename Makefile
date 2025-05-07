@@ -22,8 +22,9 @@ PARSE_DIR		=	Parse
 # -->┊( SOURCES AND OBJS )
 MAIN_C			=	minishell_main.c
 
-EXEC_MAIN_C		=	exec_main.c struct_utils.c distributer.c \
-					pipe_process.c redir_handler.c here_doc.c pipe_child_pro.c \
+EXEC_MAIN_C		=	exec_main.c 
+EXEC_FILES_C	=	struct_init.c distributer.c \
+					pipe_process.c redir_handler.c pipe_child_pro.c \
 					matrix_utils.c matrix_quick_sort.c \
 					export.c export_utils.c env.c get_env.c unset.c echo.c exit.c directory.c \
 					ft_strcmp.c ft_strndup.c ft_iswhitespace.c
@@ -37,7 +38,8 @@ MAIN		=	$(addprefix	$(MINISHELL_DIR)/, $(MAIN_C))
 EXEC_MAIN	=	$(addprefix	$(EXEC_DIR)/, $(EXEC_MAIN_C))
 PARSE_MAIN	=	$(addprefix	$(PARSE_DIR)/, $(PARSE_MAIN_C))
 
-OBJS			=	$(addprefix $(OBJS_DIR)/, $(PARSE_FILES_C:.c=.o))
+OBJS_PARSE		=	$(addprefix $(OBJS_DIR)/, $(PARSE_FILES_C:.c=.o))
+OBJS_EXEC		=	$(addprefix $(OBJS_DIR)/, $(EXEC_FILES_C:.c=.o))
 OBJS_MAIN		=	$(addprefix $(OBJS_DIR)/, $(MAIN_C:.c=.o))
 OBJS_MAIN_EXEC	=	$(addprefix $(OBJS_DIR)/, $(EXEC_MAIN_C:.c=.o))
 OBJS_MAIN_PARSE	=	$(addprefix $(OBJS_DIR)/, $(PARSE_MAIN_C:.c=.o))
@@ -45,9 +47,9 @@ OBJS_MAIN_PARSE	=	$(addprefix $(OBJS_DIR)/, $(PARSE_MAIN_C:.c=.o))
 # -->┊( RULES )
 all: $(NAME)
 
-$(NAME): $(OBJS_MAIN) $(OBJS) $(LIBFT)
+$(NAME): $(OBJS_MAIN) $(OBJS_PARSE) $(LIBFT)
 	$(M_COMP)
-	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN) $(OBJS) $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN) $(OBJS_PARSE) $(LIBFT) -o $(NAME)
 	$(M_DONE)
 
 $(OBJS_DIR)/%.o: $(SRC_DIR)/$(MINISHELL_DIR)/%.c | $(OBJS_DIR)
@@ -65,14 +67,14 @@ $(OBJS_DIR):
 $(LIBFT):
 	@make -C ./Inc/Libft -s
 
-exec: $(OBJS_MAIN_EXEC) $(OBJS) $(LIBFT)
+exec: $(OBJS_MAIN_EXEC) $(OBJS_EXEC) $(OBJS_PARSE) $(LIBFT)
 	$(M_COMP_E)
-	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN_EXEC) $(OBJS) $(LIBFT) $(RL) -o $(NAME)
+	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN_EXEC) $(OBJS_EXEC) $(OBJS_PARSE) $(LIBFT) $(RL) -o $(NAME)
 	$(M_DONE)
 
-parse: $(OBJS_MAIN_PARSE) $(OBJS) $(LIBFT)
+parse: $(OBJS_MAIN_PARSE) $(OBJS_PARSE) $(OBJS_EXEC) $(LIBFT)
 	$(M_COMP_P)
-	@$(CC) $(CFLAGS) $(OBJS_MAIN_PARSE) $(OBJS) $(LIBFT) $(RL) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS_MAIN_PARSE) $(OBJS_EXEC) $(OBJS_PARSE) $(LIBFT) $(RL) -o $(NAME)
 	$(M_DONE)
 
 clean:
