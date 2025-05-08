@@ -4,21 +4,6 @@
 
 static int	long_overflow_check(char *arg, long *arg_n);
 
-// "exit banana": exits, status 2
-// "exit banana banana muitabanana 35 70": exits, status 2
-// "exit "   40   2"": exits, status 2
-// bash: exit: banana: numeric argument required
-
-// "exit 500 banana": doesnt exit!!!!, status 1
-// bash: exit: too many arguments
-
-// "exit 500": exits, status WEXITSTATUS(500)
-// "exit "   40  "": exits, status WEXITSTATUS(40)
-
-// exit: exits, status of last command executed
-
-// long overflow 9223372036854775807 -9223372036854775808,
-
 /// @brief Exits the program, or not, according to NODE
 /// @param ms Overarching Minishell Structure
 /// @param node Current exit node to be executed
@@ -36,10 +21,17 @@ void	exit_built_in(t_minishell *ms, t_tree_node *node)
 		if (!node->right->cont.args[1])
 			minishell_clean(*ms, WEXITSTATUS(arg_n));
 		else
-			ms->exit_status = 1; // too many arguments 1 DOESNT EXIT
+		{
+			ms->exit_status = 1;
+			printf("exit: too many arguments\n");
+		}
 	}
 	else
+	{
+		printf("exit: %s: numeric argument required\n",
+			node->right->cont.args[0]);
 		minishell_clean(*ms, 2); // numeric argument required 2
+	}
 }
 
 /// @brief Checks if ARG is a long and stores it in ARG_N
@@ -86,7 +78,6 @@ static int	long_overflow_check(char *arg, long *arg_n)
 	{
 		if (num > LONG_MAX / 10)
 			return (1);
-		// can i hard code this 8 7?
 		if (num == LONG_MAX / 10 && ((sign == -1 && *arg - '0' > -(LONG_MIN
 						% 10)) || (sign == 1 && *arg - '0' > LONG_MAX % 10)))
 			return (1);

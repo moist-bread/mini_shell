@@ -1,6 +1,10 @@
 
 #include "../../Inc/minishell.h"
 
+char	*fake_readinput(char	*input);
+t_tree_node	*fake_create_tree(t_token *tokens);
+void	fake_clear_token_lst(t_token	*token);
+
 /* int	main(int ac, char **av, char **env)
 {
 	t_minishell	minis;
@@ -110,189 +114,73 @@
 	minishell_clean(ms, ms.exit_status);
 } */
 
-/* 
 int	main(int ac, char **av, char **env)
 {
-	t_minishell	ms;
-	t_node_cont	cont_1;
-	t_node_cont	cont_2;
-
-	// main for echo and env testing
 	(void)ac;
 	(void)av;
-	printf(YEL "(new) Exec Main !" DEF "\n\n");
-	minishell_struct_init(&ms, env);
-	tree_cont_init(&cont_1);
-	ms.tree_head = newtreenode(cont_1);
-	ms.tree_head->type = BUILT_IN;
-	ms.tree_head->cont.cmd = ft_strdup("echo");
-	tree_cont_init(&cont_2);
-	ms.tree_head->right = newtreenode(cont_2);
-	ms.tree_head->right->type = ARG;
-	ms.tree_head->right->cont.args = matrix_add_front("ARG=umento", NULL);
-	ms.tree_head->right->cont.args = matrix_add_front("BANANO=muita", ms.tree_head->right->cont.args);
-	ms.tree_head->right->cont.args = matrix_add_front("BANANA", ms.tree_head->right->cont.args);
-	ms.tree_head->right->cont.args = matrix_add_front("-nnnnnannnn", ms.tree_head->right->cont.args);
-	
-	echo_built_in(&ms, ms.tree_head);
-
-	
-	t_node_cont	cont_3;
-	t_node_cont	cont_4;
-
-	if (ms.tree_head)
-		free_tree(ms.tree_head);
-	tree_cont_init(&cont_3);
-	ms.tree_head = newtreenode(cont_3);
-	ms.tree_head->type = BUILT_IN;
-	ms.tree_head->cont.cmd = ft_strdup("env");
-
-	env_built_in(&ms, ms.tree_head);
-
-	tree_cont_init(&cont_4);
-	ms.tree_head->right = newtreenode(cont_4);
-	ms.tree_head->right->type = ARG;
-	ms.tree_head->right->cont.args = matrix_add_front("ARG", NULL);
-	ms.tree_head->right->cont.args = matrix_add_front("OUTRO", ms.tree_head->right->cont.args);
-	ms.tree_head->right->cont.args = matrix_add_front("-BANANA", ms.tree_head->right->cont.args);
-	
-	env_built_in(&ms, ms.tree_head);
-
-	minishell_clean(ms, ms.exit_status);
-} */
-
-
-/*
-int	main(int ac, char **av, char **env)
-{
 	(void)env;
-	(void)ac;
-	(void)av;
 	
-	printf(YEL "Testing exit built in main !" DEF "\n\n");
-	
+	printf(YEL "Testing executer WITH TREE main !" DEF "\n\n");
 	t_minishell	ms;
-	t_node_cont	cont_1;
-	t_node_cont	cont_2;
+	char		*input;
+	t_token		*tokens;
 	
 	minishell_struct_init(&ms, env);
-	tree_cont_init(&cont_1);
-	ms.tree_head = newtreenode(cont_1);
-	ms.tree_head->type = BUILT_IN;
-	ms.tree_head->cont.cmd = ft_strdup("echo");
-	tree_cont_init(&cont_2);
-	ms.tree_head->right = newtreenode(cont_2);
-	ms.tree_head->right->type = ARG;
-	ms.tree_head->right->cont.args = matrix_add_front("ARG=umento", NULL);
-	ms.tree_head->right->cont.args = matrix_add_front("BANANO=muita", ms.tree_head->right->cont.args);
-	ms.tree_head->right->cont.args = matrix_add_front("BANANA", ms.tree_head->right->cont.args);
-	ms.tree_head->right->cont.args = matrix_add_front("-nnnnn", ms.tree_head->right->cont.args);
-	
-	master_distributer(&ms, ms.tree_head);
-	if (ms.tree_head)
-		free_tree(ms.tree_head);
-	free_split(ms.env);
-} 
-*/
-
-
-/* int	main(int ac, char **av, char **env)
-{
-	(void)env;
-	(void)ac;
-	(void)av;
-	
-	printf(YEL "Testing cmd executer main !" DEF "\n\n");
-
-	// handmade tree
-	t_minishell	ms;
-	t_node_cont	cont_1;
-	t_node_cont	cont_2;
-	t_node_cont	cont_3;
-	minishell_struct_init(&ms, env);
-	tree_cont_init(&cont_1);
-	ms.tree_head = newtreenode(cont_1);
-	ms.tree_head->type = CMD;
-	ms.tree_head->cont.cmd = ft_strdup("ls");
-	tree_cont_init(&cont_2);
-	ms.tree_head->right = newtreenode(cont_2);
-	ms.tree_head->right->type = ARG;
-	ms.tree_head->right->cont.args = matrix_add_front("./Inc", NULL);
-	ms.tree_head->right->cont.args = matrix_add_front("-la", ms.tree_head->right->cont.args);
-	tree_cont_init(&cont_3);
-	cont_3.file = ft_strdup("gato");
-	ms.tree_head->left = newtreenode(cont_3);
-	ms.tree_head->left->type = REDIR_OUT;
-	
-	// execution
-	master_distributer(&ms, ms.tree_head);
-	if (ms.tree_head) // prep for next input
+	input = NULL;
+	while(1)
 	{
-		free_tree(ms.tree_head);
-		ms.tree_head = NULL;
+		// parsing
+		input = fake_readinput(input);
+		tokens = create_tokens(input);
+		ms.tree_head = fake_create_tree(tokens);
+		fake_clear_token_lst(tokens);
+		// execution
+		master_distributer(&ms, ms.tree_head);
+		if (ms.tree_head) // prep for next input
+		{
+			free_tree(ms.tree_head);
+			ms.tree_head = NULL;
+		}
 	}
+	minishell_clean(ms, ms.exit_status); // clean up
+}
 
-	// handmade tree part 2
-	tree_cont_init(&cont_1);
-	ms.tree_head = newtreenode(cont_1);
-	ms.tree_head->type = BUILT_IN;
-	ms.tree_head->cont.cmd = ft_strdup("pwd");
-	tree_cont_init(&cont_2);
-	ms.tree_head->right = newtreenode(cont_2);
-	ms.tree_head->right->type = ARG;
-	ms.tree_head->right->cont.args = matrix_add_front("-Inc", NULL);
-	// ms.tree_head->right->cont.args = matrix_add_front("-la", ms.tree_head->right->cont.args);
-
-	master_distributer(&ms, ms.tree_head);
-
-	// clean up
-	minishell_clean(ms, ms.exit_status);
-} */
-
-int	main(int ac, char **av, char **env)
+t_tree_node	*fake_create_tree(t_token *tokens)
 {
-	(void)env;
-	(void)ac;
-	(void)av;
+	t_tree_node	*tree_node;
 	
-	printf(YEL "Testing cmd executer main !" DEF "\n\n");
+	printf("Entered Create Tree\n");
+	tree_node = NULL;
+	place_treenode(tokens, &tree_node, false);
+	tree_apply_print(tree_node, 0, "Root");
+	printf("\n");
+	return (tree_node);
+}
 
-	// handmade tree
-	t_minishell	ms;
-	t_node_cont	cont_1;
-	t_node_cont	cont_2;
-		minishell_struct_init(&ms, env);
-	tree_cont_init(&cont_1);
-	ms.tree_head = newtreenode(cont_1);
-	ms.tree_head->type = BUILT_IN;
-	ms.tree_head->cont.cmd = ft_strdup("cd");
-	tree_cont_init(&cont_2);
-	ms.tree_head->right = newtreenode(cont_2);
-	ms.tree_head->right->type = ARG;
-	ms.tree_head->right->cont.args = matrix_add_front("./Inc", NULL);
-	// ms.tree_head->right->cont.args = matrix_add_front("-", ms.tree_head->right->cont.args);
-	
-	// execution
-	master_distributer(&ms, ms.tree_head);
-	if (ms.tree_head) // prep for next input
+void	fake_clear_token_lst(t_token	*token)
+{
+	t_token *current;
+	t_token *next;
+
+	if (!token)
+		return;
+	current = token;
+	while (current)
 	{
-		free_tree(ms.tree_head);
-		ms.tree_head = NULL;
+		next = current->next;
+		free(current);
+		current = next;
 	}
+}
 
-	// handmade tree part 2
-	tree_cont_init(&cont_1);
-	ms.tree_head = newtreenode(cont_1);
-	ms.tree_head->type = BUILT_IN;
-	ms.tree_head->cont.cmd = ft_strdup("pwd");
-	tree_cont_init(&cont_2);
-	ms.tree_head->right = newtreenode(cont_2);
-	ms.tree_head->right->type = ARG;
-	ms.tree_head->right->cont.args = matrix_add_front("-Inc", NULL);
-	// ms.tree_head->right->cont.args = matrix_add_front("-la", ms.tree_head->right->cont.args);
-
-	master_distributer(&ms, ms.tree_head);
-
-	// clean up
-	minishell_clean(ms, ms.exit_status);
+char	*fake_readinput(char	*input)
+{
+	input = readline("minishell > "); 
+	if (!input)
+	{
+		free(input);
+		exit(0);
+	}
+	add_history(input);
+	return (input);
 }

@@ -30,62 +30,38 @@ void	export_append(t_minishell *ms, int idx, char *new)
 	ms->env[idx] = append;
 }
 
-/// @brief Replaces the old value at env[IDX] with the value in NEW
+/// @brief Replaces the old value at ms->env[IDX] with the NEW value
 /// @param ms Overarching Minishell Structure
 /// @param key Name of variable to be replaced
-/// @param new Contains the new value
-/// @param idx  Index of the existing variable whos value will be replaced
+/// @param new The new Value to replace it with
+/// @param idx  Index of the existing variable
 void	replace_env_value(t_minishell *ms, char *key, char *new, int idx)
 {
-	/* 
-	// step 1 -- allocation
-	// get key len + 1 (for the =)
-	// get val len
-	// calloc
+	int		j;
+	int		key_len;
+	int		new_val_len;
 	char	*new_var;
-	int key_len = (key);
 
-	new_var = ft_calloc();
+	if (!ms->env || !*key || !new || idx < 0)
+		return ; // explode
+	// step 1 -- allocation - key len, val len + 2 (for the = and null), calloc
+	key_len = env_elem_len(key, 1);
+	new_val_len = ft_strlen(new) + 2;
+	new_var = ft_calloc(key_len + new_val_len, sizeof(char));
 	if (!new_var)
-		; // explode
-	// step 2 -- pasting
-	// copy key
-	// put =
-	// copy val
-	printf("old var: %s\n", ms->env[idx]);
-
-	// j = ft_strlcpy(append, ms->env[idx], ft_strlen(ms->env[idx]) + 1);
-	// printf("append ogn: %s\n", append);
-	// i = ft_strlcpy(&append[j], &new[i + 1], ft_strlen(&new[i]));
-
-	printf("new var: %s\n", new_var);
-	// step 3 -- move if needed 
-	// incase of not being previously wrongly declared
-	// old idx < ms.env_start
-	// move their ass
+		return ; // explode
+	// step 2 -- pasting - copy key, put =, copy val
+	printf("old var: %s\nnew val: %s\n", ms->env[idx], new);
+	j = ft_strlcpy(new_var, key, key_len + 1);
+	new_var[j - 1] = '=';
+	printf("copied key: %s\n", new_var);
+	ft_strlcpy(&new_var[j], new, new_val_len);
+	printf("copied new val: %s\n", new_var);
+	// step 3 -- move if needed - incase of being previously wrongly declared
 	if (idx < ms->env_start)
 		move_env_var(ms, &idx, (int)ft_matrixlen(ms->env) - 1);
 	free(ms->env[idx]);
-	ms->env[idx] = new_var; */
-
-	// FIX THIS SHIT BRUV
-	// instead of getting the whole new thing get only val????
-
-	// agora ficou a faltar o =
-	char	*new_val;
-
-	if (!ms->env || !key || !new || idx < 0)
-		return ; // explode
-	if (key[ft_strlen(key) - 1] == '=')
-		key[ft_strlen(key) - 1] = '\0';
-	new_val = ft_strjoin(key, new);
-	if (!new_val)
-		return ; // explode
-	printf("new_val joined: %s\n", new_val);
-	if (!ft_strchr(ms->env[idx], '='))
-		move_env_var(ms, &idx, (int)ft_matrixlen(ms->env) - 1);
-	free(ms->env[idx]);
-	ms->env[idx] = new_val;
+	ms->env[idx] = new_var;
 }
 
 /// @brief Moves env and alters the env_start according to OLD_IDX and NEW_IDX

@@ -8,6 +8,8 @@ LIBFT	=	./Inc/Libft/libft.a
 CC		=	cc
 CFLAGS	=	-Wall -Wextra -Werror -g
 RL		=	-lreadline
+VAL		=	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes -s
+FDFLAGS	=	--trace-children=yes --track-fds=yes
 SUPP	=	--suppressions=readline.supp
 
 # -->┊( DIRECTORIES )
@@ -98,6 +100,8 @@ rx: fclean exec
 exe: all
 	./minishell
 
+exeval: exec
+	$(VAL) $(FDFLAGS) $(SUPP) ./minishell
 
 # -->┊( COSMETICS )
 

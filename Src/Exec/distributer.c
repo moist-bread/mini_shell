@@ -8,12 +8,15 @@ int	master_distributer(t_minishell *ms, t_tree_node *node)
 {
 	if (!node)
 		return (1);
+	printf(YEL "\nEntering master distributer" DEF "\n\n");
+	if (node->type == PIPE)
+		pipe_process(ms, &node->cont.pipe);
 	if (node->type == CMD)
 		command_process(ms, node);
-	else if (node->type == PIPE)
-		pipe_process(ms, &node->cont.pipe);
 	else if (node->type == BUILT_IN)
 	{
+		// MISSING REDIRS
+		printf("is built in\n");
 		if (!ft_strcmp("echo", node->cont.cmd))
 			echo_built_in(ms, node);
 		else if (!ft_strcmp("cd", node->cont.cmd))

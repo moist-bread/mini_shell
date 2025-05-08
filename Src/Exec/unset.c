@@ -24,6 +24,10 @@ void	unset_built_in(t_minishell *ms, t_tree_node *node)
 	}
 }
 
+/// @brief Removes variable located at IDX from the Environment
+/// @param ms Overarching Minishell Structure
+/// @param idx Index of the variable to be removed
+/// @param len Length of the Environment
 void	remove_env_var(t_minishell *ms, size_t idx, size_t len)
 {
 	char	**new;
