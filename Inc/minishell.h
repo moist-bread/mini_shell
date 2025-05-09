@@ -107,6 +107,10 @@ char		**tree_alloc_args(t_token *token);
 
 char	*process_quote_expansions(char *input, char **env);
 char	*the_expansion(char	*input, char **env);
+char	*single_quote(char *input);
+char	*quote(char *input, char **env);
+int		quote_count(char *input, bool flag);
+char	*get_search(char *input);
 
 // ASSIGN TYPES
 
