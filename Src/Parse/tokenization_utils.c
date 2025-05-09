@@ -35,7 +35,6 @@ void	tokenadd_front(t_token **tklst, t_token *newtk)
 	if (*tklst)
 		(*tklst)->prev = newtk;
 	*tklst = newtk;
-
 }
 
 /// @brief Creates a node named token
