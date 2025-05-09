@@ -151,9 +151,12 @@ bool		is_sep(char c);
 
 // --------------------------EXECUTION--------------------------
 
-// STRUCT INIT
+// STRUCT UTILS
 
 void		minishell_struct_init(t_minishell *minis, char **env);
+void		minishell_clean(t_minishell minishell, int status);
+void		process_waiting(int proc_n, int *ids, int *status);
+void		master_close(void);
 
 // MATRIX UTILS
 
@@ -162,52 +165,6 @@ char		**matrix_add_to_index(char **env, char *add, size_t idx,
 char		**matrix_add_front(char *add, char **original);
 size_t		ft_matrixlen(char **matrix);
 char		**matrix_dup_char(char **original_matrix);
-
-// PIPE PROCESS
-
-void		pipe_process(t_minishell *minishell, t_pipe_data *pdata);
-void		read_and_exe_pipe_tree(t_minishell minishell,
-				t_tree_node *tree_head, t_pipe_data *pdata, int idx);
-void		setup_pipe_cmd(t_minishell minishell, t_tree_node *cmd_node,
-				t_pipe_data *pdata, int idx);
-void		process_waiting(int proc_n, int *ids, int *status);
-void		minishell_clean(t_minishell minishell, int status);
-
-// REDIR HANDLER
-
-void		redir_handler(t_minishell minishell, t_tree_node *node, int *in,
-				int *out);
-void		master_close(void);
-
-// PIPE CHILD PROCESS
-
-void		assign_pipe_fds(t_minishell ms, t_pipe_data *pdata, int *redir_fd,
-				int idx);
-void		child_parse_and_exe(t_minishell ms, t_tree_node *node,
-				t_pipe_data *pdata);
-char		*get_path(t_minishell minishell, char *cmd);
-int			error_code_for_exec(char *path);
-
-// EXPORT
-
-void		export_built_in(t_minishell *ms, t_tree_node *node);
-void		print_env(t_minishell minishell, int export_flag);
-int			invalid_export(char *arg);
-void		export_distribute(t_minishell *ms, char *arg, char *key);
-
-// GET ENV
-
-char		*get_env(char *search, char **env);
-int			get_env_idx(char **env, char *search);
-char		*get_export_key(char *var);
-char		*get_export_value(char *var);
-int			env_elem_len(char *var, int key_flag);
-
-// EXPORT UTILS
-
-void		export_append(t_minishell *ms, int idx, char *new);
-void		replace_env_value(t_minishell *ms, char *key, char *new, int idx);
-void		move_env_var(t_minishell *ms, int *old_idx, int new_idx);
 
 // NEW LIBFT
 
@@ -220,24 +177,74 @@ int			ft_iswhitespace(int c);
 char		**sort_matrix(char **original, int len);
 void		ft_string_swap(char **a, char **b);
 
-// ENV UTILS
-
-void		unset_built_in(t_minishell *ms, t_tree_node *node);
-void		remove_env_var(t_minishell *ms, size_t idx, size_t len);
-void		echo_built_in(t_minishell *ms, t_tree_node *node);
-void		env_built_in(t_minishell *ms, t_tree_node *node);
-
-// EXIT
-
-void		exit_built_in(t_minishell *ms, t_tree_node *node);
-int			long_check(char *argv, long *arg_n);
-
 // DISTRIBUTER
 
 int			master_distributer(t_minishell *ms, t_tree_node *node);
 void		command_process(t_minishell *ms, t_tree_node *node);
 void		cmd_parse_and_exe(t_minishell ms, t_tree_node *node, int *redir);
-void		pwd_built_in(t_minishell *ms, t_tree_node *node);
+
+// REDIR HANDLER
+
+void		redir_handler(t_minishell minishell, t_tree_node *node, int *in,
+				int *out);
+
+// PIPE PROCESS
+
+void		pipe_process(t_minishell *minishell, t_pipe_data *pdata);
+void		read_and_exe_pipe_tree(t_minishell minishell,
+				t_tree_node *tree_head, t_pipe_data *pdata, int idx);
+void		setup_pipe_cmd(t_minishell minishell, t_tree_node *cmd_node,
+				t_pipe_data *pdata, int idx);
+
+// PIPE CHILD PROCESS
+
+void		assign_pipe_fds(t_minishell ms, t_pipe_data *pdata, int *redir_fd,
+				int idx);
+void		child_parse_and_exe(t_minishell ms, t_tree_node *node,
+				t_pipe_data *pdata);
+char		*get_path(t_minishell minishell, char *cmd);
+int			error_code_for_exec(char *path);
+
+// ECHO
+
+void		echo_built_in(t_minishell *ms, t_tree_node *node);
+
+// DIRECTORY (CD, PWD)
+
 void		cd_built_in(t_minishell *ms, t_tree_node *node);
+void		pwd_built_in(t_minishell *ms, t_tree_node *node);
+
+// EXPORT
+
+void		export_built_in(t_minishell *ms, t_tree_node *node);
+
+// EXPORT UTILS
+
+void		export_append(t_minishell *ms, int idx, char *new);
+void		replace_env_value(t_minishell *ms, char *key, char *new, int idx);
+void		move_env_var(t_minishell *ms, int *old_idx, int new_idx);
+
+// GET ENV
+
+char		*get_env(char *search, char **env);
+int			get_env_idx(char **env, char *search);
+char		*get_export_key(char *var);
+char		*get_export_value(char *var);
+int			env_elem_len(char *var, int key_flag);
+
+// UNSET
+
+void		unset_built_in(t_minishell *ms, t_tree_node *node);
+void		remove_env_var(t_minishell *ms, size_t idx, size_t len);
+
+// ENV
+
+void		env_built_in(t_minishell *ms, t_tree_node *node);
+void		print_env(t_minishell minishell, int export_flag);
+
+// EXIT
+
+void		exit_built_in(t_minishell *ms, t_tree_node *node);
+int			long_check(char *argv, long *arg_n);
 
 #endif // MINISHELL_H

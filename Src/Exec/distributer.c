@@ -37,7 +37,7 @@ int	master_distributer(t_minishell *ms, t_tree_node *node)
 
 void	command_process(t_minishell *ms, t_tree_node *node)
 {
-	int id;
+	int	id;
 	int	redir[2];
 
 	printf(YEL "\nEntering Command Executer" DEF "\n\n");
@@ -45,15 +45,18 @@ void	command_process(t_minishell *ms, t_tree_node *node)
 	printf("step 1 --\n");
 	redir[0] = 0;
 	redir[1] = 1;
+	// handle heredoc and store it in an int
 	redir_handler(*ms, node, &redir[0], &redir[1]);
-
+	// if redir[0] != -1 && here_dod > 0  redir[0] = here doc
 	// step 2: child pro, parse, dup execute --
 	printf("step 2 --\n");
 	id = fork();
 	if (id < 0)
-		minishell_clean(*ms, 1); // fail fork ABORT
-	if (id == 0)
-		cmd_parse_and_exe(*ms, node, redir);// child exec
+		minishell_clean(*ms, 1); // fail fork ABORT?
+	if (id == 0 && (redir[0] == -1 || redir[1] == -1))
+		minishell_clean(*ms, 1); // failed redir
+	else if (id == 0)
+		cmd_parse_and_exe(*ms, node, redir); // child exec
 	if (redir[0] > 2)
 		close(redir[0]);
 	if (redir[1] > 2)
@@ -61,22 +64,23 @@ void	command_process(t_minishell *ms, t_tree_node *node)
 	process_waiting(1, &id, &ms->exit_status);
 }
 
-void cmd_parse_and_exe(t_minishell ms, t_tree_node *node, int *redir)
+void	cmd_parse_and_exe(t_minishell ms, t_tree_node *node, int *redir)
 {
-	char **cmd;
-	char *path;
+	char	*path;
+	int		status;
 
 	// cmd parse --
 	if (node->right)
-		cmd = matrix_add_front(node->cont.cmd, node->right->cont.args);
+		node->right->cont.args = matrix_add_front(node->cont.cmd,
+				node->right->cont.args);
 	else
-		cmd = matrix_add_front(node->cont.cmd, NULL);
-	if(!cmd)
-		minishell_clean(ms, 1); // fail fork ABORT
+		node->right->cont.args = matrix_add_front(node->cont.cmd, NULL);
+	if (!node->right->cont.args)
+		minishell_clean(ms, 1); // fail alloc ABORT
 	// path parse --
-	path = get_path(ms, cmd[0]);
+	path = get_path(ms, node->right->cont.args[0]);
 	if (!path)
-			minishell_clean(ms, 1); // fail alloc ABORT	
+		minishell_clean(ms, 1); // fail alloc ABORT
 	// dupping --
 	if (redir[0] > 2)
 		dup2(redir[0], STDIN_FILENO);
@@ -84,9 +88,10 @@ void cmd_parse_and_exe(t_minishell ms, t_tree_node *node, int *redir)
 		dup2(redir[1], STDOUT_FILENO);
 	master_close();
 	// executing --
-	if (execve(path, cmd, &ms.env[ms.env_start]) == -1)
+	if (execve(path, node->right->cont.args, &ms.env[ms.env_start]) == -1)
 	{
-		free_split(cmd);
-		minishell_clean(ms, error_code_for_exec(path)); // fail execve ABORT
+		status = error_code_for_exec(path);
+		free(path);
+		minishell_clean(ms, status); // fail execve ABORT
 	}
 }

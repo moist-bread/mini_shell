@@ -30,7 +30,7 @@ void	exit_built_in(t_minishell *ms, t_tree_node *node)
 	{
 		printf("exit: %s: numeric argument required\n",
 			node->right->cont.args[0]);
-		minishell_clean(*ms, 2); // numeric argument required 2
+		minishell_clean(*ms, 2);
 	}
 }
 

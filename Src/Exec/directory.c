@@ -3,32 +3,13 @@
 
 static int	invalid_cd(t_tree_node *node, int *status);
 
-/// @brief Print name of current/working directory
-/// @param ms Overarching Minishell Structure
-/// @param node Current pwd node to be executed
-void	pwd_built_in(t_minishell *ms, t_tree_node *node)
-{
-	printf(YEL "\nEntering pwd built in" DEF "\n\n");
-	if (node->right && *node->right->cont.args[0] == '-'
-		&& node->right->cont.args[0][1])
-	{
-		printf("pwd: -%c: invalid option\n", node->right->cont.args[0][1]);
-		printf("pwd: usage: pwd\n");
-		ms->exit_status = 2;
-	}
-	else
-	{
-		printf("%s\n", get_env("PWD=", &ms->env[ms->env_start]));
-		ms->exit_status = 0;
-	}
-}
-
 /// @brief Changes directory according to NODE
 /// @param ms Overarching Minishell Structure
 /// @param node Current cd node to be executed
 void	cd_built_in(t_minishell *ms, t_tree_node *node)
 {
 	char	*path;
+	char	*cur;
 
 	printf(YEL "\nEntering cd built in" DEF "\n\n");
 	if (node->right && invalid_cd(node->right, &ms->exit_status))
@@ -51,8 +32,10 @@ void	cd_built_in(t_minishell *ms, t_tree_node *node)
 		printf("old env pwd:\t%s\n", get_env("PWD=", ms->env));
 		replace_env_value(ms, "OLDPWD=", get_env("PWD=", ms->env),
 			get_env_idx(ms->env, "OLDPWD="));
-		replace_env_value(ms, "PWD=", getcwd(NULL, 0),
-			get_env_idx(&ms->env[ms->env_start], "PWD="));
+		cur = getcwd(NULL, 0);
+		replace_env_value(ms, "PWD=", cur, get_env_idx(&ms->env[ms->env_start],
+				"PWD="));
+		free(cur);
 		printf("new env oldpwd:\t%s\n", get_env("OLDPWD=", ms->env));
 		printf("new env pwd:\t%s\n", get_env("PWD=", ms->env));
 		ms->exit_status = 0;
@@ -78,4 +61,24 @@ static int	invalid_cd(t_tree_node *node, int *status)
 		return (1);
 	}
 	return (0);
+}
+
+/// @brief Print name of current/working directory
+/// @param ms Overarching Minishell Structure
+/// @param node Current pwd node to be executed
+void	pwd_built_in(t_minishell *ms, t_tree_node *node)
+{
+	printf(YEL "\nEntering pwd built in" DEF "\n\n");
+	if (node->right && *node->right->cont.args[0] == '-'
+		&& node->right->cont.args[0][1])
+	{
+		printf("pwd: -%c: invalid option\n", node->right->cont.args[0][1]);
+		printf("pwd: usage: pwd\n");
+		ms->exit_status = 2;
+	}
+	else
+	{
+		printf("%s\n", get_env("PWD=", &ms->env[ms->env_start]));
+		ms->exit_status = 0;
+	}
 }

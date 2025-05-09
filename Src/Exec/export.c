@@ -1,6 +1,10 @@
 
 #include "../../Inc/minishell.h"
 
+static int	export_validate_options(t_tree_node *node, int *status);
+static int	invalid_export(char *arg, int *status);
+static void	export_distribute(t_minishell *ms, char *arg, char *key);
+
 /// @brief Prints or Creates variables according to NODE
 /// @param ms Overarching Minishell Structure
 /// @param node Current export node to be executed
@@ -10,13 +14,15 @@ void	export_built_in(t_minishell *ms, t_tree_node *node)
 	int		i;
 
 	printf(YEL "\nEntering export built in" DEF "\n\n");
+	if (!export_validate_options(node->right, &ms->exit_status))
+		return ;
 	if (!node->right)
 		return (print_env(*ms, 1));
 	i = -1;
 	while (node->right->cont.args[++i])
 	{
 		printf("export arg[%d]: \"%s\"\n", i, node->right->cont.args[i]);
-		if (invalid_export(node->right->cont.args[i]))
+		if (invalid_export(node->right->cont.args[i], &ms->exit_status))
 			continue ;
 		key = get_export_key(node->right->cont.args[i]);
 		if (!key)
@@ -28,65 +34,60 @@ void	export_built_in(t_minishell *ms, t_tree_node *node)
 	}
 }
 
-/// @brief Prints either export or env according to EXPORT_FLAG
-/// @param minishell Overarching Minishell Structure
-/// @param export_flag 1 prints export, 0 prints env
-void	print_env(t_minishell minishell, int export_flag)
+/// @brief Checks if NODE exists and if it's an invalid option or just an argument
+/// @param node Possible argument node
+/// @param status Exit status to update
+/// @return 0 when invalid, 1 when valid
+static int	export_validate_options(t_tree_node *node, int *status)
 {
-	int		i;
-	int		j;
-	char	**temp;
-
-	i = minishell.env_start;
-	if (export_flag)
+	*status = 0;
+	if (!node)
+		return (1);
+	if (node->cont.args[0][0] == '-' && node->cont.args[0][1])
 	{
-		temp = sort_matrix(minishell.env, (int)ft_matrixlen(minishell.env));
-		i = -1;
-		while (temp[++i])
-		{
-			j = 0;
-			printf("declare -x ");
-			while (temp[i][j] && temp[i][j] != '=')
-				printf("%c", temp[i][j++]);
-			if (temp[i][j] == '=')
-				printf("%c\"%s\"", temp[i][j], &temp[i][j + 1]);
-			printf("\n");
-		}
-		free(temp);
+		printf("export: -%c: invalid option\n", node->cont.args[0][1]);
+		printf("export: usage: export [name[=value] ...]\n");
+		*status = 2;
+		return (0);
 	}
-	else
-		while (minishell.env[i])
-			printf("%s\n", minishell.env[i++]);
+	return (1);
 }
 
 /// @brief Verifies if recieved ARG is an invalid identifier
 /// @param arg Identifier
 /// @return 1 when invalid, 0 when valid
-int	invalid_export(char *arg)
+static int	invalid_export(char *arg, int *status)
 {
+	int	inv;
 	int	i;
 
 	// must begin with a letter or underscore
 	// can only contain letters, digits, and underscores
 	// depois do = podes ter oque lhe apetecer
-	if (!ft_isalpha(*arg) && *arg != '_')
-		return (printf("export: \'%s\': not a valid identifier\n", arg), 1);
+	inv = 0;
 	if (arg[0] == '_' && arg[1] == '=')
 		return (1);
+	if (!ft_isalpha(*arg) && *arg != '_')
+		inv = 1;
 	i = -1;
-	while (arg[++i] && arg[i + 1] != '=')
+	while (!inv && arg[++i] && arg[i + 1] != '=')
 		if (!ft_isalnum(arg[i]) && arg[i] != '_')
-			return (printf("export: \'%s\': not a valid identifier\n", arg), 1);
-	if (arg[i] && !ft_isalnum(arg[i]) && arg[i] != '_' && arg[i] != '+')
-		return (printf("export: \'%s\': not a valid identifier\n", arg), 1);
-	return (0);
+			inv = 1;
+	if (!inv && arg[i] && !ft_isalnum(arg[i]) && arg[i] != '_' && arg[i] != '+')
+		inv = 1;
+	if (inv)
+	{
+		printf("export: \'%s\': not a valid identifier\n", arg);
+		*status = 1;
+	}
+	return (inv);
 }
 
 /// @brief Adds or alters the enviroment variables according to ARG
 /// @param ms Overarching Minishell Structure
 /// @param arg Current argument being exported
 /// @param key Key name present in ARG
-void	export_distribute(t_minishell *ms, char *arg, char *key)
+static void	export_distribute(t_minishell *ms, char *arg, char *key)
 {
 	int	env_idx;
 	int	env_len;

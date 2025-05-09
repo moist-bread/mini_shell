@@ -114,14 +114,14 @@ int	error_code_for_exec(char *path)
 {
 	if (access(path, F_OK) < 0)
 	{
-		free(path);
 		// make an error message function
+		printf("memo falhado\n");
 		return (127);
 	}
 	else if (access(path, X_OK) < 0)
 	{
-		free(path);
 		// make an error message function
+		printf("idk you\n");
 		return (126);
 	}
 	return (0);

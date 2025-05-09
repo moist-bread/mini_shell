@@ -4,6 +4,15 @@
 static void redir_opening(t_minishell minishell, t_tree_node *node, int *in, int *out);
 static int	here_doc_redir(t_minishell minishell, char *limiter);
 
+// ideas on how to go about here_doc redirs
+// - do all here docs in the beggining and close them if theyre not the last in redir
+// - in redir opening skip here_doc
+// - if the heredoc was the last inredir, replace at the end
+
+// same thing but for pipes
+// - have an array of here doc fds???
+// - they match up with the ids and i onlu replace if its > 2 
+
 /// @brief Recurcivelly checks and opens all redirections associated with NODE
 /// @param minishell Overarching Minishell Structure
 /// @param node Current tree node being checked for redirections
@@ -11,15 +20,11 @@ static int	here_doc_redir(t_minishell minishell, char *limiter);
 /// @param out Var where to store output redirections
 void redir_handler(t_minishell minishell, t_tree_node *node, int *in, int *out)
 {
-	if (!node->left) // NO REDIR
+	if (!node->left) // no more redir
 		return ;
 	redir_opening(minishell, node->left, in, out);
-	if (*in == -1 || *out == -1)
-	{
-		// NO MORE REDIRS ARE HANDLED, cur cmd doesnt exec?
-		perror(node->left->cont.file);
-		minishell_clean(minishell, 1);
-	}
+	if (*in == -1 || *out == -1) // failed open
+		return (perror(node->left->cont.file));
 	if (node->left->left) // more redir
 		redir_handler(minishell, node->left, in, out);
 }
@@ -89,15 +94,3 @@ static int	here_doc_redir(t_minishell minishell, char *limiter)
 	return (here_pipe[0]);
 }
 
-/// @brief Closes all non standard file descriptors
-void	master_close(void)
-{
-	int	i;
-
-	i = 3;
-	while (i < 1024)
-	{
-		close(i);
-		i++;
-	}
-}

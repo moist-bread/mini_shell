@@ -10,8 +10,16 @@ void	unset_built_in(t_minishell *ms, t_tree_node *node)
 	int	i;
 
 	printf(YEL "\nEntering unset built in" DEF "\n\n");
+	ms->exit_status = 0;
 	if (!node->right)
 		return ;
+	if (node->right->cont.args[0][0] == '-' && node->right->cont.args[0][1])
+	{
+		printf("unset: -%c: invalid option\n", node->right->cont.args[0][1]);
+		printf("unset: usage: unset [name ...]\n");
+		ms->exit_status = 2;
+		return ;
+	}
 	i = -1;
 	while (node->right->cont.args[++i])
 	{

@@ -22,7 +22,7 @@ PARSE_DIR		=	Parse
 # -->┊( SOURCES AND OBJS )
 MAIN_C			=	minishell_main.c
 
-EXEC_MAIN_C		=	exec_main.c struct_init.c distributer.c \
+EXEC_MAIN_C		=	exec_main.c struct_utils.c distributer.c \
 					pipe_process.c redir_handler.c pipe_child_pro.c \
 					matrix_utils.c matrix_quick_sort.c \
 					export.c export_utils.c env.c get_env.c unset.c echo.c exit.c directory.c \

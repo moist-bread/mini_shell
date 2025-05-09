@@ -21,9 +21,9 @@ void	export_append(t_minishell *ms, int idx, char *new)
 	if (!append)
 		return ; // explode
 	j = ft_strlcpy(append, ms->env[idx], ft_strlen(ms->env[idx]) + 1);
-	printf("append ogn: %s\n", append);
+	printf("original: %s\n", append);
 	i = ft_strlcpy(&append[j], &new[i + 1], ft_strlen(&new[i]));
-	printf("append new: %s\n", append);
+	printf("appended: %s\n", append);
 	if (!ft_strchr(ms->env[idx], '='))
 		move_env_var(ms, &idx, (int)ft_matrixlen(ms->env) - 1);
 	free(ms->env[idx]);
@@ -44,20 +44,17 @@ void	replace_env_value(t_minishell *ms, char *key, char *new, int idx)
 
 	if (!ms->env || !*key || !new || idx < 0)
 		return ; // explode
-	// step 1 -- allocation - key len, val len + 2 (for the = and null), calloc
 	key_len = env_elem_len(key, 1);
 	new_val_len = ft_strlen(new) + 2;
 	new_var = ft_calloc(key_len + new_val_len, sizeof(char));
 	if (!new_var)
 		return ; // explode
-	// step 2 -- pasting - copy key, put =, copy val
-	printf("old var: %s\nnew val: %s\n", ms->env[idx], new);
+	// printf("old var: %s\nnew val: %s\n", ms->env[idx], new);
 	j = ft_strlcpy(new_var, key, key_len + 1);
 	new_var[j - 1] = '=';
 	printf("copied key: %s\n", new_var);
 	ft_strlcpy(&new_var[j], new, new_val_len);
 	printf("copied new val: %s\n", new_var);
-	// step 3 -- move if needed - incase of being previously wrongly declared
 	if (idx < ms->env_start)
 		move_env_var(ms, &idx, (int)ft_matrixlen(ms->env) - 1);
 	free(ms->env[idx]);

@@ -1,6 +1,8 @@
 
 #include "../../Inc/minishell.h"
 
+static void	pipe_init(t_minishell *ms, t_pipe_data *pdata);
+
 /// @brief Creates the pipe execution process and gets its exit status
 /// @param minishell Overarching Minishell Structure
 /// @param pdata Struct used for the execution of pipes
@@ -9,12 +11,30 @@ void	pipe_process(t_minishell *minishell, t_pipe_data *pdata)
 	int	id;
 
 	ft_printf("\nEntering pipe pro\n");
+	pipe_init(minishell, pdata);
 	id = fork();
 	if (id < 0)
 		minishell_clean(*minishell, 1); // fail fork abort WITHOUT EXIT
 	if (id == 0)
 		read_and_exe_pipe_tree(*minishell, minishell->tree_head, pdata, 0);
 	process_waiting(1, &id, &minishell->exit_status);
+}
+
+static void	pipe_init(t_minishell *ms, t_pipe_data *pdata)
+{
+	t_tree_node	*node;
+	int			pipe_n;
+
+	node = ms->tree_head;
+	pipe_n = 1;
+	while (node->type == PIPE)
+	{
+		pipe_n++;
+		node = node->right;
+	}
+	pdata->cmd_n = pipe_n;
+	pdata->pid = ft_calloc(pipe_n, sizeof(int));
+	pdata->env = &ms->env[ms->env_start];
 }
 
 /// @brief Recurcivelly checks and initiates the execution of all
@@ -45,24 +65,30 @@ void	read_and_exe_pipe_tree(t_minishell minishell, t_tree_node *tree_head,
 void	setup_pipe_cmd(t_minishell minishell, t_tree_node *cmd_node,
 		t_pipe_data *pdata, int idx)
 {
-	int	redir_fd[2];
+	int	redir[2];
 
 	ft_printf("\nEntering setup pipe cmd\n\n");
 	// step 1: check redir and open needed --
 	printf("step 1 --\n");
-	redir_fd[0] = 0;
-	redir_fd[1] = 1;
-	redir_handler(minishell, cmd_node, &redir_fd[0], &redir_fd[1]);
+	redir[0] = 0;
+	redir[1] = 1;
+	redir_handler(minishell, cmd_node, &redir[0], &redir[1]);
 	// step 2: create pipe and assign fds --
 	printf("step 2 --\n");
-	assign_pipe_fds(minishell, pdata, redir_fd, idx);
+	assign_pipe_fds(minishell, pdata, redir, idx);
 	// step 3: child pro, parse, dup execute --
 	printf("step 3 --\n");
-	pdata->pid[idx] = fork();
+	pdata->pid[idx] = fork(); // couldnt test pipes bc of unalloced array
 	if (pdata->pid[idx] < 0)
-		minishell_clean(minishell, 1); // fail fork ABORT
+	{
+		minishell_clean(minishell, 1); // fail fork ABORT?
+	}
 	if (pdata->pid[idx] == 0)
+	{
+		if (redir[0] == -1 || redir[1] == -1)
+			minishell_clean(minishell, 1);
 		child_parse_and_exe(minishell, cmd_node, pdata);
+	}
 	// step 4: parent close what needs to be closed --
 	printf("step 4 --\n");
 	if (pdata->cur_pipe[1] > 2)
@@ -71,33 +97,4 @@ void	setup_pipe_cmd(t_minishell minishell, t_tree_node *cmd_node,
 	if (pdata->cur_pipe[0] > 2)
 		close(pdata->cur_pipe[0]);
 	pdata->cur_pipe[0] = 0;
-}
-
-/// @brief Waits for the pids in IDS and stores it's exit status in STATUS
-/// @param proc_n Amount of processes to wait for
-/// @param ids Array containing the ids of said processes
-/// @param status Pointer to var where to store the final exit status in
-void	process_waiting(int proc_n, int *ids, int *status)
-{
-	int	i;
-	int	exit_status;
-
-	i = -1;
-	*status = 0;
-	while (++i < proc_n)
-		waitpid(ids[i], &exit_status, 0);
-	if (WIFEXITED(exit_status))
-		*status = WEXITSTATUS(exit_status);
-}
-
-/// @brief Cleans all content from the MINISHELL struct
-/// @param minishell Overarching Minishell Structure
-/// @param status Process exit status
-void	minishell_clean(t_minishell minishell, int status)
-{
-	printf("exiting with: %d\n", status);
-	if (minishell.tree_head)
-		free_tree(minishell.tree_head);
-	free_split(minishell.env);
-	exit(status);
 }
