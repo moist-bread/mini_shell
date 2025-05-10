@@ -118,9 +118,9 @@ static void	export_distribute(t_minishell *ms, char *arg, char *key)
 		printf("key is present, export append\n");
 		export_append(ms, env_idx, arg);
 	}
-	else if (ft_strcmp(get_env(key, ms->env), arg + key_len) && ft_strchr(arg,
-			'='))
+	else if (ft_strcmp(ms->env[env_idx], arg) && ft_strchr(arg, '='))
 	{
+		printf("get env \"%s\"\n", ms->env[env_idx]);
 		printf("key is present, different value\n");
 		replace_env_value(ms, key, get_export_value(arg), env_idx);
 	}
