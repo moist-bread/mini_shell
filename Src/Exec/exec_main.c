@@ -116,14 +116,15 @@ void	fake_clear_token_lst(t_token	*token);
 
 int	main(int ac, char **av, char **env)
 {
-	(void)ac;
-	(void)av;
-	(void)env;
-	
-	printf(YEL "Testing executer WITH TREE main !" DEF "\n\n");
 	t_minishell	ms;
 	char		*input;
 	t_token		*tokens;
+	
+	(void)ac;
+	(void)av;
+	(void)env;
+
+	printf(YEL "Testing executer WITH TREE main !" DEF "\n\n");
 	
 	minishell_struct_init(&ms, env);
 	input = NULL;
@@ -168,7 +169,8 @@ void	fake_clear_token_lst(t_token	*token)
 	while (current)
 	{
 		next = current->next;
-		if (current->type == PIPE)
+		if (current->type == PIPE || (current->type >= REDIR_IN
+			&& current->type <= REDIR_OUT_APPEND))
 			free(current->cont);
 		free(current);
 		current = next;

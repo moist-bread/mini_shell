@@ -36,7 +36,7 @@ static void	pipe_init(t_minishell *ms, t_pipe_data *pdata)
 	pdata->cmd_n = pipe_n;
 	pdata->pid = ft_calloc(pipe_n, sizeof(int));
 	if (!pdata->pid)
-		; // explode
+		return ; // explode
 	pdata->env = &ms->env[ms->env_start];
 }
 
@@ -93,7 +93,7 @@ void	setup_pipe_cmd(t_minishell minishell, t_tree_node *node,
 		if (node->type == CMD)
 			cmd_parse_and_exe(minishell, node, pdata->cur_pipe);
 		else if (node->type == BUILT_IN)
-			; // put built ins here
+			minishell_clean(minishell, 0); // put built ins here
 	}
 	// step 4: parent close what needs to be closed --
 	printf("step 4 --\n");
