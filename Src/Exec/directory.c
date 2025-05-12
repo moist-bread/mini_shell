@@ -23,7 +23,7 @@ void	cd_built_in(t_minishell *ms, t_tree_node *node)
 		if (!path)
 			printf("cd: HOME not set\n");
 		else
-			printf("perror: %s\n", *node->right->cont.args); // perror
+			printf("perror: %s\n", path); // perror
 		ms->exit_status = 1;
 	}
 	else

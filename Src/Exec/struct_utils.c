@@ -35,6 +35,7 @@ void	process_waiting(int proc_n, int *ids, int *status)
 	int	exit_status;
 
 	i = -1;
+	printf("proc n: %d\n", proc_n);
 	*status = 0;
 	while (++i < proc_n)
 		waitpid(ids[i], &exit_status, 0);

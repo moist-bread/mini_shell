@@ -168,6 +168,8 @@ void	fake_clear_token_lst(t_token	*token)
 	while (current)
 	{
 		next = current->next;
+		if (current->type == PIPE)
+			free(current->cont);
 		free(current);
 		current = next;
 	}

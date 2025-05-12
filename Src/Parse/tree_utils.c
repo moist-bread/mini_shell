@@ -55,10 +55,10 @@ void	free_tree(t_tree_node *tree_head)
 /// @param cont The content
 void	free_tree_node_cont(t_node_cont cont)
 {
-	if (cont.args)
-		free_split(cont.args);
 	if (cont.cmd)
 		free(cont.cmd);
+	if (cont.args)
+		free_split(cont.args);
 	if (cont.pipe.pid)
 		free(cont.pipe.pid);
 	if (cont.pipe.cmd)
@@ -67,8 +67,6 @@ void	free_tree_node_cont(t_node_cont cont)
 		free(cont.pipe.path);
 	if (cont.file)
 		free(cont.file);
-	if (cont.limiter)
-		free(cont.limiter);
 	if (cont.limiter)
 		free(cont.limiter);
 }

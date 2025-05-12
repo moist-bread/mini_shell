@@ -5,18 +5,19 @@ static void	pipe_init(t_minishell *ms, t_pipe_data *pdata);
 
 /// @brief Creates the pipe execution process and gets its exit status
 /// @param minishell Overarching Minishell Structure
-/// @param pdata Struct used for the execution of pipes
-void	pipe_process(t_minishell *minishell, t_pipe_data *pdata)
+/// @param node Current pipe node to be executed
+void	pipe_process(t_minishell *minishell, t_tree_node *node)
 {
 	int	id;
 
 	ft_printf("\nEntering pipe pro\n");
-	pipe_init(minishell, pdata);
+	pipe_init(minishell, &node->cont.pipe);
 	id = fork();
 	if (id < 0)
 		minishell_clean(*minishell, 1); // fail fork abort WITHOUT EXIT
 	if (id == 0)
-		read_and_exe_pipe_tree(*minishell, minishell->tree_head, pdata, 0);
+		read_and_exe_pipe_tree(*minishell, minishell->tree_head,
+			&node->cont.pipe, 0);
 	process_waiting(1, &id, &minishell->exit_status);
 }
 
@@ -27,13 +28,15 @@ static void	pipe_init(t_minishell *ms, t_pipe_data *pdata)
 
 	node = ms->tree_head;
 	pipe_n = 1;
-	while (node->type == PIPE)
+	while (node && node->type == PIPE)
 	{
 		pipe_n++;
 		node = node->right;
 	}
 	pdata->cmd_n = pipe_n;
 	pdata->pid = ft_calloc(pipe_n, sizeof(int));
+	if (!pdata->pid)
+		; // explode
 	pdata->env = &ms->env[ms->env_start];
 }
 
@@ -59,10 +62,10 @@ void	read_and_exe_pipe_tree(t_minishell minishell, t_tree_node *tree_head,
 
 /// @brief Setups up redirections, pipes, and sends nodes for execution
 /// @param minishell Overarching Minishell Structure
-/// @param cmd_node Current node of type CMD or BUILT_IN to be executed
+/// @param node Current node of type CMD or BUILT_IN to be executed
 /// @param pdata Struct used for the execution of pipes
 /// @param idx Index for the command to be executed
-void	setup_pipe_cmd(t_minishell minishell, t_tree_node *cmd_node,
+void	setup_pipe_cmd(t_minishell minishell, t_tree_node *node,
 		t_pipe_data *pdata, int idx)
 {
 	int	redir[2];
@@ -72,13 +75,13 @@ void	setup_pipe_cmd(t_minishell minishell, t_tree_node *cmd_node,
 	printf("step 1 --\n");
 	redir[0] = 0;
 	redir[1] = 1;
-	redir_handler(minishell, cmd_node, &redir[0], &redir[1]);
+	redir_handler(minishell, node, &redir[0], &redir[1]);
 	// step 2: create pipe and assign fds --
 	printf("step 2 --\n");
 	assign_pipe_fds(minishell, pdata, redir, idx);
 	// step 3: child pro, parse, dup execute --
 	printf("step 3 --\n");
-	pdata->pid[idx] = fork(); // couldnt test pipes bc of unalloced array
+	pdata->pid[idx] = fork();
 	if (pdata->pid[idx] < 0)
 	{
 		minishell_clean(minishell, 1); // fail fork ABORT?
@@ -87,7 +90,10 @@ void	setup_pipe_cmd(t_minishell minishell, t_tree_node *cmd_node,
 	{
 		if (redir[0] == -1 || redir[1] == -1)
 			minishell_clean(minishell, 1);
-		child_parse_and_exe(minishell, cmd_node, pdata);
+		if (node->type == CMD)
+			cmd_parse_and_exe(minishell, node, pdata->cur_pipe);
+		else if (node->type == BUILT_IN)
+			; // put built ins here
 	}
 	// step 4: parent close what needs to be closed --
 	printf("step 4 --\n");

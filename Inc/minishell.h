@@ -190,10 +190,10 @@ void		redir_handler(t_minishell minishell, t_tree_node *node, int *in,
 
 // PIPE PROCESS
 
-void		pipe_process(t_minishell *minishell, t_pipe_data *pdata);
+void		pipe_process(t_minishell *minishell, t_tree_node *node);
 void		read_and_exe_pipe_tree(t_minishell minishell,
 				t_tree_node *tree_head, t_pipe_data *pdata, int idx);
-void		setup_pipe_cmd(t_minishell minishell, t_tree_node *cmd_node,
+void		setup_pipe_cmd(t_minishell minishell, t_tree_node *node,
 				t_pipe_data *pdata, int idx);
 
 // PIPE CHILD PROCESS
