@@ -26,9 +26,9 @@ typedef struct s_pipe_data
 /// @param CMD Commands
 /// @param ARG Versatile arguments
 /// @param PIPE |
+/// @param LIM Arg after here_doc
 /// @param REDIR_IN <
 /// @param REDIR_HERE_DOC <<
-/// @param LIM Arg after here_doc
 /// @param REDIR_OUT >
 /// @param REDIR_OUT_APPEND >>
 /// @param BUILT_IN echo cd pwd export unset env exit
@@ -37,9 +37,9 @@ typedef enum s_node_type
 	CMD,
 	ARG,
 	PIPE,
+	LIM,
 	REDIR_IN,
 	REDIR_HERE_DOC,
-	LIM,
 	REDIR_OUT,
 	REDIR_OUT_APPEND,
 	BUILT_IN,

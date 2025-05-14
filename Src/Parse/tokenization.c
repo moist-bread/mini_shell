@@ -43,11 +43,9 @@ void	place_token(char *input, t_token **head, char **env)
 	t_token	*newtk;
 	char	**newinput;
 	char	*updated_input;
-	// char	*expanded_input;
 	int		i;
 
 	*head = NULL;
-	(void)env;
 	check_quotes(input);
 	updated_input = add_spaces(input);
 	newinput = cracked_split(updated_input);
@@ -55,10 +53,14 @@ void	place_token(char *input, t_token **head, char **env)
 	i = 0;
 	while (newinput[i])
 	{
-		// expanded_input = process_quote_expansions(newinput[i], env);
-		newtk = newtoken(newinput[i]);
-		tokenadd_back(head, newtk);
-		// free(expanded_input);
+		if (ft_strchr(newinput[i], '$'))
+			input_expander(newinput[i], env, newtk, head);
+		else
+		{
+			// quote_remover(&newinput[i]);
+			newtk = newtoken(newinput[i]);
+			tokenadd_back(head, newtk);
+		}
 		i++;
 	}
 	free_split(newinput);

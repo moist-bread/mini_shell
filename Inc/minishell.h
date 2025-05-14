@@ -105,12 +105,19 @@ char		**tree_alloc_args(t_token *token);
 
 // EXPANSIONS
 
+void	input_expander(char *input, char **env, t_token *newtk, t_token **head);
 char	*process_quote_expansions(char *input, char **env);
-char	*the_expansion(char	*input, char **env);
-char	*single_quote(char *input);
-char	*quote(char *input, char **env);
-int		quote_count(char *input, bool flag);
+void	the_expansion(char *input, char **env, char *result);
+char	*expansion(char *input, char **env);
+void	expand_single_quotes(char *input, char *result, int *i);
+void	expand_double_quotes(char *input, char **env, char *result, int *i);
+void	expand_unquotes(char *input, char **env, char *result, int *i);
 char	*get_search(char *input);
+size_t	the_lenght(char *input, char **env);
+size_t	len_expansion(char *input, char **env);
+size_t	len_double_quotes(char *input, char **env, int *i);
+size_t	len_single_quote(char *input, int *i);
+size_t	len_unquoted(char *input, char **env, int *i);
 
 // ASSIGN TYPES
 
