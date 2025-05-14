@@ -16,8 +16,11 @@ void	pipe_process(t_minishell *minishell, t_tree_node *node)
 	if (id < 0)
 		minishell_clean(*minishell, 1); // fail fork abort WITHOUT EXIT
 	if (id == 0)
+	{
+		multi_here_doc_handler(*minishell, &node->cont.pipe);
 		read_and_exe_pipe_tree(*minishell, minishell->tree_head,
 			&node->cont.pipe, 0);
+	}
 	process_waiting(1, &id, &minishell->exit_status);
 }
 
@@ -71,14 +74,23 @@ void	setup_pipe_cmd(t_minishell minishell, t_tree_node *node,
 	int	redir[2];
 
 	ft_printf("\nEntering setup pipe cmd\n\n");
+
 	// step 1: check redir and open needed --
 	printf("step 1 --\n");
 	redir[0] = 0;
 	redir[1] = 1;
-	redir_handler(minishell, node, &redir[0], &redir[1]);
+	redir_handler(node, &redir[0], &redir[1]);
+	if (pdata->here_docs[idx] > 2)
+	{
+		if (redir[0] > 2)
+			close(redir[0]);
+		redir[0] = pdata->here_docs[idx];
+	}
+	
 	// step 2: create pipe and assign fds --
 	printf("step 2 --\n");
 	assign_pipe_fds(minishell, pdata, redir, idx);
+
 	// step 3: child pro, parse, dup execute --
 	printf("step 3 --\n");
 	pdata->pid[idx] = fork();
@@ -95,6 +107,7 @@ void	setup_pipe_cmd(t_minishell minishell, t_tree_node *node,
 		else if (node->type == BUILT_IN)
 			minishell_clean(minishell, 0); // put built ins here
 	}
+
 	// step 4: parent close what needs to be closed --
 	printf("step 4 --\n");
 	if (pdata->cur_pipe[1] > 2)

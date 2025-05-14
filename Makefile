@@ -9,7 +9,7 @@ CC		=	cc
 CFLAGS	=	-Wall -Wextra -Werror -g
 RL		=	-lreadline
 VAL		=	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes -s
-FDFLAGS	=	--trace-children=yes --track-fds=yes
+FDFLAGS	=	--track-fds=yes #--trace-children=yes
 SUPP	=	--suppressions=readline.supp
 
 # -->┊( DIRECTORIES )

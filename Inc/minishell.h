@@ -185,8 +185,9 @@ void		cmd_parse_and_exe(t_minishell ms, t_tree_node *node, int *redir);
 
 // REDIR HANDLER
 
-void		redir_handler(t_minishell minishell, t_tree_node *node, int *in,
-				int *out);
+void		redir_handler(t_tree_node *node, int *in, int *out);
+void		single_here_doc_handler(t_minishell ms, t_tree_node *pin, int *in);
+void		multi_here_doc_handler(t_minishell ms, t_pipe_data *pdata);
 
 // PIPE PROCESS
 
@@ -200,8 +201,6 @@ void		setup_pipe_cmd(t_minishell minishell, t_tree_node *node,
 
 void		assign_pipe_fds(t_minishell ms, t_pipe_data *pdata, int *redir_fd,
 				int idx);
-void		child_parse_and_exe(t_minishell ms, t_tree_node *node,
-				t_pipe_data *pdata);
 char		*get_path(t_minishell minishell, char *cmd);
 int			error_code_for_exec(char *path);
 

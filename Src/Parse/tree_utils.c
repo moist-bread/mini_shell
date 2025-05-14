@@ -30,9 +30,8 @@ void	tree_cont_init(t_node_cont *cont)
 	cont->pipe.cur_pipe[0] = 0;
 	cont->pipe.cur_pipe[1] = 1;
 	cont->pipe.next_pipe = 0;
+	cont->pipe.here_docs = NULL;
 	cont->pipe.pid = NULL;
-	cont->pipe.cmd = NULL;
-	cont->pipe.path = NULL;
 	cont->pipe.env = NULL;
 	cont->file = NULL;
 	cont->limiter = NULL;
@@ -61,10 +60,8 @@ void	free_tree_node_cont(t_node_cont cont)
 		free_split(cont.args);
 	if (cont.pipe.pid)
 		free(cont.pipe.pid);
-	if (cont.pipe.cmd)
-		free_split(cont.pipe.cmd);
-	if (cont.pipe.path)
-		free(cont.pipe.path);
+	if (cont.pipe.here_docs)
+		free(cont.pipe.here_docs);
 	if (cont.file)
 		free(cont.file);
 	if (cont.limiter)

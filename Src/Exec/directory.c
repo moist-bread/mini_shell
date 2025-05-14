@@ -68,6 +68,8 @@ static int	invalid_cd(t_tree_node *node, int *status)
 /// @param node Current pwd node to be executed
 void	pwd_built_in(t_minishell *ms, t_tree_node *node)
 {
+	char *pwd;
+
 	printf(YEL "\nEntering pwd built in" DEF "\n\n");
 	if (node->right && *node->right->cont.args[0] == '-'
 		&& node->right->cont.args[0][1])
@@ -78,7 +80,9 @@ void	pwd_built_in(t_minishell *ms, t_tree_node *node)
 	}
 	else
 	{
-		printf("%s\n", get_env("PWD=", &ms->env[ms->env_start]));
+		pwd = getcwd(NULL, 0);
+		printf("%s\n", pwd);
+		free(pwd);
 		ms->exit_status = 0;
 	}
 }
