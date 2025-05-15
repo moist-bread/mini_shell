@@ -8,7 +8,7 @@ static void	export_distribute(t_minishell *ms, char *arg, char *key);
 /// @brief Prints or Creates variables according to NODE
 /// @param ms Overarching Minishell Structure
 /// @param node Current export node to be executed
-void	export_built_in(t_minishell *ms, t_tree_node *node)
+void	export_built_in(t_minishell *ms, t_tree_node *node, int fd)
 {
 	char	*key;
 	int		i;
@@ -17,7 +17,7 @@ void	export_built_in(t_minishell *ms, t_tree_node *node)
 	if (!export_validate_options(node->right, &ms->exit_status))
 		return ;
 	if (!node->right)
-		return (print_env(*ms, 1));
+		return (print_env(*ms, 1, fd));
 	i = -1;
 	while (node->right->cont.args[++i])
 	{
@@ -45,8 +45,8 @@ static int	export_validate_options(t_tree_node *node, int *status)
 		return (1);
 	if (node->cont.args[0][0] == '-' && node->cont.args[0][1])
 	{
-		printf("export: -%c: invalid option\n", node->cont.args[0][1]);
-		printf("export: usage: export [name[=value] ...]\n");
+		ft_printf_fd(2, "export: -%c: invalid option\n", node->cont.args[0][1]);
+		ft_printf_fd(2, "export: usage: export [name[=value] ...]\n");
 		*status = 2;
 		return (0);
 	}
@@ -77,7 +77,7 @@ static int	invalid_export(char *arg, int *status)
 		inv = 1;
 	if (inv)
 	{
-		printf("export: \'%s\': not a valid identifier\n", arg);
+		ft_printf_fd(2, "export: \'%s\': not a valid identifier\n", arg);
 		*status = 1;
 	}
 	return (inv);

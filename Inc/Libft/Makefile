@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+         #
+#    By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 14:34:40 by andcarva          #+#    #+#              #
-#    Updated: 2025/04/17 15:28:54 by andcarva         ###   ########.fr        #
+#    Updated: 2025/05/15 09:38:59 by rduro-pe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,14 +34,17 @@ PRINTF_SRC=	$(addprefix ./Printf_lib/, ft_ptf_util_func.c ft_ptf_hexfunc.c \
 GET_NEXT_LINE_SRC= $(addprefix ./Get_next_line_lib/, get_next_line.c \
 		get_next_line_utils.c)
 
+PRINTF_FD_SRC=	$(addprefix ./Printf_fd/, conversions_fd.c ft_printf_fd.c )
+
 OBJ= $(addprefix $(OBJ_DIR)/, $(notdir $(SRC:.c=.o)))
 OBJ_LIST= $(addprefix $(OBJ_DIR)/, $(notdir $(SRC_LIST:.c=.o)))
 PRINTF_OBJ= $(addprefix $(OBJ_DIR)/, $(notdir $(PRINTF_SRC:.c=.o)))
 GET_NEXT_LINE_OBJ= $(addprefix $(OBJ_DIR)/, $(notdir $(GET_NEXT_LINE_SRC:.c=.o)))
+PRINTF_FD_OBJ= $(addprefix $(OBJ_DIR)/, $(notdir $(PRINTF_FD_SRC:.c=.o)))
 
 all: $(NAME)
  
-$(NAME): $(OBJ) $(OBJ_LIST) $(PRINTF_OBJ) $(GET_NEXT_LINE_OBJ)
+$(NAME): $(OBJ) $(OBJ_LIST) $(PRINTF_OBJ) $(GET_NEXT_LINE_OBJ) $(PRINTF_FD_OBJ)
 	# echo "Creating library $(NAME)"
 	@ar rcs $@ $^
 
@@ -52,6 +55,9 @@ $(OBJ_DIR)/%.o: ./Printf_lib/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR)/%.o: ./Get_next_line_lib/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/%.o: ./Printf_fd/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR):

@@ -6,7 +6,7 @@ static int	echo_validate_options(char *arg);
 /// @brief Echoes NODES's arguments and handles the option -n
 /// @param ms Overarching Minishell Structure
 /// @param node Current echo node to be executed
-void	echo_built_in(t_minishell *ms, t_tree_node *node)
+void	echo_built_in(t_minishell *ms, t_tree_node *node, int fd)
 {
 	int	n_opt;
 	int	i;
@@ -22,11 +22,11 @@ void	echo_built_in(t_minishell *ms, t_tree_node *node)
 				continue ;
 		}
 		if ((!n_opt && i > 0) || (n_opt && i > 1))
-			printf(" ");
-		printf("%s", node->right->cont.args[i]);
+			ft_printf_fd(fd, " ");
+		ft_printf_fd(fd, "%s", node->right->cont.args[i]);
 	}
 	if (!n_opt)
-		printf("\n");
+		ft_printf_fd(fd, "\n");
 	ms->exit_status = 0;
 }
 

@@ -22,13 +22,13 @@ void	exit_built_in(t_minishell *ms, t_tree_node *node)
 			minishell_clean(*ms, WEXITSTATUS(arg_n));
 		else
 		{
+			ft_printf_fd(2, "exit: too many arguments\n");
 			ms->exit_status = 1;
-			printf("exit: too many arguments\n");
 		}
 	}
 	else
 	{
-		printf("exit: %s: numeric argument required\n",
+		ft_printf_fd(2, "exit: %s: numeric argument required\n",
 			node->right->cont.args[0]);
 		minishell_clean(*ms, 2);
 	}

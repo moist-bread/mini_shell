@@ -20,10 +20,11 @@ void	cd_built_in(t_minishell *ms, t_tree_node *node)
 		path = get_env("HOME=", &ms->env[ms->env_start]);
 	if (!path || chdir(path) == -1)
 	{
+		ft_printf_fd(2, "cd: ");
 		if (!path)
-			printf("cd: HOME not set\n");
+			ft_printf_fd(2, "HOME not set\n");
 		else
-			printf("perror: %s\n", path); // perror
+			perror(path);
 		ms->exit_status = 1;
 	}
 	else
@@ -50,13 +51,13 @@ static int	invalid_cd(t_tree_node *node, int *status)
 {
 	if (node->cont.args[0][0] == '-' && node->cont.args[0][1])
 	{
-		printf("cd: -%c: invalid option\n", node->cont.args[0][1]);
+		ft_printf_fd(2, "cd: -%c: invalid option\n", node->cont.args[0][1]);
 		*status = 2;
 		return (1);
 	}
 	else if (node->cont.args[1]) // caso "cd esta coisa"
 	{
-		printf("cd: too many arguments\n");
+		ft_printf_fd(2, "cd: too many arguments\n");
 		*status = 1;
 		return (1);
 	}
@@ -66,7 +67,7 @@ static int	invalid_cd(t_tree_node *node, int *status)
 /// @brief Print name of current/working directory
 /// @param ms Overarching Minishell Structure
 /// @param node Current pwd node to be executed
-void	pwd_built_in(t_minishell *ms, t_tree_node *node)
+void	pwd_built_in(t_minishell *ms, t_tree_node *node, int fd)
 {
 	char *pwd;
 
@@ -74,14 +75,14 @@ void	pwd_built_in(t_minishell *ms, t_tree_node *node)
 	if (node->right && *node->right->cont.args[0] == '-'
 		&& node->right->cont.args[0][1])
 	{
-		printf("pwd: -%c: invalid option\n", node->right->cont.args[0][1]);
-		printf("pwd: usage: pwd\n");
+		ft_printf_fd(2, "pwd: -%c: invalid option\n", node->right->cont.args[0][1]);
+		ft_printf_fd(2, "pwd: usage: pwd\n");
 		ms->exit_status = 2;
 	}
 	else
 	{
 		pwd = getcwd(NULL, 0);
-		printf("%s\n", pwd);
+		ft_printf_fd(fd, "%s\n", pwd);
 		free(pwd);
 		ms->exit_status = 0;
 	}

@@ -182,12 +182,17 @@ void		ft_string_swap(char **a, char **b);
 int			master_distributer(t_minishell *ms, t_tree_node *node);
 void		command_process(t_minishell *ms, t_tree_node *node);
 void		cmd_parse_and_exe(t_minishell ms, t_tree_node *node, int *redir);
+void		built_in_process(t_minishell *ms, t_tree_node *node);
 
 // REDIR HANDLER
 
 void		redir_handler(t_tree_node *node, int *in, int *out);
-void		single_here_doc_handler(t_minishell ms, t_tree_node *pin, int *in);
+int			cmd_redir_executer(t_minishell *ms, t_tree_node *node, int *in, int *out);
+
+// HERE DOC
+
 void		multi_here_doc_handler(t_minishell ms, t_pipe_data *pdata);
+void		single_here_doc_handler(t_minishell ms, t_tree_node *pin, int *in);
 
 // PIPE PROCESS
 
@@ -206,16 +211,16 @@ int			error_code_for_exec(char *path);
 
 // ECHO
 
-void		echo_built_in(t_minishell *ms, t_tree_node *node);
+void		echo_built_in(t_minishell *ms, t_tree_node *node, int fd);
 
 // DIRECTORY (CD, PWD)
 
 void		cd_built_in(t_minishell *ms, t_tree_node *node);
-void		pwd_built_in(t_minishell *ms, t_tree_node *node);
+void		pwd_built_in(t_minishell *ms, t_tree_node *node, int fd);
 
 // EXPORT
 
-void		export_built_in(t_minishell *ms, t_tree_node *node);
+void		export_built_in(t_minishell *ms, t_tree_node *node, int fd);
 
 // EXPORT UTILS
 
@@ -238,8 +243,8 @@ void		remove_env_var(t_minishell *ms, size_t idx, size_t len);
 
 // ENV
 
-void		env_built_in(t_minishell *ms, t_tree_node *node);
-void		print_env(t_minishell minishell, int export_flag);
+void		env_built_in(t_minishell *ms, t_tree_node *node, int fd);
+void		print_env(t_minishell minishell, int export_flag, int fd);
 
 // EXIT
 

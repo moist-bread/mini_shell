@@ -82,15 +82,13 @@ int	error_code_for_exec(char *path)
 {
 	if (access(path, F_OK) < 0)
 	{
-		// make an error message function
-		printf("memo falhado\n");
+		ft_printf_fd(2, "%s: command not found\n", path);
 		return (127);
 	}
 	else if (access(path, X_OK) < 0)
 	{
-		// make an error message function
-		printf("idk you\n");
-		return (126);
+		ft_printf_fd(2, "%s: Permission denied\n", path);
+		return (126); // algo de errado não está certo
 	}
 	return (0);
 }
