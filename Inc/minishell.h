@@ -106,8 +106,8 @@ char		**tree_alloc_args(t_token *token);
 // EXPANSIONS
 
 void	input_expander(char *input, char **env, t_token *newtk, t_token **head);
-char	*process_quote_expansions(char *input, char **env);
-void	the_expansion(char *input, char **env, char *result);
+char	*process_quote_expansions(char *input, char **env, int *is_quote);
+void	the_expansion(char *input, char **env, char *result, int *is_quote);
 char	*expansion(char *input, char **env);
 void	expand_single_quotes(char *input, char *result, int *i);
 void	expand_double_quotes(char *input, char **env, char *result, int *i);

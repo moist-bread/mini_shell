@@ -1,6 +1,11 @@
 
 #include "../../Inc/minishell.h"
 
+/// @brief Retrieves the lenght of the quoted string
+/// @param input The string passed
+/// @param env The enviorment 
+/// @param i Indexes
+/// @return The lenght
 size_t	len_double_quotes(char *input, char **env, int *i)
 {
 	size_t len;
@@ -30,6 +35,10 @@ size_t	len_double_quotes(char *input, char **env, int *i)
 	return (expansion_len + len);
 }
 
+/// @brief Retrieves the lenght of the single quoted string
+/// @param input The string passed
+/// @param i Indexes
+/// @return The length
 size_t	len_single_quote(char *input, int *i)
 {
 	size_t len;
@@ -49,6 +58,11 @@ size_t	len_single_quote(char *input, int *i)
 	return (len);
 }
 
+/// @brief Retrieves the lenght of the unquoted string
+/// @param input The string passed
+/// @param env The enviorment 
+/// @param i Indexes
+/// @return The length
 size_t	len_unquoted(char *input, char **env, int *i)
 {
 	size_t	len;
@@ -73,6 +87,10 @@ size_t	len_unquoted(char *input, char **env, int *i)
 	return (len + expansion_len);
 }
 
+/// @brief Main function that retrieves the length
+/// @param input The string passed
+/// @param env The enviorment 
+/// @return The length
 size_t	the_lenght(char *input, char **env)
 {
 	size_t	len;
@@ -92,6 +110,10 @@ size_t	the_lenght(char *input, char **env)
 	return (len);
 }
 
+/// @brief Gets the lenght of the expanded variable on the enviorment
+/// @param input The string passed
+/// @param env The enviorment 
+/// @return the length
 size_t	len_expansion(char *input, char **env)
 {
 	char	*value;
