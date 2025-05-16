@@ -8,6 +8,8 @@ LIBFT	=	./Inc/Libft/libft.a
 CC		=	cc
 CFLAGS	=	-Wall -Wextra -Werror -g
 RL		=	-lreadline
+VAL		=	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes -s
+FDFLAGS	=	--track-fds=yes #--trace-children=yes
 SUPP	=	--suppressions=readline.supp
 
 # -->┊( DIRECTORIES )
@@ -20,8 +22,8 @@ PARSE_DIR		=	Parse
 # -->┊( SOURCES AND OBJS )
 MAIN_C			=	minishell_main.c
 
-EXEC_MAIN_C		=	exec_main.c struct_init.c distributer.c \
-					pipe_process.c redir_handler.c pipe_child_pro.c \
+EXEC_MAIN_C		=	exec_main.c struct_utils.c distributer.c \
+					pipe_process.c redir_handler.c here_doc.c pipe_child_pro.c \
 					matrix_utils.c matrix_quick_sort.c \
 					export.c export_utils.c env.c get_env.c unset.c echo.c exit.c directory.c \
 					ft_strcmp.c ft_strndup.c ft_iswhitespace.c
@@ -98,6 +100,8 @@ rx: fclean exec
 exe: all
 	./minishell
 
+exeval: exec
+	$(VAL) $(FDFLAGS) $(SUPP) ./minishell
 
 # -->┊( COSMETICS )
 

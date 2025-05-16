@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/21 15:49:25 by andcarva          #+#    #+#             */
-/*   Updated: 2025/04/17 19:15:10 by andcarva         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
@@ -23,7 +12,7 @@
 # include <stdint.h>
 # include "Printf_lib/ft_printf.h"
 # include "Get_next_line_lib/get_next_line.h"
-// # include "Get_next_line_lib/get_next_line_bonus.h"
+# include "Printf_fd/ft_printf_fd.h"
 
 typedef struct s_list
 {
