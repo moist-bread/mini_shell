@@ -17,7 +17,8 @@ void	master_check(t_token *token)
 			ft_error_check(token);
 		if (temp->next && temp->type == PIPE && temp->next->type == PIPE)
 			ft_error_check(token);
-		else if (temp->next && temp->type != PIPE && is_token(temp) == true && is_token(temp->next) == true)
+		else if (temp->next && temp->type != PIPE && is_token(temp) == true \
+		&& is_token(temp->next) == true)
 			ft_error_check(token);
 		if (is_token(temp) == true && temp->next == NULL)
 			ft_error_check(token);
