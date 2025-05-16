@@ -7,18 +7,16 @@
 /// @param cmd_n Amount of cmds
 /// @param cur_pipe Stores IN fd and OUT fd
 /// @param next_pipe Read end of created pipe
+/// @param here_docs stores the ids of 
 /// @param pid Stores child process ids
-/// @param cmd Command and its arguments
-/// @param path Path to said command
 /// @param env Environment
 typedef struct s_pipe_data
 {
 	int					cmd_n;
 	int					cur_pipe[2];
 	int					next_pipe;
+	int					*here_docs;
 	int					*pid;
-	char				**cmd;
-	char				*path;
 	char				**env;
 }						t_pipe_data;
 
@@ -26,9 +24,9 @@ typedef struct s_pipe_data
 /// @param CMD Commands
 /// @param ARG Versatile arguments
 /// @param PIPE |
+/// @param LIM Arg after here_doc
 /// @param REDIR_IN <
 /// @param REDIR_HERE_DOC <<
-/// @param LIM Arg after here_doc
 /// @param REDIR_OUT >
 /// @param REDIR_OUT_APPEND >>
 /// @param BUILT_IN echo cd pwd export unset env exit
@@ -37,9 +35,9 @@ typedef enum s_node_type
 	CMD,
 	ARG,
 	PIPE,
+	LIM,
 	REDIR_IN,
 	REDIR_HERE_DOC,
-	LIM,
 	REDIR_OUT,
 	REDIR_OUT_APPEND,
 	BUILT_IN,

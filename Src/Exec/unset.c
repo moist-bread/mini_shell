@@ -10,8 +10,16 @@ void	unset_built_in(t_minishell *ms, t_tree_node *node)
 	int	i;
 
 	printf(YEL "\nEntering unset built in" DEF "\n\n");
+	ms->exit_status = 0;
 	if (!node->right)
 		return ;
+	if (node->right->cont.args[0][0] == '-' && node->right->cont.args[0][1])
+	{
+		ft_printf_fd(2, "unset: -%c: invalid option\n", node->right->cont.args[0][1]);
+		ft_printf_fd(2, "unset: usage: unset [name ...]\n");
+		ms->exit_status = 2;
+		return ;
+	}
 	i = -1;
 	while (node->right->cont.args[++i])
 	{
@@ -24,6 +32,10 @@ void	unset_built_in(t_minishell *ms, t_tree_node *node)
 	}
 }
 
+/// @brief Removes variable located at IDX from the Environment
+/// @param ms Overarching Minishell Structure
+/// @param idx Index of the variable to be removed
+/// @param len Length of the Environment
 void	remove_env_var(t_minishell *ms, size_t idx, size_t len)
 {
 	char	**new;

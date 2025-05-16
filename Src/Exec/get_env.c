@@ -69,8 +69,8 @@ char	*get_export_value(char *arg)
 {
 	int	i;
 
-	i = env_elem_len(arg, 1);
-	if (arg[i] && arg[i] != '=')
+	i = env_elem_len(arg, 1) + 1;
+	if (arg[i] == '=')
 		i++;
 	return (&arg[i]);
 }
