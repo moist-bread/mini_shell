@@ -1,7 +1,7 @@
 
 #include "../../Inc/minishell.h"
 
-char	*fake_readinput(char	*input);
+char	*fake_readinput(t_minishell ms, char	*input);
 t_tree_node	*fake_create_tree(t_token *tokens);
 void	fake_clear_token_lst(t_token	*token);
 
@@ -16,13 +16,12 @@ int	main(int ac, char **av, char **env)
 	(void)env;
 
 	ft_printf_fd(1, YEL "Testing executer WITH TREE main !" DEF "\n\n");
-	
 	minishell_struct_init(&ms, env);
 	input = NULL;
 	while(1)
 	{
 		// parsing
-		input = fake_readinput(input);
+		input = fake_readinput(ms, input);
 		tokens = create_tokens(input);
 		ms.tree_head = fake_create_tree(tokens);
 		fake_clear_token_lst(tokens);
@@ -68,13 +67,13 @@ void	fake_clear_token_lst(t_token	*token)
 	}
 }
 
-char	*fake_readinput(char	*input)
+char	*fake_readinput(t_minishell ms, char	*input)
 {
 	input = readline("minishell > "); 
 	if (!input)
 	{
-		free(input);
-		exit(0);
+		printf(BLU "exit" DEF "\n");
+		minishell_clean(ms, ms.exit_status);
 	}
 	add_history(input);
 	return (input);

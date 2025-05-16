@@ -86,7 +86,7 @@ static void	here_doc_readline(char *limiter, int fd)
 		}
 		else  // CTRL D CASE
 		{
-			ft_printf_fd(2, "warning: here-document delimited by end-of-file (wanted `%s')",
+			ft_printf_fd(2, "warning: here-document delimited by end-of-file (wanted `%s')\n",
 				limiter);
 			break ;
 		}      
