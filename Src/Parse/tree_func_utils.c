@@ -52,7 +52,6 @@ char	**tree_alloc_args(t_token *token)
 		if (temp && temp->type != PIPE)
 			temp = temp->next;
 	}
-	printf("TREE ALLOC\n");
 	return (args);
 }
 
@@ -68,7 +67,7 @@ static void	if_redir(t_token **temp, t_tree_node *cmd_node, t_tree_node	**last_r
 		return;
 	redir_node = newtreenode(assign_tree_cont((*temp)->next));
 	redir_node->type = (*temp)->type;
-	printf("Creating REDIR node for: %s\n", redir_node->cont.file);
+	// printf("Creating REDIR node for: %s\n", redir_node->cont.file);
 	if (!cmd_node->left)
 		cmd_node->left = redir_node;
 	else if (*last_redir)
@@ -95,13 +94,12 @@ void	if_command(t_token *tokens, t_tree_node *cmd_node)
 			if_redir(&temp, cmd_node, &last_redir);
 		else if (temp && temp->type == ARG && st_arg == false)
 		{
-			printf("Creating ARG node for: ");
+			// printf("Creating ARG node for: ");
 			cmd_node->right = newtreenode(assign_tree_cont(temp));
 			cmd_node->right->type = ARG;
 			st_arg = true; 
-			printf("Creating ARG node for: ");
 			for (int i = 0; cmd_node->right->cont.args[i]; i++)
-			printf("%s ",cmd_node->right->cont.args[i]);
+			// printf("%s ",cmd_node->right->cont.args[i]);
 			printf("\n");
 		}
 		temp = temp->next;
