@@ -118,6 +118,10 @@ size_t	len_expansion(char *input, char **env);
 size_t	len_double_quotes(char *input, char **env, int *i);
 size_t	len_single_quote(char *input, int *i);
 size_t	len_unquoted(char *input, char **env, int *i);
+char	**separator_3000(char *expanded, int is_quote);
+char	**separate(char *expanded);
+char	*quote_remover(char *s);
+int		quote_conter(char *s);
 
 // ASSIGN TYPES
 

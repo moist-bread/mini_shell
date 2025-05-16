@@ -57,9 +57,10 @@ void	place_token(char *input, t_token **head, char **env)
 			input_expander(newinput[i], env, newtk, head);
 		else
 		{
-			// quote_remover(&newinput[i]);
-			newtk = newtoken(newinput[i]);
+			updated_input = quote_remover(newinput[i]);
+			newtk = newtoken(updated_input);
 			tokenadd_back(head, newtk);
+			free(updated_input);
 		}
 		i++;
 	}

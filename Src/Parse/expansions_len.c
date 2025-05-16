@@ -9,15 +9,14 @@
 size_t	len_double_quotes(char *input, char **env, int *i)
 {
 	size_t len;
-    size_t expansion_len;
 
 	len = 1;
-	expansion_len = 0;
-	while (input[++(*i)] && input[*i] == '\"')
+	(*i)++;
+	while (input[(*i)] && input[*i] == '\"')
 	{
 		if (input[*i] == '$' && (isalpha(input[*i + 1]) || input[*i + 1] == '_'))
 		{
-			expansion_len += len_expansion(input + *i, env);
+			len += len_expansion(input + *i, env);
 			while (input[++(*i)] == '_' || ft_isalnum(input[*i]))
 				;
 		}
@@ -32,7 +31,7 @@ size_t	len_double_quotes(char *input, char **env, int *i)
         len++;
         (*i)++;
     }
-	return (expansion_len + len);
+	return (len);
 }
 
 /// @brief Retrieves the lenght of the single quoted string
@@ -66,15 +65,13 @@ size_t	len_single_quote(char *input, int *i)
 size_t	len_unquoted(char *input, char **env, int *i)
 {
 	size_t	len;
-	size_t	expansion_len;
 
 	len = 0;
-	expansion_len = 0;
 	while (input[*i] && input[*i] != '\"' && input[*i] != '\'')
 	{
 		if (input[*i] == '$' && (isalpha(input[*i + 1]) || input[*i + 1] == '_'))
 		{
-			expansion_len += len_expansion(input + *i, env);
+			len += len_expansion(input + *i, env);
 			while (input[++(*i)] == '_' || ft_isalnum(input[*i]))
 				;
 		}
@@ -84,7 +81,7 @@ size_t	len_unquoted(char *input, char **env, int *i)
 			len++;
 		}
 	}
-	return (len + expansion_len);
+	return (len);
 }
 
 /// @brief Main function that retrieves the length

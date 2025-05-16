@@ -39,17 +39,14 @@ void the_expansion(char *input, char **env, char *result, int *is_quote)
 	while (input[i[0]])
 	{
 		if (input[i[0]] == '\"')
-		{
 			expand_double_quotes(input, env, result, i);
-			*is_quote = 1;	
-		}
 		else if (input[i[0]] == '\'')
-		{
 			expand_single_quotes(input, result, i);
-			*is_quote = 1;
-		}
 		else
+		{
 			expand_unquotes(input, env, result, i);
+			*is_quote = 0; 
+		}
 	}
 }
 
@@ -70,7 +67,7 @@ void	expand_double_quotes(char *input, char **env, char *result, int *i)
 			exp = expansion(input + i[0], env);
 			if (exp)
 			{
-				ft_strlcpy(result + i[1], exp, ft_strlen(exp) + 1);
+				ft_memcpy(result + i[1], exp, ft_strlen(exp));
 				i[1] += ft_strlen(exp);
 				free(exp);
 			}
@@ -113,7 +110,7 @@ void	expand_unquotes(char *input, char **env, char *result, int *i)
 			exp = expansion(input + i[0], env);
 			if (exp)
 			{
-				ft_strlcpy(result + i[1], exp, ft_strlen(exp) + 1);
+				ft_memcpy(result + i[1], exp, ft_strlen(exp));
 				i[1] += ft_strlen(exp);
 				free(exp);
 			}

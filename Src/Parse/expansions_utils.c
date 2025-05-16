@@ -10,25 +10,20 @@ void	input_expander(char *input, char **env, t_token *newtk, t_token **head)
 {
 	char	*expanded;
 	int		is_quote;
-	// char	**final_result;
-	// int		i;
+	char	**final_result;
+	int		i;
 
-	(void)newtk;
-	(void)head;
-	is_quote = 0;
-	// step 1 -- expandir o char *
+	is_quote = 1;
 	expanded = process_quote_expansions(input, env, &is_quote);
-	printf("result: %s\n", expanded);
-	free(expanded);
-	// // step 2 -- separate spaces if is not btween " or ', remove the " and '; 
-	// final_result = separator(expanded, is_quote);
-	// i = 0;
-	// while (final_result[i])
-	// {
-	// 	newtk = newtoken(final_result[i]);
-	// 	tokenadd_back(head, newtk);
-	// 	i++;
-	// }
+	final_result = separator_3000(expanded, is_quote);
+	i = 0;
+	while (final_result[i])
+	{
+		newtk = newtoken(final_result[i]);
+		tokenadd_back(head, newtk);
+		i++;
+	}
+	free_split(final_result);
 }
 
 /// @brief Searches for the variable name
@@ -86,23 +81,45 @@ char	*expansion(char *input, char **env)
 /// @return The new unquoted string
 char	**separator_3000(char *expanded, int is_quote)
 {
-	char	**result;
 	char 	**final_result;
-	int		i;
 
+	final_result = NULL;
 	if (is_quote == 0)
-		result = cracked_split(expanded);
+		final_result = separate(expanded);
 	else
-		result[0] = ft_strdup(expanded);
-	free(expanded);
-	i = 0;
-	while (result[i])
 	{
-		final_result[i] = quote_remover(result[i]);
-		i++;
+		final_result = ft_calloc(sizeof(char *), 2);
+		if (!final_result)
+			return (free(expanded), NULL);
+		final_result[0] = quote_remover(expanded);
+		final_result[1] = NULL;
 	}
-	free_split(result);
+	free(expanded);
 	return (final_result);
 }
 
+/// @brief Does the separation with split
+/// @param expanded The string already expanded
+/// @return The splited expanded string
+char	**separate(char *expanded)
+{
+	char	**result;
+	char	**final_result;
+	int		count;
+	int		i;
 
+	i = -1;
+	count = 0;
+	result = cracked_split(expanded);
+	printf("1\n\n");
+	while (result[count])
+		count++;
+	final_result = ft_calloc(sizeof(char *), count + 1);
+	if (!final_result)
+		return (free_split(result), free(expanded), NULL);
+	while (++i < count)
+		final_result[i] = quote_remover(result[i]);
+	final_result[count] = NULL;
+	free_split(result);
+	return (final_result);
+}

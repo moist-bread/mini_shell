@@ -8,7 +8,6 @@ t_tree_node	*create_tree(t_token *tokens)
 {
 	t_tree_node	*tree_node;
 	
-	printf("Entered Create Tree\n");
 	tree_node = NULL;
 	place_treenode(tokens, &tree_node, false);
 	tree_apply_print(tree_node, 0, "Root");
@@ -24,7 +23,6 @@ t_node_cont	assign_tree_cont(t_token *token)
 {
 	t_node_cont	cont;
 
-	printf("Entered Assign Tree Cont\n");
 	ft_bzero(&cont, sizeof(t_node_cont));
 	if (token && (token->type == CMD || token->type == BUILT_IN))
 		cont.cmd = token->cont;
@@ -76,7 +74,6 @@ void	place_treenode(t_token *tokens, t_tree_node **root, bool pipe)
 	t_token		*pipe_token;
 	t_tree_node	*new_tree_node;
 
-	// printf("Entered Place Tree Node\n");
 	pipe_token = NULL;
 	new_tree_node = NULL;
 	if (pipe == false)

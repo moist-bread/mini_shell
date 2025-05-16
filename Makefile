@@ -31,7 +31,7 @@ PARSE_MAIN_C	=	parse_main.c
 PARSE_FILES_C	= 	tokenization_utils.c tokenization.c checks.c space_utils.c \
 					check_types_utils.c types.c errors.c cracked_split.c cracked_split_utils.c \
 					tree.c tree_utils.c tree_func_utils.c expansions.c expansions_utils.c \
-					expansions_len.c
+					expansions_len.c expansions_func_utils.c
 
 MAIN		=	$(addprefix	$(MINISHELL_DIR)/, $(MAIN_C))
 EXEC_MAIN	=	$(addprefix	$(EXEC_DIR)/, $(EXEC_MAIN_C))
