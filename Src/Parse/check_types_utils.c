@@ -86,6 +86,6 @@ void	is_limtiter_or_arg(t_token **temp)
 	{
 		*temp = (*temp)->next;
 		(*temp)->type = ARG;
-		assigns_types(*temp);
+		assigns_types(*temp, false);
 	}
 }

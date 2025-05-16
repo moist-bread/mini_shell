@@ -4,7 +4,7 @@
 
 /// @brief Assigns a Type to the Node
 /// @param token Node of a list 
-void	assign_type_token(t_token *token)
+void	assign_type_token(t_token *token, bool exp)
 {
 	t_token	*temp;
 
@@ -13,10 +13,10 @@ void	assign_type_token(t_token *token)
 	temp = token;
 	while (temp)
 	{
-		assigns_types(temp);
+		assigns_types(temp, exp);
 		temp = temp->next;
 	}
-	assigns_cmd(token);
+	assigns_cmd(token, exp);
 }
 
 /// @brief Checks if the token received is a built_in
@@ -41,23 +41,28 @@ void	assigns_built_in(t_token *token)
 
 /// @brief checks if the token received is PIPE or REDIR
 /// @param token Node of the list of tokens
-void	assigns_types(t_token *token)
+void	assigns_types(t_token *token, bool exp)
 {
-	if (ft_strncmp("|", token->cont, 2) == 0)
-		token->type = PIPE;
-	else if (ft_strncmp("<", token->cont, 2) == 0)
-		token->type = REDIR_IN;
-	else if (ft_strncmp(">", token->cont, 2) == 0)
-		token->type = REDIR_OUT;
-	else if (ft_strncmp("<<", token->cont, 3) == 0)
-		token->type = REDIR_HERE_DOC;
-	else if (ft_strncmp(">>", token->cont, 3) == 0)
-		token->type = REDIR_OUT_APPEND;
+	if (exp == false)
+	{
+		if (ft_strncmp("|", token->cont, 2) == 0)
+			token->type = PIPE;
+		else if (ft_strncmp("<", token->cont, 2) == 0)
+			token->type = REDIR_IN;
+		else if (ft_strncmp(">", token->cont, 2) == 0)
+			token->type = REDIR_OUT;
+		else if (ft_strncmp("<<", token->cont, 3) == 0)
+			token->type = REDIR_HERE_DOC;
+		else if (ft_strncmp(">>", token->cont, 3) == 0)
+			token->type = REDIR_OUT_APPEND;
+	}
+	if (exp == true)
+		token->type = ARG;
 }
 
 /// @brief Checks if the token received CMD
 /// @param head Beggining of the list of tokens
-void	assigns_cmd(t_token *head)
+void	assigns_cmd(t_token *head, bool exp)
 {
 	t_token	*temp;
 	bool	its_cmd;
@@ -71,7 +76,7 @@ void	assigns_cmd(t_token *head)
 			if ((temp->type == REDIR_HERE_DOC || is_token(temp)) && temp->next)
 			{
 				is_limtiter_or_arg(&temp);
-				assigns_types(temp);
+				assigns_types(temp, exp);
 			}
 			else if (!its_cmd && !is_token(temp))
 			{

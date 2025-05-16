@@ -4,15 +4,44 @@
 /// @brief Main function that creates the AST_Tree 
 /// @param tokens Node from the token list
 /// @param cont The content
-t_tree_node	*create_tree(t_token *tokens)
+t_tree_node	*create_tree(t_token *tokens, char **env)
 {
 	t_tree_node	*tree_node;
 	
 	tree_node = NULL;
+	expand_token_list(&tokens, env);
+	assign_type_token(tokens, true);
 	place_treenode(tokens, &tree_node, false);
 	tree_apply_print(tree_node, 0, "Root");
 	printf("\n");
 	return (tree_node);
+}
+
+void	expand_token_list(t_token **head, char **env)
+{
+	t_token	*curr;
+	char	**expanded;
+	char	*new_cont;
+
+	curr = *head;
+	while (curr)
+	{
+		if (curr->type != LIM && ft_strchr(curr->cont, '$'))
+		{
+			expanded = input_expander(curr->cont, env);
+			replace_expanded_token(head, curr, expanded);
+			free_split(expanded);
+			curr = *head;
+			continue ;
+		}
+		else
+		{
+			new_cont = quote_remover(curr->cont);
+			free(curr->cont);
+       		curr->cont = new_cont;
+		}
+		curr = curr->next;
+	}
 }
 
 /// @brief Assigns the content to the right place in the struct

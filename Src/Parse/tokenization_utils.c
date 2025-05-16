@@ -56,7 +56,7 @@ t_token	*newtoken(char *cont)
 
 /// @brief This functions clears the token list
 /// @param token Head node of the list
-void	clear_token_lst(t_token	*token)
+void	fake_clear_token_lst(t_token	*token)
 {
 	t_token *current;
 	t_token *next;
@@ -67,9 +67,35 @@ void	clear_token_lst(t_token	*token)
 	while (current)
 	{
 		next = current->next;
-		if (current->cont)
+		if (current->type == PIPE || (current->type >= REDIR_IN
+			&& current->type <= REDIR_OUT_APPEND))
 			free(current->cont);
 		free(current);
 		current = next;
 	}
+}
+
+void	replace_expanded_token(t_token **head, t_token *curr, char **expanded)
+{
+	t_token	*temp;
+	t_token *newtk;
+	t_token	*first_new;
+	int		i;
+
+	first_new = NULL;
+	i = 0;
+	while (expanded[i])
+	{
+		newtk = newtoken(expanded[i]);
+		tokenadd_back(&first_new, newtk);
+		i++;
+	}
+	temp = first_new;
+	while (temp->next != NULL)
+		temp = temp->next;
+	temp->next = curr->next;
+	if (curr && curr->prev)
+		curr->prev->next = first_new;
+	else
+		*head = first_new;
 }

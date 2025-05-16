@@ -23,11 +23,11 @@ PARSE_DIR		=	Parse
 MAIN_C			=	minishell_main.c
 
 EXEC_MAIN_C		=	exec_main.c 
-EXEC_FILES_C	=	struct_init.c distributer.c \
+EXEC_FILES_C	=	struct_utils.c distributer.c \
 					pipe_process.c redir_handler.c pipe_child_pro.c \
 					matrix_utils.c matrix_quick_sort.c \
 					export.c export_utils.c env.c get_env.c unset.c echo.c exit.c directory.c \
-					ft_strcmp.c ft_strndup.c ft_iswhitespace.c
+					ft_strcmp.c ft_strndup.c ft_iswhitespace.c here_doc.c
 
 PARSE_MAIN_C	=	parse_main.c
 PARSE_FILES_C	= 	tokenization_utils.c tokenization.c checks.c space_utils.c \
@@ -48,9 +48,9 @@ OBJS_MAIN_PARSE	=	$(addprefix $(OBJS_DIR)/, $(PARSE_MAIN_C:.c=.o))
 # -->┊( RULES )
 all: $(NAME)
 
-$(NAME): $(OBJS_MAIN) $(OBJS_PARSE) $(LIBFT)
+$(NAME): $(OBJS_MAIN) $(OBJS_EXEC) $(OBJS_PARSE) $(LIBFT)
 	$(M_COMP)
-	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN) $(OBJS_PARSE) $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN) $(OBJS_EXEC) $(OBJS_PARSE) $(LIBFT) -o $(NAME)
 	$(M_DONE)
 
 $(OBJS_DIR)/%.o: $(SRC_DIR)/$(MINISHELL_DIR)/%.c | $(OBJS_DIR)

@@ -4,29 +4,27 @@
 /// @brief Reads the input, adds a history, places a node in a list, assigns a type and prints
 /// @param input The string received from the Stdout
 /// @return Input
-char	*readinput(char	*input)
+char	*fake_readinput(t_minishell ms, char	*input)
 {
 	input = readline("minishell > "); 
 	if (!input)
 	{
-		free(input);
-		exit(0);
+		printf(BLU "exit" DEF "\n");
+		minishell_clean(ms, ms.exit_status);
 	}
 	add_history(input);
-	if (ft_strncmp(input, "exit", 4) == 0)
-		exit (0);
 	return (input);
 }
 
 /// @brief Creates the list of tokens
 /// @param input The string received from the Stdout
-t_token	*create_tokens(char *input, char **env)
+t_token	*create_tokens(char *input)
 {
 	t_token *tokens;
 
 	tokens = NULL;
-	place_token(input, &tokens, env);
-	assign_type_token(tokens);
+	place_token(input, &tokens);
+	assign_type_token(tokens, false);
 	print_tokens(tokens);
 	printf("\n");
 	master_check(tokens);
@@ -38,7 +36,7 @@ t_token	*create_tokens(char *input, char **env)
 /// @param input String received from the Stdout 
 /// @param head Beggining of the list
 /// @return The head of the list
-void	place_token(char *input, t_token **head, char **env)
+void	place_token(char *input, t_token **head)
 {
 	t_token	*newtk;
 	char	**newinput;
@@ -53,15 +51,8 @@ void	place_token(char *input, t_token **head, char **env)
 	i = 0;
 	while (newinput[i])
 	{
-		if (ft_strchr(newinput[i], '$'))
-			input_expander(newinput[i], env, newtk, head);
-		else
-		{
-			updated_input = quote_remover(newinput[i]);
-			newtk = newtoken(updated_input);
-			tokenadd_back(head, newtk);
-			free(updated_input);
-		}
+		newtk = newtoken(newinput[i]);
+		tokenadd_back(head, newtk);
 		i++;
 	}
 	free_split(newinput);

@@ -88,7 +88,7 @@ size_t	len_unquoted(char *input, char **env, int *i)
 /// @param input The string passed
 /// @param env The enviorment 
 /// @return The length
-size_t	the_lenght(char *input, char **env)
+size_t	the_length(char *input, char **env)
 {
 	size_t	len;
 	int		i;

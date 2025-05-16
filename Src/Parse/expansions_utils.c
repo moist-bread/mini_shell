@@ -6,24 +6,16 @@
 /// @param env The enviorment 
 /// @param newtk New token
 /// @param head Head of the token list
-void	input_expander(char *input, char **env, t_token *newtk, t_token **head)
+char	**input_expander(char *input, char **env)
 {
 	char	*expanded;
 	int		is_quote;
 	char	**final_result;
-	int		i;
 
 	is_quote = 1;
 	expanded = process_quote_expansions(input, env, &is_quote);
 	final_result = separator_3000(expanded, is_quote);
-	i = 0;
-	while (final_result[i])
-	{
-		newtk = newtoken(final_result[i]);
-		tokenadd_back(head, newtk);
-		i++;
-	}
-	free_split(final_result);
+	return (final_result);
 }
 
 /// @brief Searches for the variable name

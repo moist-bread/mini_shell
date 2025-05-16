@@ -19,7 +19,7 @@ char	*process_quote_expansions(char *input, char **env, int *is_quote)
 
 	if (!input)
 		return (ft_strdup(""));
-	result_len = the_lenght(input, env);
+	result_len = the_length(input, env);
 	result = ft_calloc(sizeof(char), result_len + 1);
 	if (!result)
 		return (NULL);
