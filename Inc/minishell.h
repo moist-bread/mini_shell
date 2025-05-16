@@ -46,6 +46,12 @@
 // In the tree the last node redir is over writig the prrevious ones;
 // > file > | a - Syntax Error - done
 
+// Reminder EXPANSIONS HERE_DOC:
+// cat << $"$HOME" does not expand and the lim is $HOME
+// if the LIM has a "" like EOf"f" it does not expand
+// if the LIM is the expansion like $HOME it works as a lim and does not expand
+// if is a normal LIM without any quotes it always expands
+
 // -------------------------------------------------------------------------------------------------|
 
 // LIBS
