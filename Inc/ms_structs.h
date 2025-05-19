@@ -7,7 +7,7 @@
 /// @param cmd_n Amount of cmds
 /// @param cur_pipe Stores IN fd and OUT fd
 /// @param next_pipe Read end of created pipe
-/// @param here_docs stores the ids of 
+/// @param here_docs stores the ids of
 /// @param pid Stores child process ids
 /// @param env Environment
 typedef struct s_pipe_data

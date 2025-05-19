@@ -17,11 +17,14 @@ void	pipe_process(t_minishell *minishell, t_tree_node *node)
 		minishell_clean(*minishell, 1); // fail fork abort WITHOUT EXIT
 	if (id == 0)
 	{
+		init_sigact(minishell, 'C');
 		multi_here_doc_handler(*minishell, &node->cont.pipe);
 		read_and_exe_pipe_tree(*minishell, minishell->tree_head,
 			&node->cont.pipe, 0);
 	}
+	init_sigact(minishell, 'I');
 	process_waiting(1, &id, &minishell->exit_status);
+	init_sigact(minishell, 'P');
 }
 
 static void	pipe_init(t_minishell *ms, t_pipe_data *pdata)

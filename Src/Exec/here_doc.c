@@ -62,10 +62,13 @@ static int	here_doc_redir(t_minishell minishell, char *limiter)
 	} 
 	if (id == 0)
 	{
-		here_doc_readline(minishell, limiter, here_pipe[1]);
+		init_sigact(&minishell, 'H');
+		here_doc_readline(limiter, here_pipe[1]);
 		minishell_clean(minishell, 0);
 	}
+	init_sigact(&minishell, 'I');
 	waitpid(id, NULL, 0);
+	init_sigact(&minishell, 'P');
 	close(here_pipe[1]);
 	return (here_pipe[0]);
 }

@@ -34,12 +34,17 @@ void	command_process(t_minishell *ms, t_tree_node *node)
 	if (id < 0)
 		minishell_clean(*ms, 1); // fail fork ABORT?
 	else if (id == 0)
+	{
+		init_sigact(ms, 'C');
 		cmd_parse_and_exe(*ms, node, redir);
+	}
+	init_sigact(ms, 'I');
 	if (redir[0] > 2)
 		close(redir[0]);
 	if (redir[1] > 2)
 		close(redir[1]);
 	process_waiting(1, &id, &ms->exit_status);
+	init_sigact(ms, 'P');
 }
 
 /// @brief Parses the cmd information from NODE, dups needed fds,
@@ -59,7 +64,7 @@ void	cmd_parse_and_exe(t_minishell ms, t_tree_node *node, int *redir)
 	else
 		cmd = matrix_add_front(node->cont.cmd, NULL);
 	if (!cmd)
-		minishell_clean(ms, 1); // fail fork ABORT
+		minishell_clean(ms, 1); // fail alloc ABORT
 	path = get_path(ms, cmd[0]);
 	if (!path)
 		minishell_clean(ms, 1); // fail alloc ABORT

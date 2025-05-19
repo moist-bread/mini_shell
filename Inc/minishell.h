@@ -194,6 +194,13 @@ void		minishell_clean(t_minishell minishell, int status);
 void		process_waiting(int proc_n, int *ids, int *status);
 void		master_close(void);
 
+// SIGNALS
+void		init_sigact(t_minishell *minishell, int flag);
+void		parent_sig_handler(int signal);
+void		child_sig_handler(int signal);
+void		here_doc_sig_handler(int signal);
+void		ign_sig_handler(int signal);
+
 // MATRIX UTILS
 
 char		**matrix_add_to_index(char **env, char *add, size_t idx,
@@ -223,7 +230,8 @@ void		built_in_process(t_minishell *ms, t_tree_node *node);
 // REDIR HANDLER
 
 void		redir_handler(t_tree_node *node, int *in, int *out);
-int			cmd_redir_executer(t_minishell *ms, t_tree_node *node, int *in, int *out);
+int			cmd_redir_executer(t_minishell *ms, t_tree_node *node, int *in,
+				int *out);
 
 // HERE DOC
 

@@ -6,6 +6,7 @@
 /// @param env Environment recieved by the program
 void	minishell_struct_init(t_minishell *minis, char **env)
 {
+	init_sigact(minis, 'P');
 	minis->tree_head = NULL;
 	minis->env = matrix_dup_char(env); // needs proper env
 	minis->env_start = 0;

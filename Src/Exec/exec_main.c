@@ -5,22 +5,6 @@ char	*fake_readinput(t_minishell ms, char	*input);
 t_tree_node	*fake_create_tree(t_token *tokens);
 void	fake_clear_token_lst(t_token	*token);
 
-void parent_handler(int signal)
-{
-	if (signal == SIGINT)
-	{
-		printf("BOM DIA WTHHH\n");
-	}
-}
-
-void init_sa()
-{
-	struct sigaction sa;
-
-	sa.sa_handler = &parent_handler;
-	sigaction(SIGINT, &sa, NULL);
-}
-
 int	main(int ac, char **av, char **env)
 {
 	t_minishell	ms;
@@ -29,10 +13,7 @@ int	main(int ac, char **av, char **env)
 	
 	(void)ac;
 	(void)av;
-	(void)env;
 
-	
-	init_sa();
 	ft_printf_fd(1, YEL "Testing executer WITH TREE main !" DEF "\n\n");
 	minishell_struct_init(&ms, env);
 	input = NULL;
