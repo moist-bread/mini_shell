@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 17:09:32 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/05/16 18:50:32 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/05/19 20:37:21 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	main(int ac, char **av, char **env)
 		// parsing
 		input = fake_readinput(ms, input);
 		tokens = create_tokens(input);
-		ms.tree_head = create_tree(tokens, ms.env);
+		ms.tree_head = create_tree(&tokens, ms.env);
 		fake_clear_token_lst(tokens);
 		// execution
 		master_distributer(&ms, ms.tree_head);

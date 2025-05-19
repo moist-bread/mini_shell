@@ -54,48 +54,56 @@ t_token	*newtoken(char *cont)
 	return (newtk);
 }
 
-/// @brief This functions clears the token list
-/// @param token Head node of the list
-void	fake_clear_token_lst(t_token	*token)
+t_token	*join_token_list(t_token **head, t_token *curr, t_token *first_new)
 {
-	t_token *current;
-	t_token *next;
+    t_token *last_new;
 
-	if (!token)
-		return;
-	current = token;
-	while (current)
+	last_new = first_new;
+  	if (curr->prev)
+    {
+        curr->prev->next = first_new;
+        first_new->prev = curr->prev;
+    }
+    else
+    {
+        *head = first_new;
+        first_new->prev = NULL;
+    }
+    while (last_new->next)
+        last_new = last_new->next;
+    if (curr->next)
+    {
+        last_new->next = curr->next;
+        curr->next->prev = last_new;
+    }
+    else
 	{
-		next = current->next;
-		if (current->type == PIPE || (current->type >= REDIR_IN
-			&& current->type <= REDIR_OUT_APPEND))
-			free(current->cont);
-		free(current);
-		current = next;
+        last_new->next = NULL;
 	}
+	return (last_new->next);
 }
 
-void	replace_expanded_token(t_token **head, t_token *curr, char **expanded)
+t_token	*replace_expanded_token(t_token **head, t_token *curr, char **expanded)
 {
-	t_token	*temp;
-	t_token *newtk;
 	t_token	*first_new;
+	t_token *next;
 	int		i;
 
-	first_new = NULL;
 	i = 0;
-	while (expanded[i])
-	{
-		newtk = newtoken(expanded[i]);
-		tokenadd_back(&first_new, newtk);
-		i++;
-	}
-	temp = first_new;
-	while (temp->next != NULL)
-		temp = temp->next;
-	temp->next = curr->next;
-	if (curr && curr->prev)
-		curr->prev->next = first_new;
+	next = NULL;
+	first_new = NULL;
+	if (!expanded[0])
+		tokenadd_back(&first_new, newtoken(ft_strdup("")));
 	else
-		*head = first_new;
+	{
+		while (expanded[i])
+		{
+			tokenadd_back(&first_new, newtoken(expanded[i]));
+			i++;
+		}
+	}
+	next = join_token_list(head, curr, first_new);
+	free(curr->cont);
+	free(curr);
+	return (next);
 }

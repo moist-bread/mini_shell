@@ -101,14 +101,14 @@ void	place_token(char *input, t_token **head);
 void	print_tokens(t_token *tokens);
 bool	is_token(t_token *token);
 void	expand_token_list(t_token **head, char **env);
-void	replace_expanded_token(t_token **head, t_token *curr, char **expanded);
-
+t_token	*replace_expanded_token(t_token **head, t_token *curr, char **expanded);
+t_token	*join_token_list(t_token **head, t_token *curr, t_token *first_new);
 // TREE UTILS
 
 void		print_tree(t_tree_node *tree_node, int depth, char *side);
 void		tree_apply_print(t_tree_node *root, int depth, char *side);
 t_tree_node	*newtreenode(t_node_cont cont);
-t_tree_node	*create_tree(t_token *tokens, char **env);
+t_tree_node	*create_tree(t_token **tokens, char **env);
 t_node_cont	assign_tree_cont(t_token *token);
 void		if_command(t_token *tokens, t_tree_node *cmd_node);
 void		place_treenode(t_token *tokens, t_tree_node **root, bool pipe);
@@ -161,6 +161,7 @@ void		master_check(t_token *token);
 // ERRORS
 
 void		ft_error_check(t_token *token);
+void	error_quote_check(char *s);
 
 // SPLIT UTILS
 

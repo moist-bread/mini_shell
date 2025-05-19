@@ -15,6 +15,8 @@ char	**input_expander(char *input, char **env)
 	is_quote = 1;
 	expanded = process_quote_expansions(input, env, &is_quote);
 	final_result = separator_3000(expanded, is_quote);
+	if (!final_result)
+		return (NULL);
 	return (final_result);
 }
 

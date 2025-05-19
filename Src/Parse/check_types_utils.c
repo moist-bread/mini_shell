@@ -26,10 +26,7 @@ void	check_quotes(char *input)
 			i++;
 	}
 	if (quote % 2 != 0)
-	{
-		printf("Error Quote\n");
-		exit (1);
-	}
+		error_quote_check("Invalid Syntax");
 }
 
 /// @brief If is Operator
