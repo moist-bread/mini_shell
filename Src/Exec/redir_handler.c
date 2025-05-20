@@ -1,12 +1,20 @@
 
 #include "../../Inc/minishell.h"
 
-int cmd_redir_executer(t_minishell *ms, t_tree_node *node, int *in, int *out)
+/// @brief Opens all redirections associated with NODE and stores them in IN and OUT
+/// @param ms Overarching Minishell Structure
+/// @param node Node from which to check for redirections
+/// @param in Variable to store the resulting infile fd
+/// @param out Variable to store the resulting outfile fd
+/// @return -1 on failure, 0 on success
+int	cmd_redir_executer(t_minishell *ms, t_tree_node *node, int *in, int *out)
 {
-	int hd;
+	int	hd;
 
 	hd = 0;
 	single_here_doc_handler(*ms, node, &hd);
+	if (hd == -1 )
+		return (-1);
 	*in = 0;
 	*out = 1;
 	redir_handler(node, in, out);

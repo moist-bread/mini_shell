@@ -33,15 +33,22 @@ void	minishell_clean(t_minishell minishell, int status)
 void	process_waiting(int proc_n, int *ids, int *status)
 {
 	int	i;
+	int	signal;
 	int	exit_status;
 
 	i = -1;
-	printf("proc n: %d\n", proc_n);
 	*status = 0;
 	while (++i < proc_n)
 		waitpid(ids[i], &exit_status, 0);
 	if (WIFEXITED(exit_status))
 		*status = WEXITSTATUS(exit_status);
+	else if (WIFSIGNALED(exit_status))
+	{
+		signal = WTERMSIG(exit_status);
+		if (signal == SIGINT)
+			printf("\n");
+		*status = 128 + signal;
+	}	
 }
 
 /// @brief Closes all non standard file descriptors

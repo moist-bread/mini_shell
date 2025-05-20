@@ -1,7 +1,7 @@
 
 #include "../../Inc/minishell.h"
 
-/// @brief Looks at the Input Tree sends it to the
+/// @brief Looks at the Input Tree and sends it to the
 /// corresponding executer process
 /// @param ms Overarching Minishell Structure
 int	master_distributer(t_minishell *ms, t_tree_node *node)
@@ -18,6 +18,9 @@ int	master_distributer(t_minishell *ms, t_tree_node *node)
 	return (0);
 }
 
+/// @brief Opens rediractions and sends CMD NODE to be executed
+/// @param ms Overarching Minishell Structure
+/// @param node Current node of type CMD to be executed
 void	command_process(t_minishell *ms, t_tree_node *node)
 {
 	int	id;
@@ -30,15 +33,17 @@ void	command_process(t_minishell *ms, t_tree_node *node)
 		return ;
 	// step 2: child pro, parse, dup execute --
 	printf("step 2 --\n");
+	init_sigact(ms, 'I');
 	id = fork();
 	if (id < 0)
 		minishell_clean(*ms, 1); // fail fork ABORT?
 	else if (id == 0)
 	{
-		init_sigact(ms, 'C');
+		init_sigact(ms, 'D');
+		if (!node->cont.cmd)
+			minishell_clean(*ms, 0);
 		cmd_parse_and_exe(*ms, node, redir);
 	}
-	init_sigact(ms, 'I');
 	if (redir[0] > 2)
 		close(redir[0]);
 	if (redir[1] > 2)
@@ -82,33 +87,46 @@ void	cmd_parse_and_exe(t_minishell ms, t_tree_node *node, int *redir)
 	minishell_clean(ms, status);
 }
 
+/// @brief Opens rediractions and sends BUILT_IN NODE to be executed
+/// @param ms Overarching Minishell Structure
+/// @param node Current node of type BUILT_IN to be executed
 void	built_in_process(t_minishell *ms, t_tree_node *node)
 {
 	int	redir[2];
 
 	printf(YEL "\nEntering Built In Process" DEF "\n\n");
-	// step 1: check redir and open needed --
 	printf("step 1 --\n");
 	if (cmd_redir_executer(ms, node, &redir[0], &redir[1]) == -1)
 		return ;
-	// step 2: distribute built in --
-	printf("step 2 --\n");
-	if (!ft_strcmp("echo", node->cont.cmd))
-		echo_built_in(ms, node, redir[1]);
-	else if (!ft_strcmp("cd", node->cont.cmd))
-		cd_built_in(ms, node);
-	else if (!ft_strcmp("pwd", node->cont.cmd))
-		pwd_built_in(ms, node, redir[1]);
-	else if (!ft_strcmp("export", node->cont.cmd))
-		export_built_in(ms, node, redir[1]);
-	else if (!ft_strcmp("unset", node->cont.cmd))
-		unset_built_in(ms, node);
-	else if (!ft_strcmp("env", node->cont.cmd))
-		env_built_in(ms, node, redir[1]);
-	else if (!ft_strcmp("exit", node->cont.cmd))
-		exit_built_in(ms, node);
+	built_in_exe(ms, node, redir[1]);
 	if (redir[0] > 2)
 		close(redir[0]);
 	if (redir[1] > 2)
 		close(redir[1]);
 }
+
+/// @brief Opens rediractions and sends BUILT_IN NODE to be executed
+/// @param ms Overarching Minishell Structure
+/// @param node Current node of type BUILT_IN to be executed
+void	built_in_exe(t_minishell *ms, t_tree_node *node, int out)
+{
+	printf("step 2 --\n");
+	if (!ft_strcmp("echo", node->cont.cmd))
+		echo_built_in(ms, node, out);
+	else if (!ft_strcmp("cd", node->cont.cmd))
+		cd_built_in(ms, node);
+	else if (!ft_strcmp("pwd", node->cont.cmd))
+		pwd_built_in(ms, node, out);
+	else if (!ft_strcmp("export", node->cont.cmd))
+		export_built_in(ms, node, out);
+	else if (!ft_strcmp("unset", node->cont.cmd))
+		unset_built_in(ms, node);
+	else if (!ft_strcmp("env", node->cont.cmd))
+		env_built_in(ms, node, out);
+	else if (!ft_strcmp("exit", node->cont.cmd))
+		exit_built_in(ms, node);
+}
+
+// not working : 
+// > out | > outf | > outfi | > outfil | > outfile echo banana
+// >> out echo banana | > outfil echo banana

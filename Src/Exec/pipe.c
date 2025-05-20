@@ -12,21 +12,23 @@ void	pipe_process(t_minishell *minishell, t_tree_node *node)
 
 	ft_printf("\nEntering pipe pro\n");
 	pipe_init(minishell, &node->cont.pipe);
+	init_sigact(minishell, 'I');
 	id = fork();
 	if (id < 0)
 		minishell_clean(*minishell, 1); // fail fork abort WITHOUT EXIT
 	if (id == 0)
 	{
-		init_sigact(minishell, 'C');
 		multi_here_doc_handler(*minishell, &node->cont.pipe);
 		read_and_exe_pipe_tree(*minishell, minishell->tree_head,
 			&node->cont.pipe, 0);
 	}
-	init_sigact(minishell, 'I');
 	process_waiting(1, &id, &minishell->exit_status);
 	init_sigact(minishell, 'P');
 }
 
+/// @brief Initializes the values in PDATA according to the TREE in MS
+/// @param ms Overarching Minishell Structure
+/// @param pdata Struct used for the execution of pipes
 static void	pipe_init(t_minishell *ms, t_pipe_data *pdata)
 {
 	t_tree_node	*node;
@@ -55,9 +57,11 @@ static void	pipe_init(t_minishell *ms, t_pipe_data *pdata)
 void	read_and_exe_pipe_tree(t_minishell minishell, t_tree_node *tree_head,
 		t_pipe_data *pdata, int idx)
 {
-	if (tree_head->left && tree_head->left->type == CMD) // ADD BUILT IN
+	if (tree_head->left && (tree_head->left->type == CMD
+			|| tree_head->left->type == BUILT_IN)) // ADD BUILT IN
 		setup_pipe_cmd(minishell, tree_head->left, pdata, idx++);
-	if (tree_head->right && tree_head->right->type == CMD)
+	if (tree_head->right && (tree_head->right->type == CMD
+			|| tree_head->right->type == BUILT_IN))
 		setup_pipe_cmd(minishell, tree_head->right, pdata, idx++);
 	else if (tree_head->right && tree_head->right->type == PIPE)
 		read_and_exe_pipe_tree(minishell, tree_head->right, pdata, idx);
@@ -77,7 +81,6 @@ void	setup_pipe_cmd(t_minishell minishell, t_tree_node *node,
 	int	redir[2];
 
 	ft_printf("\nEntering setup pipe cmd\n\n");
-
 	// step 1: check redir and open needed --
 	printf("step 1 --\n");
 	redir[0] = 0;
@@ -89,11 +92,9 @@ void	setup_pipe_cmd(t_minishell minishell, t_tree_node *node,
 			close(redir[0]);
 		redir[0] = pdata->here_docs[idx];
 	}
-	
 	// step 2: create pipe and assign fds --
 	printf("step 2 --\n");
 	assign_pipe_fds(minishell, pdata, redir, idx);
-
 	// step 3: child pro, parse, dup execute --
 	printf("step 3 --\n");
 	pdata->pid[idx] = fork();
@@ -103,14 +104,19 @@ void	setup_pipe_cmd(t_minishell minishell, t_tree_node *node,
 	}
 	if (pdata->pid[idx] == 0)
 	{
+		init_sigact(&minishell, 'D');
 		if (redir[0] == -1 || redir[1] == -1)
 			minishell_clean(minishell, 1);
+		if (!node->cont.cmd)
+			minishell_clean(minishell, 0);
 		if (node->type == CMD)
 			cmd_parse_and_exe(minishell, node, pdata->cur_pipe);
 		else if (node->type == BUILT_IN)
-			minishell_clean(minishell, 0); // put built ins here
+		{
+			built_in_exe(&minishell, node, pdata->cur_pipe[1]);
+			minishell_clean(minishell, minishell.exit_status);
+		}
 	}
-
 	// step 4: parent close what needs to be closed --
 	printf("step 4 --\n");
 	if (pdata->cur_pipe[1] > 2)

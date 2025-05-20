@@ -196,10 +196,6 @@ void		master_close(void);
 
 // SIGNALS
 void		init_sigact(t_minishell *minishell, int flag);
-void		parent_sig_handler(int signal);
-void		child_sig_handler(int signal);
-void		here_doc_sig_handler(int signal);
-void		ign_sig_handler(int signal);
 
 // MATRIX UTILS
 
@@ -226,6 +222,7 @@ int			master_distributer(t_minishell *ms, t_tree_node *node);
 void		command_process(t_minishell *ms, t_tree_node *node);
 void		cmd_parse_and_exe(t_minishell ms, t_tree_node *node, int *redir);
 void		built_in_process(t_minishell *ms, t_tree_node *node);
+void		built_in_exe(t_minishell *ms, t_tree_node *node, int out);
 
 // REDIR HANDLER
 
