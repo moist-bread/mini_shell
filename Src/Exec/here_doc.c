@@ -63,11 +63,11 @@ static int	here_doc_redir(t_minishell minishell, char *limiter)
 	int	id;
 
 	if (pipe(here_pipe) == -1)
-		return(-1);
+		return(perror("pipe"), -1);
 	init_sigact(&minishell, 'I');
 	id = fork();
 	if (id < 0)
-		return(-1);
+		return(perror("fork"), -1);
 	if (id == 0)
 	{
 		init_sigact(&minishell, 'H');
@@ -78,10 +78,7 @@ static int	here_doc_redir(t_minishell minishell, char *limiter)
 	init_sigact(&minishell, 'P');
 	close(here_pipe[1]);
 	if (exit_status != 0)
-	{
-		close(here_pipe[0]);
-		return(-1);
-	}
+		return(close(here_pipe[0]), -1);
 	return (here_pipe[0]);
 }
 
