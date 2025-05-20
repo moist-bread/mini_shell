@@ -100,15 +100,16 @@ t_token	*create_tokens(char *input);
 void	place_token(char *input, t_token **head);
 void	print_tokens(t_token *tokens);
 bool	is_token(t_token *token);
-void	expand_token_list(t_token **head, char **env);
+void	expand_token_list(t_token **head, t_minishell ms);
 t_token	*replace_expanded_token(t_token **head, t_token *curr, char **expanded);
 t_token	*join_token_list(t_token **head, t_token *curr, t_token *first_new);
+
 // TREE UTILS
 
 void		print_tree(t_tree_node *tree_node, int depth, char *side);
 void		tree_apply_print(t_tree_node *root, int depth, char *side);
 t_tree_node	*newtreenode(t_node_cont cont);
-t_tree_node	*create_tree(t_token **tokens, char **env);
+t_tree_node	*create_tree(t_token **tokens, t_minishell ms);
 t_node_cont	assign_tree_cont(t_token *token);
 void		if_command(t_token *tokens, t_tree_node *cmd_node);
 void		place_treenode(t_token *tokens, t_tree_node **root, bool pipe);
@@ -120,23 +121,25 @@ char		**tree_alloc_args(t_token *token);
 
 // EXPANSIONS
 
-char	**input_expander(char *input, char **env);
-char	*process_quote_expansions(char *input, char **env, int *is_quote);
-void	the_expansion(char *input, char **env, char *result, int *is_quote);
+char	**input_expander(char *input, t_minishell ms);
+char	*process_quote_expansions(char *input, t_minishell ms, int *is_quote);
+void	the_expansion(char *input, t_minishell ms, int *is_quote, char *result);
 char	*expansion(char *input, char **env);
 void	expand_single_quotes(char *input, char *result, int *i);
-void	expand_double_quotes(char *input, char **env, char *result, int *i);
-void	expand_unquotes(char *input, char **env, char *result, int *i);
+void	expand_double_quotes(char *input, char *result, int *i, t_minishell ms);
+void	expand_unquotes(char *input, char *result, int *i, t_minishell ms);
+void	expansion_exit_status(char *result, int *i, char *exit_status);
 char	*get_search(char *input);
-size_t	the_length(char *input, char **env);
+size_t	the_length(char *input, t_minishell ms);
 size_t	len_expansion(char *input, char **env);
-size_t	len_double_quotes(char *input, char **env, int *i);
+size_t	len_double_quotes(char *input, char **env, int *i, int exit_status);
 size_t	len_single_quote(char *input, int *i);
-size_t	len_unquoted(char *input, char **env, int *i);
+size_t	len_unquoted(char *input, char **env, int *i, int exit_status);
+void	len_exit_status(char *exit_status, size_t *len, int *i);
 char	**separator_3000(char *expanded, int is_quote);
 char	**separate(char *expanded);
 char	*quote_remover(char *s);
-int		quote_conter(char *s);
+size_t	quote_conter_len(char *s);
 
 // ASSIGN TYPES
 
@@ -161,7 +164,7 @@ void		master_check(t_token *token);
 // ERRORS
 
 void		ft_error_check(t_token *token);
-void	error_quote_check(char *s);
+void		error_quote_check(char *s);
 
 // SPLIT UTILS
 

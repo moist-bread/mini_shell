@@ -99,6 +99,10 @@ rx: fclean exec
 .PHONY: all clean fclean re bonus exe rp
 
 
+# -->┊ ( MAIN TEST RULES )
+val: all
+	$(VAL) $(FDFLAGS) $(SUPP) ./minishell
+
 # -->┊( EXE TEST RULES )
 exe: all
 	./minishell

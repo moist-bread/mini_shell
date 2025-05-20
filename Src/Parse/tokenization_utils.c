@@ -93,7 +93,7 @@ t_token	*replace_expanded_token(t_token **head, t_token *curr, char **expanded)
 	next = NULL;
 	first_new = NULL;
 	if (!expanded[0])
-		tokenadd_back(&first_new, newtoken(ft_strdup("")));
+		tokenadd_back(&first_new, newtoken(NULL));
 	else
 	{
 		while (expanded[i])

@@ -4,20 +4,22 @@
 /// @brief Main function that creates the AST_Tree 
 /// @param tokens Node from the token list
 /// @param cont The content
-t_tree_node	*create_tree(t_token **tokens, char **env)
+t_tree_node	*create_tree(t_token **tokens, t_minishell ms)
 {
 	t_tree_node	*tree_node;
 	
 	tree_node = NULL;
-	expand_token_list(tokens, env);
+	expand_token_list(tokens, ms);
 	assign_type_token(*tokens, true);
+	printf("after expansion:\n");
+	print_tokens(*tokens);
 	place_treenode(*tokens, &tree_node, false);
 	tree_apply_print(tree_node, 0, "Root");
 	printf("\n");
 	return (tree_node);
 }
 
-void	expand_token_list(t_token **head, char **env)
+void	expand_token_list(t_token **head, t_minishell ms)
 {
 	t_token	*curr;
 	char	**expanded;
@@ -28,10 +30,9 @@ void	expand_token_list(t_token **head, char **env)
 	{
 		if (curr->type != LIM && ft_strchr(curr->cont, '$'))
 		{
-			expanded = input_expander(curr->cont, env);
+			expanded = input_expander(curr->cont, ms);
 			curr = replace_expanded_token(head, curr, expanded);
 			free_split(expanded);
-			// curr = curr->next;
 			continue ;
 		}
 		else

@@ -6,13 +6,13 @@
 /// @param env The enviorment 
 /// @param i Indexes
 /// @return The lenght
-size_t	len_double_quotes(char *input, char **env, int *i)
+size_t	len_double_quotes(char *input, char **env, int *i, int exit_status)
 {
 	size_t len;
 
 	len = 1;
 	(*i)++;
-	while (input[(*i)] && input[*i] == '\"')
+	while (input[(*i)] && input[*i] != '\"')
 	{
 		if (input[*i] == '$' && (isalpha(input[*i + 1]) || input[*i + 1] == '_'))
 		{
@@ -20,17 +20,19 @@ size_t	len_double_quotes(char *input, char **env, int *i)
 			while (input[++(*i)] == '_' || ft_isalnum(input[*i]))
 				;
 		}
+		else if (input[*i] == '$' && ft_isdigit(input[*i + 1]))
+			*i += 2;
+		else if (input[*i] == '$' && input[*i + 1] == '?')
+			len_exit_status(ft_itoa(exit_status), &len, i);
 		else
 		{
 			(*i)++;
 			len++;
 		}
 	}
-	if (input[*i] == '\"')
-	{
+	if (input[(*i)++] == '\"')
         len++;
-        (*i)++;
-    }
+	printf("len_double: %zu\n", len);
 	return (len);
 }
 
@@ -62,7 +64,7 @@ size_t	len_single_quote(char *input, int *i)
 /// @param env The enviorment 
 /// @param i Indexes
 /// @return The length
-size_t	len_unquoted(char *input, char **env, int *i)
+size_t	len_unquoted(char *input, char **env, int *i, int exit_status)
 {
 	size_t	len;
 
@@ -75,6 +77,10 @@ size_t	len_unquoted(char *input, char **env, int *i)
 			while (input[++(*i)] == '_' || ft_isalnum(input[*i]))
 				;
 		}
+		else if (input[*i] == '$' && ft_isdigit(input[*i + 1]))
+			*i += 2;
+		else if (input[*i] == '$' && input[*i + 1] == '?')
+			len_exit_status(ft_itoa(exit_status), &len, i);
 		else
 		{
 			(*i)++;
@@ -88,7 +94,7 @@ size_t	len_unquoted(char *input, char **env, int *i)
 /// @param input The string passed
 /// @param env The enviorment 
 /// @return The length
-size_t	the_length(char *input, char **env)
+size_t	the_length(char *input, t_minishell ms)
 {
 	size_t	len;
 	int		i;
@@ -98,11 +104,11 @@ size_t	the_length(char *input, char **env)
 	while (input[i])
 	{
 		if (input[i] == '\"')
-			len += len_double_quotes(input, env, &i);
+			len += len_double_quotes(input, ms.env, &i, ms.exit_status);
 		else if (input[i] == '\'')
 			len += len_single_quote(input, &i);
 		else
-			len += len_unquoted(input, env, &i);
+			len += len_unquoted(input, ms.env, &i, ms.exit_status);
 	}
 	return (len);
 }

@@ -13,7 +13,11 @@ void	assign_type_token(t_token *token, bool exp)
 	temp = token;
 	while (temp)
 	{
-		assigns_types(temp, exp);
+		if (temp->type != PIPE && temp->type < REDIR_IN 
+			&& temp->type > REDIR_OUT_APPEND && exp == true)
+			assigns_types(temp, exp);
+		else if (exp == false)
+			assigns_types(temp, exp);
 		temp = temp->next;
 	}
 	assigns_cmd(token, exp);

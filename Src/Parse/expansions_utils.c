@@ -6,14 +6,14 @@
 /// @param env The enviorment 
 /// @param newtk New token
 /// @param head Head of the token list
-char	**input_expander(char *input, char **env)
+char	**input_expander(char *input, t_minishell ms)
 {
 	char	*expanded;
 	int		is_quote;
 	char	**final_result;
 
 	is_quote = 1;
-	expanded = process_quote_expansions(input, env, &is_quote);
+	expanded = process_quote_expansions(input, ms, &is_quote);
 	final_result = separator_3000(expanded, is_quote);
 	if (!final_result)
 		return (NULL);
@@ -36,7 +36,8 @@ char	*get_search(char *input)
 	if (!input[i])
 		return (NULL);
 	i++;
-	while (input[i + search_len] && (input[i + search_len] == '_' || ft_isalnum(input[i + search_len])))
+	while (input[i + search_len] && (input[i + search_len] == '_' \
+	|| ft_isalnum(input[i + search_len])))
 		search_len++;
 	search = ft_calloc(sizeof(char), search_len + 2);
 	if (!search)

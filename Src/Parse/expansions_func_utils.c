@@ -1,6 +1,9 @@
 
 #include "../../Inc/minishell.h"
 
+/// @brief Removes the quotes of the token
+/// @param s The expanded string
+/// @return The string without quotes
 char	*quote_remover(char *s)
 {
 	char	*str;
@@ -10,7 +13,7 @@ char	*quote_remover(char *s)
 
 	i = 0;
 	j = 0;
-	str = ft_calloc(sizeof(char), ft_strlen(s) - quote_conter(s) + 1);
+	str = ft_calloc(sizeof(char), (ft_strlen(s) - quote_conter_len(s)) + 1);
 	if (!str)
 		return (NULL);
 	while (s[i])
@@ -33,31 +36,52 @@ char	*quote_remover(char *s)
 /// @brief Counts the number of quotes that will seize to exist
 /// @param s The string
 /// @return The number of quotes
-int	quote_conter(char *s)
+size_t	quote_conter_len(char *s)
 {
-	int		i;
-	int		n;
-	char	quote;
+	int			i;
+	size_t		len;
+	char		quote;
 
-	n = 0;
 	i = 0;
+	len = 0;
 	while (s[i])
 	{
 		if (s[i] == '\"' || s[i] == '\'')
 		{
 			quote = s[i++];
-			n++;
+			len++;
 			while (s[i] && s[i] != quote)
 				i++;
 			if(s[i] && s[i] == quote)
 			{
-				i++;
-				n++;
+				i++;	
+				len++;
 			}
 		}
 		else
 			i++;
 	}
-	return (n);
+	return (len);
 }
 
+void	len_exit_status(char *exit_status, size_t *len, int *i)
+{
+	*len += ft_strlen(exit_status);
+	*i += 2;
+	free(exit_status);
+}
+
+void	expansion_exit_status(char *result, int *i, char *exit_status)
+{
+	int	n;
+
+	n = 0;
+	i[0] += 2;
+	while (exit_status[n])
+	{
+		result[i[1]] = exit_status[n];
+		n++;
+		i[1]++;
+	}
+	free(exit_status);
+}

@@ -41,7 +41,6 @@ typedef enum s_node_type
 	REDIR_OUT,
 	REDIR_OUT_APPEND,
 	BUILT_IN,
-	REPLACED,
 }						t_node_type;
 
 /// @param type Node Type
