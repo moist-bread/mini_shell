@@ -96,6 +96,7 @@ static void	here_doc_readline(t_minishell ms, char *limiter, int fd)
 		{
 			if (!ft_strcmp(line, limiter))
 				break ;
+			line = a_minha_funcao(ms, line, limiter);
 			ft_printf_fd(fd, "%s\n", line);
 			free(line);
 		}

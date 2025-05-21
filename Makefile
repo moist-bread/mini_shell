@@ -27,7 +27,8 @@ EXEC_FILES_C	=	struct_utils.c distributer.c \
 					pipe.c redir_handler.c pipe_utils.c \
 					matrix_utils.c matrix_quick_sort.c \
 					export.c export_utils.c env.c get_env.c unset.c echo.c exit.c directory.c \
-					ft_strcmp.c ft_strndup.c ft_iswhitespace.c here_doc.c
+					ft_strcmp.c ft_strndup.c ft_iswhitespace.c here_doc.c \
+					signals.c
 
 PARSE_MAIN_C	=	parse_main.c
 PARSE_FILES_C	= 	tokenization_utils.c tokenization.c checks.c space_utils.c \

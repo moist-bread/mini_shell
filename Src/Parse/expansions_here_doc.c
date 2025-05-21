@@ -17,7 +17,7 @@ char	*a_minha_funcao(t_minishell ms, char *line, char *limiter)
 			expanded = process_expander(line, ms);
 			if (!expanded)
 				return (NULL);
-			return (expanded);
+			return (free(line), expanded);
 		}
 
 		else
