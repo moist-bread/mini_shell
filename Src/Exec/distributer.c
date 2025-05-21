@@ -4,10 +4,10 @@
 /// @brief Looks at the Input Tree and sends it to the
 /// corresponding executer process
 /// @param ms Overarching Minishell Structure
-int	master_distributer(t_minishell *ms, t_tree_node *node)
+void	master_distributer(t_minishell *ms, t_tree_node *node)
 {
 	if (!node)
-		return (1);
+		return ;
 	printf(YEL "\nEntering master distributer" DEF "\n\n");
 	if (node->type == PIPE)
 		pipe_process(ms, node);
@@ -15,7 +15,6 @@ int	master_distributer(t_minishell *ms, t_tree_node *node)
 		command_process(ms, node);
 	else if (node->type == BUILT_IN)
 		built_in_process(ms, node);
-	return (0);
 }
 
 /// @brief Opens rediractions and sends CMD NODE to be executed
@@ -30,7 +29,7 @@ void	command_process(t_minishell *ms, t_tree_node *node)
 	// step 1: check redir and open needed --
 	printf("step 1 --\n");
 	if (cmd_redir_executer(ms, node, &redir[0], &redir[1]) == -1)
-		return ;
+		return (error_msg_status(NULL, &ms->exit_status, 1));
 	// step 2: child pro, parse, dup execute --
 	printf("step 2 --\n");
 	init_sigact(ms, 'I');
@@ -69,7 +68,7 @@ void	cmd_parse_and_exe(t_minishell ms, t_tree_node *node, int *redir)
 	else
 		cmd = matrix_add_front(node->cont.cmd, NULL);
 	if (!cmd)
-		minishell_clean(ms, 1); // fail alloc ABORT
+		return (perror("malloc"), minishell_clean(ms, 1));
 	path = get_path(ms, cmd[0]);
 	if (!path)
 		minishell_clean(ms, 1); // fail alloc ABORT

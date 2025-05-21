@@ -14,8 +14,8 @@ void	init_sigact(t_minishell *minishell, int flag)
 	struct sigaction	sa;
 
 	// save adress to minishell
-	if (minishell)
-		g_ms_struct = minishell;
+	// if (minishell)
+	g_ms_struct = minishell;
 	// signal SIGQUIT
 	if (flag == 'D')
 		sa.sa_handler = SIG_DFL;

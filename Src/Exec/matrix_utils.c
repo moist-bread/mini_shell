@@ -79,7 +79,7 @@ char	**matrix_dup_char(char **original_matrix)
 	{
 		dup[i] = ft_strdup(original_matrix[i]);
 		if (!dup[i])
-			free_matrix((void **)dup, i);
+			return (free_matrix((void **)dup, i), NULL);
 	}
 	dup[i] = NULL;
 	return (dup);

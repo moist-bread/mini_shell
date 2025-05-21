@@ -9,6 +9,11 @@ void	minishell_struct_init(t_minishell *minis, char **env)
 	init_sigact(minis, 'P');
 	minis->tree_head = NULL;
 	minis->env = matrix_dup_char(env); // needs proper env
+	if (!minis->env)
+	{
+		ft_printf_fd(2, "malloc: failed memory allocation on initialization\n");
+		exit (1);
+	}
 	minis->env_start = 0;
 	minis->exit_status = 0;
 }
@@ -48,7 +53,7 @@ void	process_waiting(int proc_n, int *ids, int *status)
 		if (signal == SIGINT)
 			printf("\n");
 		*status = 128 + signal;
-	}	
+	}
 }
 
 /// @brief Closes all non standard file descriptors

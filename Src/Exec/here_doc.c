@@ -13,9 +13,6 @@ void	multi_here_doc_handler(t_minishell ms, t_pipe_data *pdata)
 	int			idx;
 
 	printf(YEL "\n- multiple heredoc" DEF "\n\n");
-	pdata->here_docs = ft_calloc(pdata->cmd_n, sizeof(int));
-	if (!pdata->here_docs)
-		minishell_clean(ms, 1); // fail malloc ABORT?
 	pin = ms.tree_head;
 	idx = -1;
 	while (++idx < pdata->cmd_n)
@@ -23,6 +20,8 @@ void	multi_here_doc_handler(t_minishell ms, t_pipe_data *pdata)
 		single_here_doc_handler(ms, pin, &pdata->here_docs[idx]);
 		if (pdata->here_docs[idx] == -1)
 			minishell_clean(ms, 130);
+		if (pdata->here_docs[idx] == -2)
+			minishell_clean(ms, 1);
 		pin = pin->right;
 	}
 }
@@ -37,7 +36,7 @@ void	single_here_doc_handler(t_minishell ms, t_tree_node *pin, int *in)
 
 	printf(YEL "\n-- single heredoc" DEF "\n\n");
 	runner = pin->left;
-	while (runner && *in != -1)
+	while (runner && *in > -1)
 	{
 		printf("redir node loop_\n");
 		if (runner->type == REDIR_HERE_DOC)
@@ -62,16 +61,17 @@ static int	here_doc_redir(t_minishell minishell, char *limiter)
 	int	exit_status;
 	int	id;
 
+	exit_status = 0;
 	if (pipe(here_pipe) == -1)
-		return(perror("pipe"), -1);
+		return(perror("pipe"), -2);
 	init_sigact(&minishell, 'I');
 	id = fork();
 	if (id < 0)
-		return(perror("fork"), -1);
+		return(perror("fork"), -2);
 	if (id == 0)
 	{
 		init_sigact(&minishell, 'H');
-		here_doc_readline(limiter, here_pipe[1]);
+		here_doc_readline(minishell, limiter, here_pipe[1]);
 		minishell_clean(minishell, 0);
 	}
 	waitpid(id, &exit_status, 0);
@@ -85,7 +85,7 @@ static int	here_doc_redir(t_minishell minishell, char *limiter)
 /// @brief Starts a readline and writes the input in FD until LIMITER is written
 /// @param limiter String that stops the readline
 /// @param fd Write end of a pipe to write to
-static void	here_doc_readline(char *limiter, int fd)
+static void	here_doc_readline(t_minishell ms, char *limiter, int fd)
 {
 	char	*line;
 
@@ -109,4 +109,5 @@ static void	here_doc_readline(char *limiter, int fd)
 	}
 	if (line)
 		free(line);
+	(void)ms;
 }
