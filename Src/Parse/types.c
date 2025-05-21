@@ -1,5 +1,4 @@
 
-
 #include "../../Inc/minishell.h"
 
 /// @brief Assigns a Type to the Node
@@ -63,7 +62,7 @@ void	assigns_types(t_token *token, bool exp)
 			token->type = REDIR_OUT_APPEND;
 	}
 	if (exp == true)
-		token->type = ARG;
+		is_limtiter_or_arg(&token);
 }
 
 /// @brief Checks if the token received CMD
