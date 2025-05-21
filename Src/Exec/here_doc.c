@@ -2,7 +2,7 @@
 #include "../../Inc/minishell.h"
 
 static int	here_doc_redir(t_minishell minishell, char *limiter);
-static void	here_doc_readline(char *limiter, int fd);
+static void	here_doc_readline(t_minishell ms, char *limiter, int fd);
 
 void	multi_here_doc_handler(t_minishell ms, t_pipe_data *pdata)
 {
@@ -62,7 +62,7 @@ static int	here_doc_redir(t_minishell minishell, char *limiter)
 	} 
 	if (id == 0)
 	{
-		here_doc_readline(limiter, here_pipe[1]);
+		here_doc_readline(minishell, limiter, here_pipe[1]);
 		minishell_clean(minishell, 0);
 	}
 	waitpid(id, NULL, 0);
@@ -70,7 +70,7 @@ static int	here_doc_redir(t_minishell minishell, char *limiter)
 	return (here_pipe[0]);
 }
 
-static void	here_doc_readline(char *limiter, int fd)
+static void	here_doc_readline(t_minishell ms, char *limiter, int fd)
 {
 	char	*line;
 

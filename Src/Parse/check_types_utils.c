@@ -3,7 +3,7 @@
 
 /// @brief Checks if the quotes are impar and gives an error if they are
 /// @param input String
-void	check_quotes(char *input)
+bool	check_quotes(char *input)
 {
 	int		i;
 	int 	quote;
@@ -26,10 +26,8 @@ void	check_quotes(char *input)
 			i++;
 	}
 	if (quote % 2 != 0)
-	{
-		printf("Error Quote\n");
-		exit (1);
-	}
+		return (printf("Invalid Syntax\n"), false);
+	return (true);
 }
 
 /// @brief If is Operator
@@ -86,6 +84,6 @@ void	is_limtiter_or_arg(t_token **temp)
 	{
 		*temp = (*temp)->next;
 		(*temp)->type = ARG;
-		assigns_types(*temp);
+		assigns_types(*temp, false);
 	}
 }

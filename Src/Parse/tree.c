@@ -4,15 +4,48 @@
 /// @brief Main function that creates the AST_Tree 
 /// @param tokens Node from the token list
 /// @param cont The content
-void	create_tree(t_token *tokens)
+t_tree_node	*create_tree(t_token **tokens, t_minishell ms)
 {
 	t_tree_node	*tree_node;
 	
-	printf("Entered Create Tree\n");
 	tree_node = NULL;
-	place_treenode(tokens, &tree_node, false);
+	expand_token_list(tokens, ms);
+	assign_type_token(*tokens, true);
+	printf("after expansion:\n");
+	print_tokens(*tokens);
+	place_treenode(*tokens, &tree_node, false);
 	tree_apply_print(tree_node, 0, "Root");
 	printf("\n");
+	return (tree_node);
+}
+
+/// @brief Expands the content of the tokens
+/// @param head The head of the tokens list
+/// @param ms The minishell struct  
+void	expand_token_list(t_token **head, t_minishell ms)
+{
+	t_token	*curr;
+	char	**expanded;
+	char	*new_cont;
+
+	curr = *head;
+	while (curr)
+	{
+		if (curr->type != LIM && ft_strchr(curr->cont, '$'))
+		{
+			expanded = input_expander(curr->cont, ms);
+			curr = replace_expanded_token(head, curr, expanded);
+			free_split(expanded);
+			continue ;
+		}
+		else
+		{
+			new_cont = quote_remover(curr->cont);
+			free(curr->cont);
+       		curr->cont = new_cont;
+			curr = curr->next;
+		}
+	}
 }
 
 /// @brief Assigns the content to the right place in the struct
@@ -23,7 +56,6 @@ t_node_cont	assign_tree_cont(t_token *token)
 {
 	t_node_cont	cont;
 
-	printf("Entered Assign Tree Cont\n");
 	ft_bzero(&cont, sizeof(t_node_cont));
 	if (token && (token->type == CMD || token->type == BUILT_IN))
 		cont.cmd = token->cont;
@@ -75,7 +107,6 @@ void	place_treenode(t_token *tokens, t_tree_node **root, bool pipe)
 	t_token		*pipe_token;
 	t_tree_node	*new_tree_node;
 
-	// printf("Entered Place Tree Node\n");
 	pipe_token = NULL;
 	new_tree_node = NULL;
 	if (pipe == false)

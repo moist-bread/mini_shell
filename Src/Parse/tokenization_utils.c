@@ -35,7 +35,6 @@ void	tokenadd_front(t_token **tklst, t_token *newtk)
 	if (*tklst)
 		(*tklst)->prev = newtk;
 	*tklst = newtk;
-
 }
 
 /// @brief Creates a node named token
@@ -55,22 +54,56 @@ t_token	*newtoken(char *cont)
 	return (newtk);
 }
 
-/// @brief This functions clears the token list
-/// @param token Head node of the list
-void	clear_token_lst(t_token	*token)
+t_token	*join_token_list(t_token **head, t_token *curr, t_token *first_new)
 {
-	t_token *current;
-	t_token *next;
+    t_token *last_new;
 
-	if (!token)
-		return;
-	current = token;
-	while (current)
+	last_new = first_new;
+  	if (curr->prev)
+    {
+        curr->prev->next = first_new;
+        first_new->prev = curr->prev;
+    }
+    else
+    {
+        *head = first_new;
+        first_new->prev = NULL;
+    }
+    while (last_new->next)
+        last_new = last_new->next;
+    if (curr->next)
+    {
+        last_new->next = curr->next;
+        curr->next->prev = last_new;
+    }
+    else
 	{
-		next = current->next;
-		if (current->cont)
-			free(current->cont);
-		free(current);
-		current = next;
+        last_new->next = NULL;
 	}
+	return (last_new->next);
+}
+
+t_token	*replace_expanded_token(t_token **head, t_token *curr, char **expanded)
+{
+	t_token	*first_new;
+	t_token *next;
+	int		i;
+
+	i = 0;
+	next = NULL;
+	first_new = NULL;
+	if (!expanded[0])
+		tokenadd_back(&first_new, newtoken(NULL));
+	else
+	{
+		while (expanded[i])
+		{
+			tokenadd_back(&first_new, newtoken(expanded[i]));
+			i++;
+		}
+	}
+	next = join_token_list(head, curr, first_new);
+	free(curr->cont);
+	free(curr);
+	return (next);
 }

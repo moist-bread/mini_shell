@@ -45,7 +45,6 @@ char	**cracked_split(char const *s)
 	split = ft_calloc(count_str(s) + 1, sizeof(char *));
 	if (!split)
 		return (NULL);
-	printf("count: %d\n", count_str(s));
 	while (s && *s != '\0')
 	{
 		while (*s && is_sep(*s))

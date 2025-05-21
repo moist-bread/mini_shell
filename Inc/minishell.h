@@ -50,6 +50,20 @@
 // In the tree the last node redir is over writig the prrevious ones;
 // > file > | a - Syntax Error - done
 
+// Reminder EXPANSIONS HERE_DOC:
+// cat << $"$HOME" does not expand and the lim is $HOME
+// if the LIM has a "" like EOf"f" it does not expand
+// if the LIM is the expansion like $HOME it works as a lim and does not expand
+// if is a normal LIM without any quotes it always expands
+// DO a bolean to say if the lim had quotes; for the here_doc expansions
+ 
+// REDIRS: not HERE_DOC
+// If after redir there is an expansion ansd inside of said expansion there is more than one word
+// the redir fails because of ambiguous redirect
+
+// TAREFAS:
+// 		// line = atuafuncao(line, limiter);
+//	Take of exit in syntax error
 // -------------------------------------------------------------------------------------------------|
 
 // LIBS
@@ -87,17 +101,19 @@ void		tokenadd_back(t_token **tklst, t_token *newtk);
 void		tokenadd_front(t_token **tklst, t_token *newtk);
 t_token		*newtoken(char *cont);
 t_token		*create_tokens(char *input);
-void		place_token(char *input, t_token **head);
+bool		place_token(char *input, t_token **head);
 void		print_tokens(t_token *tokens);
-void		clear_token_lst(t_token *token);
 bool		is_token(t_token *token);
+void		expand_token_list(t_token **head, t_minishell ms);
+t_token		*replace_expanded_token(t_token **head, t_token *curr, char **expanded);
+t_token		*join_token_list(t_token **head, t_token *curr, t_token *first_new);
 
 // TREE UTILS
 
 void		print_tree(t_tree_node *tree_node, int depth, char *side);
 void		tree_apply_print(t_tree_node *root, int depth, char *side);
 t_tree_node	*newtreenode(t_node_cont cont);
-void		create_tree(t_token *tokens);
+t_tree_node	*create_tree(t_token **tokens, t_minishell ms);
 t_node_cont	assign_tree_cont(t_token *token);
 void		if_command(t_token *tokens, t_tree_node *cmd_node);
 void		place_treenode(t_token *tokens, t_tree_node **root, bool pipe);
@@ -107,13 +123,35 @@ void		tree_cont_init(t_node_cont *cont);
 t_token		*iteri_till_pipe(t_token *token);
 char		**tree_alloc_args(t_token *token);
 
+// EXPANSIONS
+
+char		**input_expander(char *input, t_minishell ms);
+char		*process_quote_expansions(char *input, t_minishell ms, int *is_quote);
+void		the_expansion(char *input, t_minishell ms, int *is_quote, char *result);
+char		*expansion(char *input, char **env);
+void		expand_single_quotes(char *input, char *result, int *i);
+void		expand_double_quotes(char *input, char *result, int *i, t_minishell ms);
+void		expand_unquotes(char *input, char *result, int *i, t_minishell ms);
+void		expansion_exit_status(char *result, int *i, char *exit_status);
+char		*get_search(char *input);
+size_t		the_length(char *input, t_minishell ms);
+size_t		len_expansion(char *input, char **env);
+size_t		len_double_quotes(char *input, char **env, int *i, int exit_status);
+size_t		len_single_quote(char *input, int *i);
+size_t		len_unquoted(char *input, char **env, int *i, int exit_status);
+void		len_exit_status(char *exit_status, size_t *len, int *i);
+char		**separator_3000(char *expanded, int is_quote);
+char		**separate(char *expanded);
+char		*quote_remover(char *s);
+size_t		quote_conter_len(char *s);
+char		*a_minha_funcao(t_minishell ms, char *line, char *limiter);
+
 // ASSIGN TYPES
 
-void		assign_type_token(t_token *token);
-void		assign_tree_type(t_token *token, t_tree_node *tree);
+void		assign_type_token(t_token *token, bool exp);
 void		assign_name(int type);
-void		assigns_types(t_token *token);
-void		assigns_cmd(t_token *head);
+void		assigns_types(t_token *token, bool exp);
+void		assigns_cmd(t_token *head, bool exp);
 void		assigns_built_in(t_token *token);
 void		is_limtiter_or_arg(t_token **temp);
 
@@ -121,17 +159,17 @@ void		is_limtiter_or_arg(t_token **temp);
 
 char		*add_spaces(char *input);
 int			space_length(char *input);
-char		*readinput(char *input);
 char		*space_put(char *input, int len);
 
 // CHECKS
 
-void		check_quotes(char *input);
-void		master_check(t_token *token);
+bool		check_quotes(char *input);
+void		master_check(t_token **token);
+void		syntax_clear(t_token *token);
 
 // ERRORS
 
-void		ft_error_check(t_token *token);
+void		ft_error_check(t_token **token);
 
 // SPLIT UTILS
 
@@ -141,13 +179,11 @@ int			skip_quote(const char *s);
 void		word_runner(const char **s);
 bool		is_sep(char c);
 
-// char	*merge_adjacent_segments(char *input);
-// void	check_double_pipe(int *j, int *i, char *dest);
-// void	checks_here_doc(t_token	*token);
-// char	**cracked_split(char const *s, char c);
-// void	working_quote(char const *s, int *len, char c);
-// char	*extract_single_quote(const char *s, int len);
-// int		handle_single_quote(const char **s);
+// FAKE
+
+char		*fake_readinput(t_minishell ms, char	*input);
+t_tree_node	*fake_create_tree(t_token *tokens);
+void		fake_clear_token_lst(t_token	*token);
 
 // --------------------------EXECUTION--------------------------
 
