@@ -13,7 +13,6 @@ int	main(int ac, char **av, char **env)
 	
 	(void)ac;
 	(void)av;
-	(void)env;
 
 	ft_printf_fd(1, YEL "Testing executer WITH TREE main !" DEF "\n\n");
 	minishell_struct_init(&ms, env);
@@ -46,35 +45,4 @@ t_tree_node	*fake_create_tree(t_token *tokens)
 	tree_apply_print(tree_node, 0, "Root");
 	printf("\n");
 	return (tree_node);
-}
-
-void	fake_clear_token_lst(t_token	*token)
-{
-	t_token *current;
-	t_token *next;
-
-	if (!token)
-		return;
-	current = token;
-	while (current)
-	{
-		next = current->next;
-		if (current->type == PIPE || (current->type >= REDIR_IN
-			&& current->type <= REDIR_OUT_APPEND))
-			free(current->cont);
-		free(current);
-		current = next;
-	}
-}
-
-char	*fake_readinput(t_minishell ms, char	*input)
-{
-	input = readline("minishell > "); 
-	if (!input)
-	{
-		printf(BLU "exit" DEF "\n");
-		minishell_clean(ms, ms.exit_status);
-	}
-	add_history(input);
-	return (input);
 }

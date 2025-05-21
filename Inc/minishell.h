@@ -193,6 +193,10 @@ void		minishell_struct_init(t_minishell *minis, char **env);
 void		minishell_clean(t_minishell minishell, int status);
 void		process_waiting(int proc_n, int *ids, int *status);
 void		master_close(void);
+void		error_msg_status(char *message, int *status, int value);
+
+// SIGNALS
+void		init_sigact(t_minishell *minishell, int flag);
 
 // MATRIX UTILS
 
@@ -215,15 +219,18 @@ void		ft_string_swap(char **a, char **b);
 
 // DISTRIBUTER
 
-int			master_distributer(t_minishell *ms, t_tree_node *node);
+void		master_distributer(t_minishell *ms, t_tree_node *node);
 void		command_process(t_minishell *ms, t_tree_node *node);
 void		cmd_parse_and_exe(t_minishell ms, t_tree_node *node, int *redir);
 void		built_in_process(t_minishell *ms, t_tree_node *node);
+void		built_in_exe(t_minishell *ms, t_tree_node *node, int out);
 
 // REDIR HANDLER
 
 void		redir_handler(t_tree_node *node, int *in, int *out);
-int			cmd_redir_executer(t_minishell *ms, t_tree_node *node, int *in, int *out);
+int			cmd_redir_executer(t_minishell *ms, t_tree_node *node, int *in,
+				int *out);
+int			successful_redir_check(int *in, int *out, int hd);
 
 // HERE DOC
 

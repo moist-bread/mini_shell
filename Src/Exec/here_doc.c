@@ -4,31 +4,39 @@
 static int	here_doc_redir(t_minishell minishell, char *limiter);
 static void	here_doc_readline(t_minishell ms, char *limiter, int fd);
 
+/// @brief Executes all here docs in a PIPE tree and stores the fds in PDATA
+/// @param ms Overarching Minishell Structure
+/// @param pdata Struct used for the execution of pipes
 void	multi_here_doc_handler(t_minishell ms, t_pipe_data *pdata)
 {
 	t_tree_node	*pin;
 	int			idx;
 
 	printf(YEL "\n- multiple heredoc" DEF "\n\n");
-	pdata->here_docs = ft_calloc(pdata->cmd_n, sizeof(int));
-	if (!pdata->here_docs)
-		minishell_clean(ms, 1); // fail malloc ABORT?
 	pin = ms.tree_head;
 	idx = -1;
 	while (++idx < pdata->cmd_n)
 	{
 		single_here_doc_handler(ms, pin, &pdata->here_docs[idx]);
+		if (pdata->here_docs[idx] == -1)
+			minishell_clean(ms, 130);
+		if (pdata->here_docs[idx] == -2)
+			minishell_clean(ms, 1);
 		pin = pin->right;
 	}
 }
 
+/// @brief Executes all here docs associated with PIN and stores the last in IN
+/// @param ms Overarching Minishell Structure
+/// @param pin Current node to be scanned for REDIR_HERE_DOC
+/// @param in Variable to store the resulting fd
 void	single_here_doc_handler(t_minishell ms, t_tree_node *pin, int *in)
 {
 	t_tree_node	*runner;
 
 	printf(YEL "\n-- single heredoc" DEF "\n\n");
 	runner = pin->left;
-	while (runner)
+	while (runner && *in > -1)
 	{
 		printf("redir node loop_\n");
 		if (runner->type == REDIR_HERE_DOC)
@@ -43,33 +51,40 @@ void	single_here_doc_handler(t_minishell ms, t_tree_node *pin, int *in)
 	}
 }
 
-/// @brief Starts a here doc and writes input until LIMITER is written
+/// @brief Opens a pipe and forks for the Here Doc to take place
 /// @param minishell Overarching Minishell Structure
 /// @param limiter sentence that stops the here_doc
 /// @return Read end fd of opened pipe
 static int	here_doc_redir(t_minishell minishell, char *limiter)
 {
-	int		here_pipe[2];
-	int		id;
+	int	here_pipe[2];
+	int	exit_status;
+	int	id;
 
+	exit_status = 0;
 	if (pipe(here_pipe) == -1)
-		minishell_clean(minishell, 1); // abort ?
+		return(perror("pipe"), -2);
+	init_sigact(&minishell, 'I');
 	id = fork();
 	if (id < 0)
-	{
-		// maybe return -1 and protect in the single_hd ft
-		minishell_clean(minishell, 1); // fail fork abort WITHOUT EXIT
-	} 
+		return(perror("fork"), -2);
 	if (id == 0)
 	{
+		init_sigact(&minishell, 'H');
 		here_doc_readline(minishell, limiter, here_pipe[1]);
 		minishell_clean(minishell, 0);
 	}
-	waitpid(id, NULL, 0);
+	waitpid(id, &exit_status, 0);
+	init_sigact(&minishell, 'P');
 	close(here_pipe[1]);
+	if (exit_status != 0)
+		return(close(here_pipe[0]), -1);
 	return (here_pipe[0]);
 }
 
+/// @brief Starts a readline and writes the input in FD until LIMITER is written
+/// @param limiter String that stops the readline
+/// @param fd Write end of a pipe to write to
 static void	here_doc_readline(t_minishell ms, char *limiter, int fd)
 {
 	char	*line;
@@ -79,18 +94,21 @@ static void	here_doc_readline(t_minishell ms, char *limiter, int fd)
 		line = readline("> ");
 		if (line)
 		{
-			if (!ft_strncmp(line, limiter, ft_strlen(limiter) + 1))
+			if (!ft_strcmp(line, limiter))
 				break ;
+			line = a_minha_funcao(ms, line, limiter);
 			ft_printf_fd(fd, "%s\n", line);
 			free(line);
 		}
-		else  // CTRL D CASE
+		else // CTRL D CASE
 		{
-			ft_printf_fd(2, "warning: here-document delimited by end-of-file (wanted `%s')\n",
+			ft_printf_fd(2,
+				"warning: here-document delimited by end-of-file (wanted `%s')\n",
 				limiter);
 			break ;
-		}      
+		}
 	}
 	if (line)
 		free(line);
+	(void)ms;
 }

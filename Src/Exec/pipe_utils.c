@@ -12,11 +12,11 @@ void	assign_pipe_fds(t_minishell ms, t_pipe_data *pdata, int *redir_fd,
 {
 	int	new_pipe[2];
 
-	if (redir_fd[0] > 2) // in redir
+	if (redir_fd[0] > 2)
 	{
 		printf("in redir --\n");
 		pdata->cur_pipe[0] = redir_fd[0];
-		if (pdata->next_pipe > 2) // possible problem
+		if (pdata->next_pipe > 2)
 			close(pdata->next_pipe);
 	}
 	else // no in redir
@@ -24,9 +24,9 @@ void	assign_pipe_fds(t_minishell ms, t_pipe_data *pdata, int *redir_fd,
 		printf("no in redir --\n");
 		pdata->cur_pipe[0] = pdata->next_pipe;
 	}
-	printf("create pipe --\n"); // standard case
+	printf("create pipe --\n");
 	if (pipe(new_pipe) == -1)
-		minishell_clean(ms, 1); // pipe didnt create ABORT
+		return (perror("pipe"), minishell_clean(ms, 1));
 	pdata->cur_pipe[1] = new_pipe[1];
 	pdata->next_pipe = new_pipe[0];
 	if (redir_fd[1] > 2 || idx + 1 == pdata->cmd_n) // out redir or last cmd
