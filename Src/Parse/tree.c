@@ -19,6 +19,9 @@ t_tree_node	*create_tree(t_token **tokens, t_minishell ms)
 	return (tree_node);
 }
 
+/// @brief Expands the content of the tokens
+/// @param head The head of the tokens list
+/// @param ms The minishell struct  
 void	expand_token_list(t_token **head, t_minishell ms)
 {
 	t_token	*curr;

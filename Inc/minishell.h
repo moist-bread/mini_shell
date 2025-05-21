@@ -60,6 +60,10 @@
 // REDIRS: not HERE_DOC
 // If after redir there is an expansion ansd inside of said expansion there is more than one word
 // the redir fails because of ambiguous redirect
+
+// TAREFAS:
+// 		// line = atuafuncao(line, limiter);
+//	Take of exit in syntax error
 // -------------------------------------------------------------------------------------------------|
 
 // LIBS
@@ -93,16 +97,16 @@
 
 // TOKENS
 
-void	tokenadd_back(t_token **tklst, t_token *newtk);
-void	tokenadd_front(t_token **tklst, t_token *newtk);
-t_token	*newtoken(char *cont);
-t_token	*create_tokens(char *input);
-void	place_token(char *input, t_token **head);
-void	print_tokens(t_token *tokens);
-bool	is_token(t_token *token);
-void	expand_token_list(t_token **head, t_minishell ms);
-t_token	*replace_expanded_token(t_token **head, t_token *curr, char **expanded);
-t_token	*join_token_list(t_token **head, t_token *curr, t_token *first_new);
+void		tokenadd_back(t_token **tklst, t_token *newtk);
+void		tokenadd_front(t_token **tklst, t_token *newtk);
+t_token		*newtoken(char *cont);
+t_token		*create_tokens(char *input);
+bool		place_token(char *input, t_token **head);
+void		print_tokens(t_token *tokens);
+bool		is_token(t_token *token);
+void		expand_token_list(t_token **head, t_minishell ms);
+t_token		*replace_expanded_token(t_token **head, t_token *curr, char **expanded);
+t_token		*join_token_list(t_token **head, t_token *curr, t_token *first_new);
 
 // TREE UTILS
 
@@ -121,34 +125,35 @@ char		**tree_alloc_args(t_token *token);
 
 // EXPANSIONS
 
-char	**input_expander(char *input, t_minishell ms);
-char	*process_quote_expansions(char *input, t_minishell ms, int *is_quote);
-void	the_expansion(char *input, t_minishell ms, int *is_quote, char *result);
-char	*expansion(char *input, char **env);
-void	expand_single_quotes(char *input, char *result, int *i);
-void	expand_double_quotes(char *input, char *result, int *i, t_minishell ms);
-void	expand_unquotes(char *input, char *result, int *i, t_minishell ms);
-void	expansion_exit_status(char *result, int *i, char *exit_status);
-char	*get_search(char *input);
-size_t	the_length(char *input, t_minishell ms);
-size_t	len_expansion(char *input, char **env);
-size_t	len_double_quotes(char *input, char **env, int *i, int exit_status);
-size_t	len_single_quote(char *input, int *i);
-size_t	len_unquoted(char *input, char **env, int *i, int exit_status);
-void	len_exit_status(char *exit_status, size_t *len, int *i);
-char	**separator_3000(char *expanded, int is_quote);
-char	**separate(char *expanded);
-char	*quote_remover(char *s);
-size_t	quote_conter_len(char *s);
+char		**input_expander(char *input, t_minishell ms);
+char		*process_quote_expansions(char *input, t_minishell ms, int *is_quote);
+void		the_expansion(char *input, t_minishell ms, int *is_quote, char *result);
+char		*expansion(char *input, char **env);
+void		expand_single_quotes(char *input, char *result, int *i);
+void		expand_double_quotes(char *input, char *result, int *i, t_minishell ms);
+void		expand_unquotes(char *input, char *result, int *i, t_minishell ms);
+void		expansion_exit_status(char *result, int *i, char *exit_status);
+char		*get_search(char *input);
+size_t		the_length(char *input, t_minishell ms);
+size_t		len_expansion(char *input, char **env);
+size_t		len_double_quotes(char *input, char **env, int *i, int exit_status);
+size_t		len_single_quote(char *input, int *i);
+size_t		len_unquoted(char *input, char **env, int *i, int exit_status);
+void		len_exit_status(char *exit_status, size_t *len, int *i);
+char		**separator_3000(char *expanded, int is_quote);
+char		**separate(char *expanded);
+char		*quote_remover(char *s);
+size_t		quote_conter_len(char *s);
+char		*a_minha_funcao(t_minishell ms, char *line, char *limiter);
 
 // ASSIGN TYPES
 
-void	assign_type_token(t_token *token, bool exp);
-void	assign_name(int type);
-void	assigns_types(t_token *token, bool exp);
-void	assigns_cmd(t_token *head, bool exp);
-void	assigns_built_in(t_token *token);
-void	is_limtiter_or_arg(t_token **temp);
+void		assign_type_token(t_token *token, bool exp);
+void		assign_name(int type);
+void		assigns_types(t_token *token, bool exp);
+void		assigns_cmd(t_token *head, bool exp);
+void		assigns_built_in(t_token *token);
+void		is_limtiter_or_arg(t_token **temp);
 
 // UTILS
 
@@ -158,21 +163,21 @@ char		*space_put(char *input, int len);
 
 // CHECKS
 
-void		check_quotes(char *input);
-void		master_check(t_token *token);
+bool		check_quotes(char *input);
+void		master_check(t_token **token);
+void		syntax_clear(t_token *token);
 
 // ERRORS
 
-void		ft_error_check(t_token *token);
-void		error_quote_check(char *s);
+void		ft_error_check(t_token **token);
 
 // SPLIT UTILS
 
-char	**cracked_split(char const *s);
-int		word_len(char const *s);
-int		skip_quote(const char *s);
-void	word_runner(const char **s);
-bool	is_sep(char c);
+char		**cracked_split(char const *s);
+int			word_len(char const *s);
+int			skip_quote(const char *s);
+void		word_runner(const char **s);
+bool		is_sep(char c);
 
 // FAKE
 

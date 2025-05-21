@@ -32,7 +32,6 @@ size_t	len_double_quotes(char *input, char **env, int *i, int exit_status)
 	}
 	if (input[(*i)++] == '\"')
         len++;
-	printf("len_double: %zu\n", len);
 	return (len);
 }
 

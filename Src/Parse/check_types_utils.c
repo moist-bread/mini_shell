@@ -3,7 +3,7 @@
 
 /// @brief Checks if the quotes are impar and gives an error if they are
 /// @param input String
-void	check_quotes(char *input)
+bool	check_quotes(char *input)
 {
 	int		i;
 	int 	quote;
@@ -26,7 +26,8 @@ void	check_quotes(char *input)
 			i++;
 	}
 	if (quote % 2 != 0)
-		error_quote_check("Invalid Syntax");
+		return (printf("Invalid Syntax\n"), false);
+	return (true);
 }
 
 /// @brief If is Operator

@@ -22,17 +22,28 @@ void	fake_clear_token_lst(t_token *token)
 	}
 }
 
-/// @brief Basic error function
-/// @param token Node of the token list
-void	ft_error_check(t_token *token)
+void	syntax_clear(t_token *token)
 {
-	fake_clear_token_lst(token);
-	printf("Invalid Syntax\n");
-	exit(1);
+	t_token *current;
+	t_token *next;
+
+	if (!token)
+		return;
+	current = token;
+	while (current)
+	{
+		next = current->next;
+		free(current->cont);
+		free(current);
+		current = next;
+	}
 }
 
-void	error_quote_check(char *s)
+/// @brief Basic error function
+/// @param token Node of the token list
+void	ft_error_check(t_token **token)
 {
-	printf("%s\n", s);
-	exit (1);
+	printf("syntax error near unexpected token\n");
+	syntax_clear(*token);
+	*token = NULL;
 }

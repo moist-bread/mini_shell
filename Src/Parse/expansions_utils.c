@@ -106,7 +106,6 @@ char	**separate(char *expanded)
 	i = -1;
 	count = 0;
 	result = cracked_split(expanded);
-	printf("1\n\n");
 	while (result[count])
 		count++;
 	final_result = ft_calloc(sizeof(char *), count + 1);
