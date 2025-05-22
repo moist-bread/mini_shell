@@ -80,6 +80,8 @@ char	*get_path(t_minishell ms, char *cmd)
 /// @return Exit status after execve() failure
 int	error_code_for_exec(char *path)
 {
+	DIR *dir;
+	
 	if (access(path, F_OK) < 0)
 	{
 		ft_printf_fd(2, "%s: command not found\n", path);
@@ -94,6 +96,13 @@ int	error_code_for_exec(char *path)
 		}
 		ft_printf_fd(2, "%s: command not found\n", path);
 		return (127);
+	}
+	dir = opendir(path);
+	if (dir)
+	{
+		free (dir);
+		ft_printf_fd(2, "%s: Is a directory\n", path);
+		return (126);
 	}
 	return (0);
 }

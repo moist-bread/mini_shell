@@ -13,7 +13,7 @@ int	cmd_redir_executer(t_minishell *ms, t_tree_node *node, int *in, int *out)
 
 	hd = 0;
 	single_here_doc_handler(*ms, node, &hd);
-	if (hd == -1)
+	if (hd == -1 || hd == -2)
 		return (-1);
 	*in = 0;
 	*out = 1;
