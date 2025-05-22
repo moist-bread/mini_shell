@@ -4,22 +4,22 @@
 static	char	*process_expander(char *line, t_minishell ms);
 static	void	here_doc_expansion(char *result, char *input, t_minishell ms);
 
-char	*a_minha_funcao(t_minishell ms, char *line, char *limiter)
+char	*my_function(t_minishell ms, char *line, char *limiter)
 {
 	char	*expanded;
 	int		i;
 
+	(void)limiter;
 	i = 0;
 	while (line[i])
 	{
-		if (ft_strchr(line, '$') && (!ft_strchr(limiter, '\"') || !ft_strchr(limiter, '\'')))
+		if (ft_strchr(line, '$') && ms.quote == false)
 		{
 			expanded = process_expander(line, ms);
 			if (!expanded)
 				return (NULL);
 			return (free(line), expanded);
 		}
-
 		else
 			i++;
 	}

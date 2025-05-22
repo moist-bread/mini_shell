@@ -4,7 +4,7 @@
 /// @brief Main function that creates the AST_Tree 
 /// @param tokens Node from the token list
 /// @param cont The content
-t_tree_node	*create_tree(t_token **tokens, t_minishell ms)
+t_tree_node	*create_tree(t_token **tokens, t_minishell *ms)
 {
 	t_tree_node	*tree_node;
 	
@@ -22,7 +22,7 @@ t_tree_node	*create_tree(t_token **tokens, t_minishell ms)
 /// @brief Expands the content of the tokens
 /// @param head The head of the tokens list
 /// @param ms The minishell struct  
-void	expand_token_list(t_token **head, t_minishell ms)
+void	expand_token_list(t_token **head, t_minishell *ms)
 {
 	t_token	*curr;
 	char	**expanded;
@@ -33,7 +33,7 @@ void	expand_token_list(t_token **head, t_minishell ms)
 	{
 		if (curr->type != LIM && ft_strchr(curr->cont, '$'))
 		{
-			expanded = input_expander(curr->cont, ms);
+			expanded = input_expander(curr->cont, *ms);
 			curr = replace_expanded_token(head, curr, expanded);
 			free_split(expanded);
 			continue ;
@@ -42,7 +42,7 @@ void	expand_token_list(t_token **head, t_minishell ms)
 		{
 			if (curr->type == LIM && (ft_strchr(curr->cont, '\"') 
 			|| ft_strchr(curr->cont, '\'')))
-				ms.quote = true;
+				ms->quote = true;
 			new_cont = quote_remover(curr->cont);
 			free(curr->cont);
        		curr->cont = new_cont;

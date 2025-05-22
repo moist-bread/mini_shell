@@ -47,3 +47,10 @@ void	ft_error_check(t_token **token)
 	syntax_clear(*token);
 	*token = NULL;
 }
+
+void	len_exit_status(char *exit_status, size_t *len, int *i)
+{
+	*len += ft_strlen(exit_status);
+	*i += 2;
+	free(exit_status);
+}

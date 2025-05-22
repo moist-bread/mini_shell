@@ -104,7 +104,7 @@ t_token		*create_tokens(char *input);
 bool		place_token(char *input, t_token **head);
 void		print_tokens(t_token *tokens);
 bool		is_token(t_token *token);
-void		expand_token_list(t_token **head, t_minishell ms);
+void		expand_token_list(t_token **head, t_minishell *ms);
 t_token		*replace_expanded_token(t_token **head, t_token *curr, char **expanded);
 t_token		*join_token_list(t_token **head, t_token *curr, t_token *first_new);
 
@@ -113,7 +113,7 @@ t_token		*join_token_list(t_token **head, t_token *curr, t_token *first_new);
 void		print_tree(t_tree_node *tree_node, int depth, char *side);
 void		tree_apply_print(t_tree_node *root, int depth, char *side);
 t_tree_node	*newtreenode(t_node_cont cont);
-t_tree_node	*create_tree(t_token **tokens, t_minishell ms);
+t_tree_node	*create_tree(t_token **tokens, t_minishell *ms);
 t_node_cont	assign_tree_cont(t_token *token);
 void		if_command(t_token *tokens, t_tree_node *cmd_node);
 void		place_treenode(t_token *tokens, t_tree_node **root, bool pipe);
@@ -143,8 +143,9 @@ void		len_exit_status(char *exit_status, size_t *len, int *i);
 char		**separator_3000(char *expanded, int is_quote);
 char		**separate(char *expanded);
 char		*quote_remover(char *s);
+char		*quote_limiter(char	*exp);
 size_t		quote_conter_len(char *s);
-char		*a_minha_funcao(t_minishell ms, char *line, char *limiter);
+char	*my_function(t_minishell ms, char *line, char *limiter);
 
 // ASSIGN TYPES
 

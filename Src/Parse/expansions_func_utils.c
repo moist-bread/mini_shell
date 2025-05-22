@@ -2,6 +2,7 @@
 #include "../../Inc/minishell.h"
 
 static	int	quote_count(char *exp);
+static	void	quotes_quoted(char *quoted, int *j, char put, char between);
 
 /// @brief Removes the quotes of the token
 /// @param s The expanded string
@@ -66,38 +67,42 @@ size_t	quote_conter_len(char *s)
 	return (len);
 }
 
-void	len_exit_status(char *exit_status, size_t *len, int *i)
-{
-	*len += ft_strlen(exit_status);
-	*i += 2;
-	free(exit_status);
-}
-
 char	*quote_limiter(char	*exp)
 {
 	char	*quoted;
 	int		i;
+	int		j;
 
+	j = 0;
 	i = 0;
-	quoted = ft_calloc(sizeof(char), ft_strlen(exp) + quote_count(exp));
+	quoted = ft_calloc(sizeof(char), ft_strlen(exp) + quote_count(exp) + 1);
 	if (!quoted)
 		return (NULL);
-	while (quoted[i])
+	while (exp[i])
 	{
-		if (quoted[i] = '\'')
-		{
-			quote
-		}
+		if (exp[i] == '\'')
+			quotes_quoted(quoted, &j, '\'', '\"');
+		else if (exp[i] == '\"')
+			quotes_quoted(quoted, &j, '\"', '\'');
+		else
+			quoted[j++] = exp[i];
+		i++;
 	}
+	free(exp);
 	return (quoted);
+}
 
+static	void	quotes_quoted(char *quoted, int *j, char put, char between)
+{
+	quoted[(*j)++] = between;
+	quoted[(*j)++] = put;
+	quoted[(*j)++] = between;
 }
 
 static	int	quote_count(char *exp)
 {
 	int		i;
 	int		len;
-	char	quote;
 
 	i = 0;
 	len = 0;
