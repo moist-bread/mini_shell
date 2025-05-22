@@ -35,8 +35,9 @@ bool	check_quotes(char *input)
 /// @return True if is Operator, False if is not 
 bool	is_token(t_token *token)
 {
-	if (token->type == PIPE || token->type == REDIR_HERE_DOC || token->type == REDIR_IN \
-	|| token->type == REDIR_OUT || token->type == REDIR_OUT_APPEND)
+	if (token->type == PIPE || token->type == RED_HD \
+	|| token->type == RED_IN \
+	|| token->type == RED_OUT || token->type == RED_APP)
 		return (true);
 	return (false);
 }
@@ -74,7 +75,9 @@ char	*merge_adjacent_segments(char *input)
 
 void	is_limtiter_or_arg(t_token **temp)
 {
-	if ((*temp)->type == REDIR_HERE_DOC && (*temp)->next)
+	if ((*temp)->cont == NULL)
+		(*temp)->type = ARG;
+	else if ((*temp)->type == RED_HD && (*temp)->next)
 	{
 		*temp = (*temp)->next;
 		(*temp)->type = LIM;
