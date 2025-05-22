@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 17:09:32 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/05/21 16:01:52 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/05/22 16:49:57 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	main(int ac, char **av, char **env)
 		tokens = create_tokens(input);
 		if (tokens)
 		{
-			ms.tree_head = create_tree(&tokens, ms);
+			ms.tree_head = create_tree(&tokens, &ms);
 			fake_clear_token_lst(tokens);
 		}
 		// execution
