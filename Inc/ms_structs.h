@@ -96,6 +96,7 @@ typedef struct s_minishell
 	char				**env;
 	int					env_start;
 	int					exit_status;
+	bool				quote;
 }						t_minishell;
 
 #endif // MS_STRUCTS_H
