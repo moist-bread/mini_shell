@@ -16,6 +16,7 @@ void	minishell_struct_init(t_minishell *minis, char **env)
 	}
 	minis->env_start = 0;
 	minis->exit_status = 0;
+	minis->quote = false;
 }
 
 /// @brief Cleans all content from the MINISHELL struct

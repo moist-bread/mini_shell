@@ -9,12 +9,14 @@
 char	**input_expander(char *input, t_minishell ms)
 {
 	char	*expanded;
+	char	*quoted;
 	int		is_quote;
 	char	**final_result;
 
 	is_quote = 1;
 	expanded = process_quote_expansions(input, ms, &is_quote);
-	final_result = separator_3000(expanded, is_quote);
+	quoted = 
+	final_result = separator_3000(quoted, is_quote);
 	if (!final_result)
 		return (NULL);
 	return (final_result);

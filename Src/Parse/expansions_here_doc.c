@@ -68,3 +68,18 @@ static	void	here_doc_expansion(char *result, char *input, t_minishell ms)
 			result[i[1]++] = input[i[0]++];
 	}
 }
+
+void	expansion_exit_status(char *result, int *i, char *exit_status)
+{
+	int	n;
+
+	n = 0;
+	i[0] += 2;
+	while (exit_status[n])
+	{
+		result[i[1]] = exit_status[n];
+		n++;
+		i[1]++;
+	}
+	free(exit_status);
+}
