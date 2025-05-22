@@ -32,17 +32,17 @@ void	redir_handler(t_minishell *ms, t_tree_node *node, int *in, int *out)
 {
 	if (!node->left || !node->left->cont.file) // no redir || empty redir
 		return (ambiguous_redir_verify(node, in, out));
-	if (node->left->type == REDIR_IN) // IN <
+	if (node->left->type == RED_IN) // IN <
 	{
 		safe_close(*in);
 		*in = open(node->left->cont.file, O_RDONLY);
 	}
-	else if (node->left->type == REDIR_OUT) // OUT >
+	else if (node->left->type == RED_OUT) // OUT >
 	{
 		safe_close(*out);
 		*out = open(node->left->cont.file, O_RDWR | O_TRUNC | O_CREAT, 0644);
 	}
-	else if (node->left->type == REDIR_OUT_APPEND) // APPEND OUT >>
+	else if (node->left->type == RED_APP) // APPEND OUT >>
 	{
 		safe_close(*out);
 		*out = open(node->left->cont.file, O_RDWR | O_APPEND | O_CREAT, 0644);

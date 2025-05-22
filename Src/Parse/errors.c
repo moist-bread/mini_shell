@@ -14,8 +14,8 @@ void	fake_clear_token_lst(t_token *token)
 	while (current)
 	{
 		next = current->next;
-		if (current->type == PIPE || (current->type >= REDIR_IN
-			&& current->type <= REDIR_OUT_APPEND))
+		if (current->type == PIPE || (current->type >= RED_IN
+			&& current->type <= RED_APP))
 			free(current->cont);
 		free(current);
 		current = next;

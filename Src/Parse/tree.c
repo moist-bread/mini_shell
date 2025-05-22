@@ -64,8 +64,8 @@ t_node_cont	assign_tree_cont(t_token *token)
 		cont.cmd = token->cont;
 	else if (token && token->type == LIM)
 		cont.limiter = token->cont;
-	else if (token && token->prev && (token->prev->type == REDIR_IN \
-	|| token->prev->type == REDIR_OUT || token->prev->type == REDIR_OUT_APPEND) \
+	else if (token && token->prev && (token->prev->type == RED_IN \
+	|| token->prev->type == RED_OUT || token->prev->type == RED_APP) \
 	&& token->type == ARG)
 		cont.file = token->cont;
 	else if (token && token->type == PIPE)

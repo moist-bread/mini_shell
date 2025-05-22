@@ -17,7 +17,7 @@ static int	tree_arg_len(t_token *token, t_token *temp)
 		if (temp->type == ARG)
 		{
 			if (temp->prev && temp->type == ARG \
-			&& temp->prev->type >= REDIR_IN && temp->prev->type <= REDIR_OUT_APPEND)
+			&& temp->prev->type >= RED_IN && temp->prev->type <= RED_APP)
 				i--;
 			i++;
 		}
@@ -45,7 +45,7 @@ char	**tree_alloc_args(t_token *token)
 	while (temp && temp->type != PIPE)
 	{
 		if (temp->prev && temp->type == ARG \
-			&& temp->prev->type >= REDIR_IN && temp->prev->type <= REDIR_OUT_APPEND)
+			&& temp->prev->type >= RED_IN && temp->prev->type <= RED_APP)
 			temp = temp->next;
 		if (temp && temp->type == ARG)
 			args[i++] = temp->cont;
@@ -90,9 +90,9 @@ void	if_command(t_token *tokens, t_tree_node *cmd_node)
 	temp = tokens;
 	while (temp && temp->type != PIPE)
 	{
-		if (temp && (temp->type >= REDIR_IN && temp->type <= REDIR_OUT_APPEND))
+		if (temp && (temp->type >= RED_IN && temp->type <= RED_APP))
 			if_redir(&temp, cmd_node, &last_redir);
-		else if (temp && temp->type == ARG && st_arg == false)
+		else if (temp && temp->type == ARG && st_arg == false && temp->cont != NULL)
 		{
 			// printf("Creating ARG node for: ");
 			cmd_node->right = newtreenode(assign_tree_cont(temp));
