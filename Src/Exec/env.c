@@ -28,9 +28,9 @@ void	env_built_in(t_minishell *ms, t_tree_node *node, int fd)
 }
 
 /// @brief Prints either export or env according to EXPORT_FLAG
-/// @param minishell Overarching Minishell Structure
+/// @param ms Overarching Minishell Structure
 /// @param export_flag 1 prints export, 0 prints env
-void	print_env(t_minishell minishell, int export_flag, int fd)
+void	print_env(t_minishell ms, int export_flag, int fd)
 {
 	int		i;
 	int		j;
@@ -39,9 +39,9 @@ void	print_env(t_minishell minishell, int export_flag, int fd)
 	i = -1;
 	if (export_flag)
 	{
-		temp = sort_matrix(minishell.env, (int)ft_matrixlen(minishell.env));
+		temp = sort_matrix(ms.env, (int)ft_matrixlen(ms.env));
 		if (!temp)
-			return ; // explode ??
+			return (error_msg_status("malloc", &ms.exit_status, 1));
 		while (temp[++i])
 		{
 			j = 0;
@@ -55,6 +55,6 @@ void	print_env(t_minishell minishell, int export_flag, int fd)
 		free(temp);
 	}
 	else
-		while (minishell.env[++i + minishell.env_start])
-			ft_printf_fd(fd, "%s\n", minishell.env[i + minishell.env_start]);
+		while (ms.env[++i + ms.env_start])
+			ft_printf_fd(fd, "%s\n", ms.env[i + ms.env_start]);
 }

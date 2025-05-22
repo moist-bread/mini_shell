@@ -3,7 +3,8 @@
 
 static int	export_validate_options(t_tree_node *node, int *status);
 static int	invalid_export(char *arg, int *status);
-static void	export_distribute(t_minishell *ms, char *arg, char *key);
+static void	export_distribute(t_minishell *ms, char *arg, char *key,
+				int env_idx);
 
 /// @brief Prints or Creates variables according to NODE
 /// @param ms Overarching Minishell Structure
@@ -26,9 +27,10 @@ void	export_built_in(t_minishell *ms, t_tree_node *node, int fd)
 			continue ;
 		key = get_export_key(node->right->cont.args[i]);
 		if (!key)
-			continue ; // explode ???
+			return (error_msg_status("malloc", &ms->exit_status, 1));
 		printf("key= %s\n", key);
-		export_distribute(ms, node->right->cont.args[i], key);
+		export_distribute(ms, node->right->cont.args[i], key,
+			get_env_idx(ms->env, key));
 		if (key)
 			free(key);
 	}
@@ -87,13 +89,12 @@ static int	invalid_export(char *arg, int *status)
 /// @param ms Overarching Minishell Structure
 /// @param arg Current argument being exported
 /// @param key Key name present in ARG
-static void	export_distribute(t_minishell *ms, char *arg, char *key)
+static void	export_distribute(t_minishell *ms, char *arg, char *key,
+		int env_idx)
 {
-	int	env_idx;
 	int	env_len;
 	int	key_len;
 
-	env_idx = get_env_idx(ms->env, key);
 	key_len = ft_strlen(key);
 	if (env_idx == -1)
 	{
@@ -116,12 +117,14 @@ static void	export_distribute(t_minishell *ms, char *arg, char *key)
 	else if (arg[key_len - 1] == '+')
 	{
 		printf("key is present, export append\n");
-		export_append(ms, env_idx, arg);
+		return (export_append(ms, env_idx, arg));
 	}
 	else if (ft_strcmp(ms->env[env_idx], arg) && ft_strchr(arg, '='))
 	{
 		printf("get env \"%s\"\n", ms->env[env_idx]);
 		printf("key is present, different value\n");
-		replace_env_value(ms, key, get_export_value(arg), env_idx);
+		if (replace_env_value(ms, key, get_export_value(arg), env_idx) == -1)
+			return (error_msg_status("malloc", &ms->exit_status, 1));
 	}
+	ms->exit_status = 0;
 }

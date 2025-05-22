@@ -45,17 +45,17 @@ void	assign_pipe_fds(t_minishell ms, t_pipe_data *pdata, int *redir_fd,
 }
 
 /// @brief Searches for the true path to the CMD program
-/// @param minishell Overarching Minishell Structure
+/// @param ms Overarching Minishell Structure
 /// @param cmd Command for which the path is being searched
 /// @return String with the commands corresponding path
-char	*get_path(t_minishell minishell, char *cmd)
+char	*get_path(t_minishell ms, char *cmd)
 {
 	char	**path;
 	char	*joined;
 	char	*bar;
 	int		i;
 
-	path = ft_split(get_env("PATH", minishell.env), ':');
+	path = ft_split(get_env("PATH", ms.env), ':');
 	if (!path)
 		return (ft_strdup(cmd));
 	i = -1;
@@ -63,11 +63,11 @@ char	*get_path(t_minishell minishell, char *cmd)
 	{
 		bar = ft_strjoin(path[i], "/");
 		if (!bar)
-			minishell_clean(minishell, 1); // fail alloc ABORT
+			return (perror("malloc"), NULL);
 		joined = ft_strjoin(bar, cmd);
 		free(bar);
 		if (!joined)
-			minishell_clean(minishell, 1); // fail alloc ABORT
+			return (perror("malloc"), NULL);
 		if (access(joined, F_OK) == 0)
 			return (free_split(path), joined);
 		free(joined);
@@ -87,8 +87,13 @@ int	error_code_for_exec(char *path)
 	}
 	else if (access(path, X_OK) < 0)
 	{
-		ft_printf_fd(2, "%s: Permission denied\n", path);
-		return (126); // algo de errado não está certo
+		if (ft_strchr(path, '/'))
+		{
+			ft_printf_fd(2, "%s: Permission denied\n", path);
+			return (126);
+		}
+		ft_printf_fd(2, "%s: command not found\n", path);
+		return (127);
 	}
 	return (0);
 }

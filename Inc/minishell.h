@@ -268,7 +268,7 @@ void		export_built_in(t_minishell *ms, t_tree_node *node, int fd);
 // EXPORT UTILS
 
 void		export_append(t_minishell *ms, int idx, char *new);
-void		replace_env_value(t_minishell *ms, char *key, char *new, int idx);
+int		replace_env_value(t_minishell *ms, char *key, char *new, int idx);
 void		move_env_var(t_minishell *ms, int *old_idx, int new_idx);
 
 // GET ENV

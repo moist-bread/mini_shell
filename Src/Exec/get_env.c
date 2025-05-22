@@ -55,6 +55,8 @@ char	*get_export_key(char *arg)
 	if (arg[i] == '=' || arg[i] == '+')
 	{
 		name = ft_strndup(arg, i + 1);
+		if (!name)
+			return (NULL);
 		if (arg[i] == '+')
 			name[i] = '=';
 		return (name);

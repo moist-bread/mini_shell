@@ -2,6 +2,7 @@
 #include "../../Inc/minishell.h"
 
 static int	invalid_cd(t_tree_node *node, int *status);
+static void	cd_oldpwd_pwd(t_minishell *ms);
 
 /// @brief Changes directory according to NODE
 /// @param ms Overarching Minishell Structure
@@ -9,7 +10,6 @@ static int	invalid_cd(t_tree_node *node, int *status);
 void	cd_built_in(t_minishell *ms, t_tree_node *node)
 {
 	char	*path;
-	char	*cur;
 
 	printf(YEL "\nEntering cd built in" DEF "\n\n");
 	if (node->right && invalid_cd(node->right, &ms->exit_status))
@@ -24,23 +24,10 @@ void	cd_built_in(t_minishell *ms, t_tree_node *node)
 		if (!path)
 			ft_printf_fd(2, "HOME not set\n");
 		else
-			perror(path);
-		ms->exit_status = 1;
+			error_msg_status(path, &ms->exit_status, 1);
 	}
 	else
-	{
-		printf("old env oldpwd:\t%s\n", get_env("OLDPWD=", ms->env));
-		printf("old env pwd:\t%s\n", get_env("PWD=", ms->env));
-		replace_env_value(ms, "OLDPWD=", get_env("PWD=", ms->env),
-			get_env_idx(ms->env, "OLDPWD="));
-		cur = getcwd(NULL, 0);
-		replace_env_value(ms, "PWD=", cur, get_env_idx(&ms->env[ms->env_start],
-				"PWD="));
-		free(cur);
-		printf("new env oldpwd:\t%s\n", get_env("OLDPWD=", ms->env));
-		printf("new env pwd:\t%s\n", get_env("PWD=", ms->env));
-		ms->exit_status = 0;
-	}
+		cd_oldpwd_pwd(ms);
 }
 
 /// @brief Checks for invalid options or argument amount for cd built in
@@ -64,18 +51,49 @@ static int	invalid_cd(t_tree_node *node, int *status)
 	return (0);
 }
 
+/// @brief 
+/// @param ms 
+static void	cd_oldpwd_pwd(t_minishell *ms)
+{
+	int		old_pi;
+	int		env_len;
+	char	*cur;
+
+	printf("old env oldpwd:\t%s\n", get_env("OLDPWD=", ms->env));
+	printf("old env pwd:\t%s\n", get_env("PWD=", ms->env));
+	old_pi = get_env_idx(ms->env, "OLDPWD=");
+	if (old_pi == -1)
+	{
+		env_len = (int)ft_matrixlen(ms->env);
+		ms->env = matrix_add_to_index(ms->env, "OLDPWD=", env_len, env_len);
+		old_pi = env_len;
+	}
+	if (replace_env_value(ms, "OLDPWD=", get_env("PWD=", ms->env), old_pi) ==
+		-1)
+		return (error_msg_status("malloc", &ms->exit_status, 1));
+	cur = getcwd(NULL, 0);
+	if (replace_env_value(ms, "PWD=", cur, get_env_idx(&ms->env[ms->env_start],
+				"PWD=")) == -1)
+		return (free(cur), error_msg_status("malloc", &ms->exit_status, 1));
+	free(cur);
+	printf("new env oldpwd:\t%s\n", get_env("OLDPWD=", ms->env));
+	printf("new env pwd:\t%s\n", get_env("PWD=", ms->env));
+	ms->exit_status = 0;
+}
+
 /// @brief Print name of current/working directory
 /// @param ms Overarching Minishell Structure
 /// @param node Current pwd node to be executed
 void	pwd_built_in(t_minishell *ms, t_tree_node *node, int fd)
 {
-	char *pwd;
+	char	*pwd;
 
 	printf(YEL "\nEntering pwd built in" DEF "\n\n");
 	if (node->right && *node->right->cont.args[0] == '-'
 		&& node->right->cont.args[0][1])
 	{
-		ft_printf_fd(2, "pwd: -%c: invalid option\n", node->right->cont.args[0][1]);
+		ft_printf_fd(2, "pwd: -%c: invalid option\n",
+			node->right->cont.args[0][1]);
 		ft_printf_fd(2, "pwd: usage: pwd\n");
 		ms->exit_status = 2;
 	}

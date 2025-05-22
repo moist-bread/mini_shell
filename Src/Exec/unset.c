@@ -46,7 +46,7 @@ void	remove_env_var(t_minishell *ms, size_t idx, size_t len)
 		return ;
 	new = ft_calloc(len, sizeof(char *));
 	if (!new)
-		return ; // explode
+		return (error_msg_status("malloc", &ms->exit_status, 1));
 	if ((int)idx < ms->env_start)
 		ms->env_start--;
 	i = -1;

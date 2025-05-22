@@ -19,9 +19,9 @@ void	multi_here_doc_handler(t_minishell ms, t_pipe_data *pdata)
 	{
 		single_here_doc_handler(ms, pin, &pdata->here_docs[idx]);
 		if (pdata->here_docs[idx] == -1)
-			minishell_clean(ms, 130);
-		if (pdata->here_docs[idx] == -2)
 			minishell_clean(ms, 1);
+		if (pdata->here_docs[idx] == -2)
+			minishell_clean(ms, 130);
 		pin = pin->right;
 	}
 }
@@ -63,11 +63,11 @@ static int	here_doc_redir(t_minishell minishell, char *limiter)
 
 	exit_status = 0;
 	if (pipe(here_pipe) == -1)
-		return(perror("pipe"), -2);
+		return(perror("pipe"), -1);
 	init_sigact(&minishell, 'I');
 	id = fork();
 	if (id < 0)
-		return(perror("fork"), -2);
+		return(perror("fork"), -1);
 	if (id == 0)
 	{
 		init_sigact(&minishell, 'H');
@@ -78,7 +78,7 @@ static int	here_doc_redir(t_minishell minishell, char *limiter)
 	init_sigact(&minishell, 'P');
 	close(here_pipe[1]);
 	if (exit_status != 0)
-		return(close(here_pipe[0]), -1);
+		return(close(here_pipe[0]), -2);
 	return (here_pipe[0]);
 }
 
@@ -96,7 +96,7 @@ static void	here_doc_readline(t_minishell ms, char *limiter, int fd)
 		{
 			if (!ft_strcmp(line, limiter))
 				break ;
-			line = a_minha_funcao(ms, line, limiter);
+			line = a_minha_funcao(ms, line, limiter); // SAFE GUARD THIS
 			ft_printf_fd(fd, "%s\n", line);
 			free(line);
 		}
@@ -110,5 +110,4 @@ static void	here_doc_readline(t_minishell ms, char *limiter, int fd)
 	}
 	if (line)
 		free(line);
-	(void)ms;
 }

@@ -35,6 +35,7 @@ void	pipe_process(t_minishell *minishell, t_tree_node *node)
 void	error_msg_status(char *message, int *status, int value)
 {
 	*status = value;
+	printf("valor: %d\n", value);
 	if (message)
 		perror(message);
 }
