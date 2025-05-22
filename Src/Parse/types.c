@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:20:38 by andcarva          #+#    #+#             */
-/*   Updated: 2025/05/22 18:23:52 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/05/22 18:34:35 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ void	assigns_built_in(t_token *token)
 /// @param token Node of the list of tokens
 void	assigns_types(t_token *token, bool exp)
 {
+	if (token->cont == NULL)
+		return ;
 	if (exp == false)
 	{
 		if (ft_strncmp("|", token->cont, 2) == 0)
