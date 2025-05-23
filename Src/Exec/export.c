@@ -127,5 +127,4 @@ static void	export_distribute(t_minishell *ms, char *arg, char *key,
 		if (replace_env_value(ms, key, get_export_value(arg), env_idx) == -1)
 			return (error_msg_status("malloc", &ms->exit_status, 1));
 	}
-	ms->exit_status = 0;
 }

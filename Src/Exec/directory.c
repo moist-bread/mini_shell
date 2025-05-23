@@ -24,7 +24,8 @@ void	cd_built_in(t_minishell *ms, t_tree_node *node)
 		if (!path)
 			ft_printf_fd(2, "HOME not set\n");
 		else
-			error_msg_status(path, &ms->exit_status, 1);
+			perror(path);
+		ms->exit_status = 1;
 	}
 	else
 		cd_update_pwd(ms);
