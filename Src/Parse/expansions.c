@@ -1,12 +1,6 @@
 
 #include "../../Inc/minishell.h"
 
-// case 1 -- found quotes: correr pelo que esta dentro das quotes, e fazer expansao
-// case 2 -- found pelica: correr e copiar
-// case 3 -- found $: fazer expansao
-// case 4 -- found other: copiar
-// case 5 -- $?
-
 /// @brief Processes the expansion of the string passed
 /// @param input The string passed
 /// @param env The enviorment

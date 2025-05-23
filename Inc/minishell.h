@@ -65,21 +65,6 @@
 // 		// line = atuafuncao(line, limiter);
 //	Take of exit in syntax error
 
-// PROBLEMS:
-// if > $noexist
-// error:
-// redir node loop_
-// ==35927== Syscall param openat(filename) points to unaddressable byte(s)
-// ==35927==    at 0x49D953B: open (open64.c:41)
-// ==35927==    by 0x402568: redir_handler (redir_handler.c:42)
-// ==35927==    by 0x40248C: cmd_redir_executer (redir_handler.c:20)
-// ==35927==    by 0x40168A: command_process (distributer.c:31)
-// ==35927==    by 0x401609: master_distributer (distributer.c:15)
-// ==35927==    by 0x401376: main (minishell_main.c:39)
-// ==35927==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
-// ==35927== 
-// Bad address
-
 // -------------------------------------------------------------------------------------------------|
 
 // LIBS
