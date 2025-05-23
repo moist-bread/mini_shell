@@ -9,14 +9,12 @@
 char	**input_expander(char *input, t_minishell ms)
 {
 	char	*expanded;
-	char	*quoted;
 	int		is_quote;
 	char	**final_result;
 
 	is_quote = 1;
 	expanded = process_quote_expansions(input, ms, &is_quote);
-	quoted = quote_limiter(expanded);
-	final_result = separator_3000(quoted, is_quote);
+	final_result = separator_3000(expanded, is_quote);
 	if (!final_result)
 		return (NULL);
 	return (final_result);
@@ -79,11 +77,16 @@ char	*expansion(char *input, char **env)
 char	**separator_3000(char *expanded, int is_quote)
 {
 	char 	**final_result;
+	char	*quoted;
 
-	printf("is_quote: %d\n", is_quote);
 	final_result = NULL;
+	quoted = NULL;
 	if (is_quote == 0)
-		final_result = separate(expanded);
+	{
+		quoted = quote_limiter(expanded);
+		final_result = separate(quoted);
+		free(quoted);
+	}
 	else
 	{
 		final_result = ft_calloc(sizeof(char *), 2);
@@ -91,6 +94,7 @@ char	**separator_3000(char *expanded, int is_quote)
 			return (free(expanded), NULL);
 		final_result[0] = quote_remover(expanded);
 		final_result[1] = NULL;
+		printf("final_result: %s\n", final_result[0] );
 	}
 	free(expanded);
 	return (final_result);
