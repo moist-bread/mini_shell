@@ -9,15 +9,20 @@
 char	*process_quote_expansions(char *input, t_minishell ms, int *is_quote)
 {	
 	char	*result;
+	char	*checked;
 	size_t	result_len;
 
 	if (!input)
 		return (ft_strdup(""));
-	result_len = the_length(input, ms);
+	checked = check_expansion(input);
+	if (!checked)
+		return (NULL);
+	result_len = the_length(checked, ms);
 	result = ft_calloc(sizeof(char), result_len + 1);
 	if (!result)
-		return (NULL);
-	the_expansion(input, ms, is_quote, result);
+		return (perror("malloc"), NULL);
+	the_expansion(checked, ms, is_quote, result);
+	free(checked);
 	return (result);
 }
 

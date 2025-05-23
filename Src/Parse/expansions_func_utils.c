@@ -88,7 +88,6 @@ char	*quote_limiter(char	*exp)
 			quoted[j++] = exp[i];
 		i++;
 	}
-	free(exp);
 	return (quoted);
 }
 

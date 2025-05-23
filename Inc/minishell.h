@@ -176,6 +176,8 @@ char		*space_put(char *input, int len);
 bool		check_quotes(char *input);
 void		master_check(t_token **token);
 void		syntax_clear(t_token *token);
+char		*check_expansion(char *input);
+size_t		checked_len(char *input);
 
 // ERRORS
 
