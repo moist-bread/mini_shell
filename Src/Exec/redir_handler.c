@@ -29,19 +29,19 @@ void	redir_handler(t_tree_node *node, int *in, int *out)
 {
 	if (!node->left) // no more redir
 		return ;
-	if (node->left->type == REDIR_IN) // IN <
+	if (node->left->type == RED_IN) // IN <
 	{
 		if (*in > 2)
 			close(*in);
 		*in = open(node->left->cont.file, O_RDONLY);
 	}
-	else if (node->left->type == REDIR_OUT) // OUT >
+	else if (node->left->type == RED_OUT) // OUT >
 	{
 		if (*out > 2)
 			close(*out);
 		*out = open(node->left->cont.file, O_RDWR | O_TRUNC | O_CREAT, 0644);
 	}
-	else if (node->left->type == REDIR_OUT_APPEND) // APPEND OUT >>
+	else if (node->left->type == RED_APP) // APPEND OUT >>
 	{
 		if (*out > 2)
 			close(*out);

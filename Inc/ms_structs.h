@@ -25,10 +25,10 @@ typedef struct s_pipe_data
 /// @param ARG Versatile arguments
 /// @param PIPE |
 /// @param LIM Arg after here_doc
-/// @param REDIR_IN <
-/// @param REDIR_HERE_DOC <<
-/// @param REDIR_OUT >
-/// @param REDIR_OUT_APPEND >>
+/// @param RED_IN <
+/// @param RED_HD <<
+/// @param RED_OUT >
+/// @param RED_APP >>
 /// @param BUILT_IN echo cd pwd export unset env exit
 typedef enum s_node_type
 {
@@ -36,10 +36,10 @@ typedef enum s_node_type
 	ARG,
 	PIPE,
 	LIM,
-	REDIR_IN,
-	REDIR_HERE_DOC,
-	REDIR_OUT,
-	REDIR_OUT_APPEND,
+	RED_IN,
+	RED_HD,
+	RED_OUT,
+	RED_APP,
 	BUILT_IN,
 }						t_node_type;
 
@@ -96,6 +96,7 @@ typedef struct s_minishell
 	char				**env;
 	int					env_start;
 	int					exit_status;
+	bool				quote;
 }						t_minishell;
 
 #endif // MS_STRUCTS_H

@@ -4,22 +4,22 @@
 static	char	*process_expander(char *line, t_minishell ms);
 static	void	here_doc_expansion(char *result, char *input, t_minishell ms);
 
-char	*a_minha_funcao(t_minishell ms, char *line, char *limiter)
+char	*my_function(t_minishell ms, char *line, char *limiter)
 {
 	char	*expanded;
 	int		i;
 
+	(void)limiter;
 	i = 0;
 	while (line[i])
 	{
-		if (ft_strchr(line, '$') && (!ft_strchr(limiter, '\"') || !ft_strchr(limiter, '\'')))
+		if (ft_strchr(line, '$') && ms.quote == false)
 		{
 			expanded = process_expander(line, ms);
 			if (!expanded)
-				return (NULL);
+				return (free(line), NULL);
 			return (free(line), expanded);
 		}
-
 		else
 			i++;
 	}
@@ -67,4 +67,19 @@ static	void	here_doc_expansion(char *result, char *input, t_minishell ms)
 		else
 			result[i[1]++] = input[i[0]++];
 	}
+}
+
+void	expansion_exit_status(char *result, int *i, char *exit_status)
+{
+	int	n;
+
+	n = 0;
+	i[0] += 2;
+	while (exit_status[n])
+	{
+		result[i[1]] = exit_status[n];
+		n++;
+		i[1]++;
+	}
+	free(exit_status);
 }

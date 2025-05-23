@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   types.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/22 18:20:38 by andcarva          #+#    #+#             */
+/*   Updated: 2025/05/22 18:34:35 by andcarva         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 
 
 #include "../../Inc/minishell.h"
@@ -13,8 +25,8 @@ void	assign_type_token(t_token *token, bool exp)
 	temp = token;
 	while (temp)
 	{
-		if (temp->type != PIPE && temp->type < REDIR_IN 
-			&& temp->type > REDIR_OUT_APPEND && exp == true)
+		if (temp->type != PIPE && temp->type < RED_IN 
+			&& temp->type > RED_APP && exp == true)
 			assigns_types(temp, exp);
 		else if (exp == false)
 			assigns_types(temp, exp);
@@ -49,21 +61,23 @@ void	assigns_built_in(t_token *token)
 /// @param token Node of the list of tokens
 void	assigns_types(t_token *token, bool exp)
 {
+	if (token->cont == NULL)
+		return ;
 	if (exp == false)
 	{
 		if (ft_strncmp("|", token->cont, 2) == 0)
 			token->type = PIPE;
 		else if (ft_strncmp("<", token->cont, 2) == 0)
-			token->type = REDIR_IN;
+			token->type = RED_IN;
 		else if (ft_strncmp(">", token->cont, 2) == 0)
-			token->type = REDIR_OUT;
+			token->type = RED_OUT;
 		else if (ft_strncmp("<<", token->cont, 3) == 0)
-			token->type = REDIR_HERE_DOC;
+			token->type = RED_HD;
 		else if (ft_strncmp(">>", token->cont, 3) == 0)
-			token->type = REDIR_OUT_APPEND;
+			token->type = RED_APP;
 	}
 	if (exp == true)
-		token->type = ARG;
+		is_limtiter_or_arg(&token);
 }
 
 /// @brief Checks if the token received CMD
@@ -79,7 +93,7 @@ void	assigns_cmd(t_token *head, bool exp)
 		its_cmd = false;
 		while (temp && temp->type != PIPE)
 		{
-			if ((temp->type == REDIR_HERE_DOC || is_token(temp)) && temp->next)
+			if ((temp->type == RED_HD || is_token(temp) || temp->cont == NULL))
 			{
 				is_limtiter_or_arg(&temp);
 				assigns_types(temp, exp);
@@ -110,13 +124,13 @@ void	assign_name(int type)
 	else if (type == 3)
 		printf("Type: %s", "LIM");
 	else if (type == 4)
-		printf("Type: %s", "REDIR_IN");
+		printf("Type: %s", "RED_IN");
 	else if (type == 5)
-		printf("Type: %s", "REDIR_HERE_DOC");
+		printf("Type: %s", "RED_HD");
 	else if (type == 6)
-		printf("Type: %s", "REDIR_OUT");
+		printf("Type: %s", "RED_OUT");
 	else if (type == 7)
-		printf("Type: %s", "REDIR_OUT_APPEND");
+		printf("Type: %s", "RED_APP");
 	else if (type == 8)
 		printf("Type: %s", "BUILT_IN");
 }

@@ -1,6 +1,9 @@
 
 #include "../../Inc/minishell.h"
 
+static	int	quote_count(char *exp);
+static	void	quotes_quoted(char *quoted, int *j, char put, char between);
+
 /// @brief Removes the quotes of the token
 /// @param s The expanded string
 /// @return The string without quotes
@@ -64,24 +67,52 @@ size_t	quote_conter_len(char *s)
 	return (len);
 }
 
-void	len_exit_status(char *exit_status, size_t *len, int *i)
+char	*quote_limiter(char	*exp)
 {
-	*len += ft_strlen(exit_status);
-	*i += 2;
-	free(exit_status);
+	char	*quoted;
+	int		i;
+	int		j;
+
+	j = 0;
+	i = 0;
+	quoted = ft_calloc(sizeof(char), ft_strlen(exp) + quote_count(exp) + 1);
+	if (!quoted)
+		return (NULL);
+	while (exp[i])
+	{
+		if (exp[i] == '\'')
+			quotes_quoted(quoted, &j, '\'', '\"');
+		else if (exp[i] == '\"')
+			quotes_quoted(quoted, &j, '\"', '\'');
+		else
+			quoted[j++] = exp[i];
+		i++;
+	}
+	free(exp);
+	return (quoted);
 }
 
-void	expansion_exit_status(char *result, int *i, char *exit_status)
+static	void	quotes_quoted(char *quoted, int *j, char put, char between)
 {
-	int	n;
+	quoted[(*j)++] = between;
+	quoted[(*j)++] = put;
+	quoted[(*j)++] = between;
+}
 
-	n = 0;
-	i[0] += 2;
-	while (exit_status[n])
+static	int	quote_count(char *exp)
+{
+	int		i;
+	int		len;
+
+	i = 0;
+	len = 0;
+	while (exp[i])
 	{
-		result[i[1]] = exit_status[n];
-		n++;
-		i[1]++;
+		if (exp[i] == '\'' || exp[i] == '\"')
+			len++;
+		i++;
 	}
-	free(exit_status);
+	if (len)
+		len *= 2;
+	return (len);
 }
