@@ -45,7 +45,7 @@ char	*check_expansion(char *input)
 	{
 		while (input[i] && (input[i] == '\"' || input[i] == '\''))
 			ft_copy(input, checked, &i, &j);
-		if (input[i] == '$' && !ft_isalpha(input[i + 1]) && input[i + 1] != '_')
+		if (input[i] == '$' && !ft_isalpha(input[i + 1]) && input[i + 1] != '_' && input[i + 1] != '?')
 			i++;
 		else if (input[i])
 			checked[j++] = input[i++];
@@ -70,7 +70,7 @@ size_t	checked_len(char *input)
 				i++;
 			i++;
 		}
-		if (input[i] == '$' && !ft_isalpha(input[i + 1]) && input[i + 1] != '_')
+		if (input[i] == '$' && !ft_isalpha(input[i + 1]) && input[i + 1] != '_' && input[i + 1] != '?')
 			len += 1;
 		if (input[i])
 			i++;
