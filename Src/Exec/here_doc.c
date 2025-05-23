@@ -19,9 +19,9 @@ void	multi_here_doc_handler(t_minishell ms, t_pipe_data *pdata)
 	{
 		single_here_doc_handler(ms, pin, &pdata->here_docs[idx]);
 		if (pdata->here_docs[idx] == -1)
-			minishell_clean(ms, 130);
-		if (pdata->here_docs[idx] == -2)
 			minishell_clean(ms, 1);
+		if (pdata->here_docs[idx] == -2)
+			minishell_clean(ms, 130);
 		pin = pin->right;
 	}
 }
@@ -43,8 +43,7 @@ void	single_here_doc_handler(t_minishell ms, t_tree_node *pin, int *in)
 			*in = here_doc_redir(ms, runner->cont.limiter);
 		else if (runner->type == RED_IN)
 		{
-			if (*in > 2)
-				close(*in);
+			safe_close(*in);
 			*in = 0;
 		}
 		runner = runner->left;
@@ -54,7 +53,7 @@ void	single_here_doc_handler(t_minishell ms, t_tree_node *pin, int *in)
 /// @brief Opens a pipe and forks for the Here Doc to take place
 /// @param minishell Overarching Minishell Structure
 /// @param limiter sentence that stops the here_doc
-/// @return Read end fd of opened pipe
+/// @return Read end fd of opened pipe, -1 on error, -2 on signal end
 static int	here_doc_redir(t_minishell minishell, char *limiter)
 {
 	int	here_pipe[2];
@@ -63,11 +62,11 @@ static int	here_doc_redir(t_minishell minishell, char *limiter)
 
 	exit_status = 0;
 	if (pipe(here_pipe) == -1)
-		return(perror("pipe"), -2);
+		return (perror("pipe"), -1);
 	init_sigact(&minishell, 'I');
 	id = fork();
 	if (id < 0)
-		return(perror("fork"), -2);
+		return (perror("fork"), -1);
 	if (id == 0)
 	{
 		init_sigact(&minishell, 'H');
@@ -78,7 +77,7 @@ static int	here_doc_redir(t_minishell minishell, char *limiter)
 	init_sigact(&minishell, 'P');
 	close(here_pipe[1]);
 	if (exit_status != 0)
-		return(close(here_pipe[0]), -1);
+		return (close(here_pipe[0]), -2);
 	return (here_pipe[0]);
 }
 
@@ -102,13 +101,10 @@ static void	here_doc_readline(t_minishell ms, char *limiter, int fd)
 		}
 		else // CTRL D CASE
 		{
-			ft_printf_fd(2,
-				"warning: here-document delimited by end-of-file (wanted `%s')\n",
-				limiter);
+			ft_printf_fd(2, HERE_EOF "(wanted `%s')\n", limiter);
 			break ;
 		}
 	}
 	if (line)
 		free(line);
-	(void)ms;
 }

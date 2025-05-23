@@ -12,7 +12,7 @@ void	minishell_struct_init(t_minishell *minis, char **env)
 	if (!minis->env)
 	{
 		ft_printf_fd(2, "malloc: failed memory allocation on initialization\n");
-		exit (1);
+		exit(1);
 	}
 	minis->env_start = 0;
 	minis->exit_status = 0;
@@ -68,4 +68,15 @@ void	master_close(void)
 		close(i);
 		i++;
 	}
+}
+
+/// @brief Writes perror with MESSAGE and changed STATUS to VALUE
+/// @param message to be sent with perror(), when NULL no message is written
+/// @param status pointer to the exit status to alter
+/// @param value value to alter it to
+void	error_msg_status(char *message, int *status, int value)
+{
+	*status = value;
+	if (message)
+		perror(message);
 }

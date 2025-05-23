@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 13:07:09 by andcarva          #+#    #+#             */
-/*   Updated: 2025/04/03 15:09:19 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/05/22 12:56:05 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,8 @@ char	**ft_split(char const *s, char c)
 	char	**split;
 	size_t	i;
 
+	if (!s)
+		return (NULL);
 	i = 0;
 	split = malloc(sizeof(char *) * (count_str(s, c) + 1));
 	if (!split)

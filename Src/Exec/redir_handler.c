@@ -1,7 +1,10 @@
 
 #include "../../Inc/minishell.h"
 
-/// @brief Opens all redirections associated with NODE and stores them in IN and OUT
+static void	ambiguous_redir_verify(t_tree_node *node, int *in, int *out);
+
+/// @brief Opens all redirections associated with NODE and
+/// stores them in IN and OUT
 /// @param ms Overarching Minishell Structure
 /// @param node Node from which to check for redirections
 /// @param in Variable to store the resulting infile fd
@@ -13,11 +16,11 @@ int	cmd_redir_executer(t_minishell *ms, t_tree_node *node, int *in, int *out)
 
 	hd = 0;
 	single_here_doc_handler(*ms, node, &hd);
-	if (hd == -1)
+	if (hd < 0)
 		return (-1);
 	*in = 0;
 	*out = 1;
-	redir_handler(node, in, out);
+	redir_handler(ms, node, in, out);
 	return (successful_redir_check(in, out, hd));
 }
 
@@ -25,49 +28,83 @@ int	cmd_redir_executer(t_minishell *ms, t_tree_node *node, int *in, int *out)
 /// @param node Current tree node being checked for redirections
 /// @param in Var where to store input redirections
 /// @param out Var where to store output redirections
-void	redir_handler(t_tree_node *node, int *in, int *out)
+void	redir_handler(t_minishell *ms, t_tree_node *node, int *in, int *out)
 {
-	if (!node->left) // no more redir
-		return ;
+	if (!node->left || !node->left->cont.file) // no redir || empty redir
+		return (ambiguous_redir_verify(node, in, out));
 	if (node->left->type == RED_IN) // IN <
 	{
-		if (*in > 2)
-			close(*in);
+		safe_close(*in);
 		*in = open(node->left->cont.file, O_RDONLY);
 	}
 	else if (node->left->type == RED_OUT) // OUT >
 	{
-		if (*out > 2)
-			close(*out);
+		safe_close(*out);
 		*out = open(node->left->cont.file, O_RDWR | O_TRUNC | O_CREAT, 0644);
 	}
 	else if (node->left->type == RED_APP) // APPEND OUT >>
 	{
-		if (*out > 2)
-			close(*out);
+		safe_close(*out);
 		*out = open(node->left->cont.file, O_RDWR | O_APPEND | O_CREAT, 0644);
 	}
 	if (*in == -1 || *out == -1)
 		return (perror(node->left->cont.file));
 	if (node->left->left) // more redir
-		redir_handler(node->left, in, out);
+		redir_handler(ms, node->left, in, out);
 }
 
+/// @brief Checks for ambiguous (null) redirections and replaces the fd with -1
+/// @param node Current tree node being checked for redirections
+/// @param in Var where to store input redirections
+/// @param out Var where to store output redirections
+static void	ambiguous_redir_verify(t_tree_node *node, int *in, int *out)
+{
+	if (!node->left)
+		return ;
+	ft_printf_fd(2, "ambiguous redirect\n");
+	if (node->left->type == REDIR_IN)
+	{
+		safe_close(*in);
+		*in = -1;
+	}
+	else if (node->left->type == REDIR_OUT)
+	{
+		safe_close(*out);
+		*out = -1;
+	}
+	else if (node->left->type == REDIR_OUT_APPEND)
+	{
+		safe_close(*out);
+		*out = -1;
+	}
+}
+
+/// @brief Checks for failure in opened redirs and
+/// replaces IN with HD when needed
+/// @param in Var where the input redirection is stored
+/// @param out Var where the output redirection is stored
+/// @param hd Var where the here doc redirection is stored
+/// @return 0 on sucess, -1 when there was a failure in opening IN or OUT
 int	successful_redir_check(int *in, int *out, int hd)
 {
 	if (*in == -1 || *out == -1)
 	{
-		if (*in > 2)
-			close(*in);
-		else if (*out > 2)
-			close(*out);
+		safe_close(*in);
+		safe_close(*out);
 		return (-1);
 	}
 	if (hd > 2)
 	{
-		if (*in > 2)
-			close(*in);
+		safe_close(*in);
 		*in = hd;
 	}
 	return (0);
+}
+
+/// @brief Closes FD if it is bigger than 2
+/// @param fd File descriptor to close
+void	safe_close(int fd)
+{
+	if (fd > 2)
+		close(fd);
 }

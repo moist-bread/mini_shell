@@ -39,7 +39,6 @@ static int	echo_validate_options(char *arg)
 
 	if (*arg == '-')
 	{
-		printf("verifying echo option\n");
 		i = 0;
 		while (arg[++i] == 'n')
 			;

@@ -19,7 +19,7 @@ void	export_append(t_minishell *ms, int idx, char *new)
 	append = ft_calloc(ft_strlen(ms->env[idx]) + ft_strlen(&new[i + 1]) + 1,
 			sizeof(char));
 	if (!append)
-		return ; // explode
+		return (error_msg_status("malloc", &ms->exit_status, 1));
 	j = ft_strlcpy(append, ms->env[idx], ft_strlen(ms->env[idx]) + 1);
 	printf("original: %s\n", append);
 	i = ft_strlcpy(&append[j], &new[i + 1], ft_strlen(&new[i]));
@@ -28,6 +28,7 @@ void	export_append(t_minishell *ms, int idx, char *new)
 		move_env_var(ms, &idx, (int)ft_matrixlen(ms->env) - 1);
 	free(ms->env[idx]);
 	ms->env[idx] = append;
+	ms->exit_status = 0;
 }
 
 /// @brief Replaces the old value at ms->env[IDX] with the NEW value
@@ -35,7 +36,7 @@ void	export_append(t_minishell *ms, int idx, char *new)
 /// @param key Name of variable to be replaced
 /// @param new The new Value to replace it with
 /// @param idx  Index of the existing variable
-void	replace_env_value(t_minishell *ms, char *key, char *new, int idx)
+int	replace_env_value(t_minishell *ms, char *key, char *new, int idx)
 {
 	int		j;
 	int		key_len;
@@ -43,13 +44,12 @@ void	replace_env_value(t_minishell *ms, char *key, char *new, int idx)
 	char	*new_var;
 
 	if (!ms->env || !*key || !new || idx < 0)
-		return ; // explode
+		return (-1);
 	key_len = env_elem_len(key, 1);
 	new_val_len = ft_strlen(new) + 2;
 	new_var = ft_calloc(key_len + new_val_len, sizeof(char));
 	if (!new_var)
-		return ; // explode
-	// printf("old var: %s\nnew val: %s\n", ms->env[idx], new);
+		return (-1);
 	j = ft_strlcpy(new_var, key, key_len + 1);
 	new_var[j - 1] = '=';
 	printf("copied key: %s\n", new_var);
@@ -59,6 +59,7 @@ void	replace_env_value(t_minishell *ms, char *key, char *new, int idx)
 		move_env_var(ms, &idx, (int)ft_matrixlen(ms->env) - 1);
 	free(ms->env[idx]);
 	ms->env[idx] = new_var;
+	return (0);
 }
 
 /// @brief Moves env and alters the env_start according to OLD_IDX and NEW_IDX
@@ -77,16 +78,16 @@ void	move_env_var(t_minishell *ms, int *old_idx, int new_idx)
 		ms->env_start++;
 	temp = ms->env[*old_idx];
 	if (*old_idx < new_idx)
-		while (ms->env[*old_idx] && *old_idx < new_idx)
-		{
-			ms->env[*old_idx] = ms->env[*old_idx + 1];
-			(*old_idx)++;
-		}
+	{
+		while (ms->env[(*old_idx)++] && *old_idx <= new_idx)
+			ms->env[*old_idx - 1] = ms->env[*old_idx];
+		(*old_idx)--;
+	}
 	else
-		while (ms->env[*old_idx] && *old_idx > new_idx)
-		{
-			ms->env[*old_idx] = ms->env[*old_idx - 1];
-			(*old_idx)--;
-		}
+	{
+		while (ms->env[(*old_idx)--] && *old_idx >= new_idx)
+			ms->env[*old_idx + 1] = ms->env[*old_idx];
+		(*old_idx)++;
+	}
 	ms->env[*old_idx] = temp;
 }
