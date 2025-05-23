@@ -146,7 +146,7 @@ char		**separate(char *expanded);
 char		*quote_remover(char *s);
 char		*quote_limiter(char	*exp);
 size_t		quote_conter_len(char *s);
-char	*my_function(t_minishell ms, char *line, char *limiter);
+char		*my_function(t_minishell ms, char *line, char *limiter);
 
 // ASSIGN TYPES
 
