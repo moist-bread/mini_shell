@@ -95,8 +95,7 @@
 # define DEF "\e[0m"
 
 // messages
-# define HERE_EOF "warning: here-document delimited by end-of-file "
-
+# define M_HERE_EOF "warning: here-document delimited by end-of-file "
 
 // ------------------------PARSING----------------------------
 
@@ -152,9 +151,9 @@ void		len_exit_status(char *exit_status, size_t *len, int *i);
 char		**separator_3000(char *expanded, int is_quote);
 char		**separate(char *expanded);
 char		*quote_remover(char *s);
-char		*quote_limiter(char	*exp);
+char		*quote_limiter(char *exp);
 size_t		quote_conter_len(char *s);
-char	*my_function(t_minishell ms, char *line, char *limiter);
+char		*my_function(t_minishell ms, char *line, char *limiter);
 
 // ASSIGN TYPES
 

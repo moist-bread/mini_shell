@@ -62,17 +62,17 @@ static void	ambiguous_redir_verify(t_tree_node *node, int *in, int *out)
 	if (!node->left)
 		return ;
 	ft_printf_fd(2, "ambiguous redirect\n");
-	if (node->left->type == REDIR_IN)
+	if (node->left->type == RED_IN)
 	{
 		safe_close(*in);
 		*in = -1;
 	}
-	else if (node->left->type == REDIR_OUT)
+	else if (node->left->type == RED_OUT)
 	{
 		safe_close(*out);
 		*out = -1;
 	}
-	else if (node->left->type == REDIR_OUT_APPEND)
+	else if (node->left->type == RED_APP)
 	{
 		safe_close(*out);
 		*out = -1;

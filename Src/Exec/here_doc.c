@@ -101,7 +101,7 @@ static void	here_doc_readline(t_minishell ms, char *limiter, int fd)
 		}
 		else // CTRL D CASE
 		{
-			ft_printf_fd(2, HERE_EOF "(wanted `%s')\n", limiter);
+			ft_printf_fd(2, M_HERE_EOF "(wanted `%s')\n", limiter);
 			break ;
 		}
 	}
