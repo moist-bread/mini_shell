@@ -14,7 +14,7 @@ size_t	len_double_quotes(char *input, char **env, int *i, int exit_status)
 	(*i)++;
 	while (input[(*i)] && input[*i] != '\"')
 	{
-		if (input[*i] == '$' && (isalpha(input[*i + 1]) || input[*i + 1] == '_'))
+		if (input[*i] == '$' && (ft_isalpha(input[*i + 1]) || input[*i + 1] == '_'))
 		{
 			len += len_expansion(input + *i, env);
 			while (input[++(*i)] == '_' || ft_isalnum(input[*i]))
@@ -70,7 +70,7 @@ size_t	len_unquoted(char *input, char **env, int *i, int exit_status)
 	len = 0;
 	while (input[*i] && input[*i] != '\"' && input[*i] != '\'')
 	{
-		if (input[*i] == '$' && (isalpha(input[*i + 1]) || input[*i + 1] == '_'))
+		if (input[*i] == '$' && (ft_isalpha(input[*i + 1]) || input[*i + 1] == '_'))
 		{
 			len += len_expansion(input + *i, env);
 			while (input[++(*i)] == '_' || ft_isalnum(input[*i]))
