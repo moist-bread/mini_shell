@@ -78,16 +78,16 @@ void	move_env_var(t_minishell *ms, int *old_idx, int new_idx)
 		ms->env_start++;
 	temp = ms->env[*old_idx];
 	if (*old_idx < new_idx)
-		while (ms->env[*old_idx] && *old_idx < new_idx)
-		{
-			ms->env[*old_idx] = ms->env[*old_idx + 1];
-			(*old_idx)++;
-		}
+	{
+		while (ms->env[(*old_idx)++] && *old_idx <= new_idx)
+			ms->env[*old_idx - 1] = ms->env[*old_idx];
+		(*old_idx)--;
+	}
 	else
-		while (ms->env[*old_idx] && *old_idx > new_idx)
-		{
-			ms->env[*old_idx] = ms->env[*old_idx - 1];
-			(*old_idx)--;
-		}
+	{
+		while (ms->env[(*old_idx)--] && *old_idx >= new_idx)
+			ms->env[*old_idx + 1] = ms->env[*old_idx];
+		(*old_idx)++;
+	}
 	ms->env[*old_idx] = temp;
 }

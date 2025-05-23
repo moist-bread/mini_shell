@@ -4,6 +4,7 @@
 /// @brief Prints the current Environment
 /// @param ms Overarching Minishell Structure
 /// @param node Current env node to be executed
+/// @param fd possible redir file descriptor
 void	env_built_in(t_minishell *ms, t_tree_node *node, int fd)
 {
 	printf(YEL "\nEntering env built in" DEF "\n\n");
@@ -23,13 +24,14 @@ void	env_built_in(t_minishell *ms, t_tree_node *node, int fd)
 		}
 		return ;
 	}
-	print_env(*ms, 0, fd);
 	ms->exit_status = 0;
+	print_env(*ms, 0, fd);
 }
 
 /// @brief Prints either export or env according to EXPORT_FLAG
 /// @param ms Overarching Minishell Structure
 /// @param export_flag 1 prints export, 0 prints env
+/// @param fd possible redir file descriptor
 void	print_env(t_minishell ms, int export_flag, int fd)
 {
 	int		i;

@@ -43,10 +43,8 @@ void	command_process(t_minishell *ms, t_tree_node *node)
 			minishell_clean(*ms, 0);
 		cmd_parse_and_exe(*ms, node, redir);
 	}
-	if (redir[0] > 2)
-		close(redir[0]);
-	if (redir[1] > 2)
-		close(redir[1]);
+	safe_close(redir[0]);
+	safe_close(redir[1]);
 	process_waiting(1, &id, &ms->exit_status);
 	init_sigact(ms, 'P');
 }
@@ -98,10 +96,8 @@ void	built_in_process(t_minishell *ms, t_tree_node *node)
 	if (cmd_redir_executer(ms, node, &redir[0], &redir[1]) == -1)
 		return (error_msg_status(NULL, &ms->exit_status, 1));
 	built_in_exe(ms, node, redir[1]);
-	if (redir[0] > 2)
-		close(redir[0]);
-	if (redir[1] > 2)
-		close(redir[1]);
+	safe_close(redir[0]);
+	safe_close(redir[1]);
 }
 
 /// @brief Opens rediractions and sends BUILT_IN NODE to be executed

@@ -6,7 +6,8 @@ t_minishell	*g_ms_struct;
 static void	parent_sig_handler(int signal);
 static void	here_doc_sig_handler(int signal);
 
-/// @brief Saves adress to MINISHELL in the global variable and initialized the signals according to FLAG
+/// @brief Saves adress to MINISHELL in the global variable and
+/// initialized the signals according to FLAG
 /// @param minishell Overarching Minishell Structure
 /// @param flag 'P': parent, 'H': here doc, 'I': ignore, 'D': default
 void	init_sigact(t_minishell *minishell, int flag)

@@ -15,7 +15,8 @@ void	unset_built_in(t_minishell *ms, t_tree_node *node)
 		return ;
 	if (node->right->cont.args[0][0] == '-' && node->right->cont.args[0][1])
 	{
-		ft_printf_fd(2, "unset: -%c: invalid option\n", node->right->cont.args[0][1]);
+		ft_printf_fd(2, "unset: -%c: invalid option\n",
+			node->right->cont.args[0][1]);
 		ft_printf_fd(2, "unset: usage: unset [name ...]\n");
 		ms->exit_status = 2;
 		return ;

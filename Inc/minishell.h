@@ -56,7 +56,7 @@
 // if the LIM is the expansion like $HOME it works as a lim and does not expand
 // if is a normal LIM without any quotes it always expands
 // DO a bolean to say if the lim had quotes; for the here_doc expansions
- 
+
 // REDIRS: not HERE_DOC
 // If after redir there is an expansion ansd inside of said expansion there is more than one word
 // the redir fails because of ambiguous redirect
@@ -93,6 +93,10 @@
 # define CYN "\e[0;36m"
 # define DEF "\e[0m"
 
+// messages
+# define HERE_EOF "warning: here-document delimited by end-of-file "
+
+
 // ------------------------PARSING----------------------------
 
 // TOKENS
@@ -105,7 +109,8 @@ bool		place_token(char *input, t_token **head);
 void		print_tokens(t_token *tokens);
 bool		is_token(t_token *token);
 void		expand_token_list(t_token **head, t_minishell ms);
-t_token		*replace_expanded_token(t_token **head, t_token *curr, char **expanded);
+t_token		*replace_expanded_token(t_token **head, t_token *curr,
+				char **expanded);
 t_token		*join_token_list(t_token **head, t_token *curr, t_token *first_new);
 
 // TREE UTILS
@@ -126,11 +131,14 @@ char		**tree_alloc_args(t_token *token);
 // EXPANSIONS
 
 char		**input_expander(char *input, t_minishell ms);
-char		*process_quote_expansions(char *input, t_minishell ms, int *is_quote);
-void		the_expansion(char *input, t_minishell ms, int *is_quote, char *result);
+char		*process_quote_expansions(char *input, t_minishell ms,
+				int *is_quote);
+void		the_expansion(char *input, t_minishell ms, int *is_quote,
+				char *result);
 char		*expansion(char *input, char **env);
 void		expand_single_quotes(char *input, char *result, int *i);
-void		expand_double_quotes(char *input, char *result, int *i, t_minishell ms);
+void		expand_double_quotes(char *input, char *result, int *i,
+				t_minishell ms);
 void		expand_unquotes(char *input, char *result, int *i, t_minishell ms);
 void		expansion_exit_status(char *result, int *i, char *exit_status);
 char		*get_search(char *input);
@@ -181,9 +189,9 @@ bool		is_sep(char c);
 
 // FAKE
 
-char		*fake_readinput(t_minishell ms, char	*input);
+char		*fake_readinput(t_minishell ms, char *input);
 t_tree_node	*fake_create_tree(t_token *tokens);
-void		fake_clear_token_lst(t_token	*token);
+void		fake_clear_token_lst(t_token *token);
 
 // --------------------------EXECUTION--------------------------
 
@@ -227,10 +235,12 @@ void		built_in_exe(t_minishell *ms, t_tree_node *node, int out);
 
 // REDIR HANDLER
 
-void		redir_handler(t_tree_node *node, int *in, int *out);
+void		redir_handler(t_minishell *ms, t_tree_node *node, int *in,
+				int *out);
 int			cmd_redir_executer(t_minishell *ms, t_tree_node *node, int *in,
 				int *out);
 int			successful_redir_check(int *in, int *out, int hd);
+void		safe_close(int fd);
 
 // HERE DOC
 
@@ -240,10 +250,6 @@ void		single_here_doc_handler(t_minishell ms, t_tree_node *pin, int *in);
 // PIPE PROCESS
 
 void		pipe_process(t_minishell *minishell, t_tree_node *node);
-void		read_and_exe_pipe_tree(t_minishell minishell,
-				t_tree_node *tree_head, t_pipe_data *pdata, int idx);
-void		setup_pipe_cmd(t_minishell minishell, t_tree_node *node,
-				t_pipe_data *pdata, int idx);
 
 // PIPE CHILD PROCESS
 
@@ -268,7 +274,7 @@ void		export_built_in(t_minishell *ms, t_tree_node *node, int fd);
 // EXPORT UTILS
 
 void		export_append(t_minishell *ms, int idx, char *new);
-int		replace_env_value(t_minishell *ms, char *key, char *new, int idx);
+int			replace_env_value(t_minishell *ms, char *key, char *new, int idx);
 void		move_env_var(t_minishell *ms, int *old_idx, int new_idx);
 
 // GET ENV

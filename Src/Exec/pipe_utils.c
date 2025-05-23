@@ -16,8 +16,7 @@ void	assign_pipe_fds(t_minishell ms, t_pipe_data *pdata, int *redir_fd,
 	{
 		printf("in redir --\n");
 		pdata->cur_pipe[0] = redir_fd[0];
-		if (pdata->next_pipe > 2)
-			close(pdata->next_pipe);
+		safe_close(pdata->next_pipe);
 	}
 	else // no in redir
 	{
@@ -80,8 +79,8 @@ char	*get_path(t_minishell ms, char *cmd)
 /// @return Exit status after execve() failure
 int	error_code_for_exec(char *path)
 {
-	DIR *dir;
-	
+	DIR	*dir;
+
 	if (access(path, F_OK) < 0)
 	{
 		ft_printf_fd(2, "%s: command not found\n", path);
@@ -100,7 +99,7 @@ int	error_code_for_exec(char *path)
 	dir = opendir(path);
 	if (dir)
 	{
-		free (dir);
+		free(dir);
 		ft_printf_fd(2, "%s: Is a directory\n", path);
 		return (126);
 	}
