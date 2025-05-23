@@ -39,15 +39,6 @@ void	syntax_clear(t_token *token)
 	}
 }
 
-/// @brief Basic error function
-/// @param token Node of the token list
-void	ft_error_check(t_token **token)
-{
-	printf("syntax error near unexpected token\n");
-	syntax_clear(*token);
-	*token = NULL;
-}
-
 void	len_exit_status(char *exit_status, size_t *len, int *i)
 {
 	*len += ft_strlen(exit_status);
