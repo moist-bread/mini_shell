@@ -47,7 +47,7 @@ char	**matrix_add_front(char *add, char **original)
 		return (original);
 	new = malloc((ft_matrixlen(original) + 2) * sizeof(char *));
 	if (!new)
-		return (NULL);
+		return (original);
 	new[0] = ft_strdup(add);
 	i = -1;
 	while (original && original[++i])

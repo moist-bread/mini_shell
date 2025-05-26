@@ -96,6 +96,7 @@
 
 // messages
 # define M_HERE_EOF "warning: here-document delimited by end-of-file "
+# define VAR_PATH "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 // ------------------------PARSING----------------------------
 
@@ -201,6 +202,8 @@ void		fake_clear_token_lst(t_token *token);
 // STRUCT UTILS
 
 void		minishell_struct_init(t_minishell *minis, char **env);
+char		**env_init(t_minishell *ms, char **old_env);
+int			new_atoi(char *value);
 void		minishell_clean(t_minishell minishell, int status);
 void		process_waiting(int proc_n, int *ids, int *status);
 void		master_close(void);

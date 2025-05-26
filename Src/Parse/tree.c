@@ -41,7 +41,7 @@ void	expand_token_list(t_token **head, t_minishell *ms)
 		else
 		{
 			if (curr->type == LIM && (ft_strchr(curr->cont, '\"') 
-			|| ft_strchr(curr->cont, '\'')))
+			|| ft_strchr(curr->cont, '\''))) // MY FUNCTION
 				ms->quote = true;
 			new_cont = quote_remover(curr->cont);
 			free(curr->cont);

@@ -8,15 +8,64 @@ void	minishell_struct_init(t_minishell *minis, char **env)
 {
 	init_sigact(minis, 'P');
 	minis->tree_head = NULL;
-	minis->env = matrix_dup_char(env); // needs proper env
+	minis->exit_status = 0;
+	minis->env = env_init(minis, env);
 	if (!minis->env)
 	{
 		ft_printf_fd(2, "malloc: failed memory allocation on initialization\n");
 		exit(1);
 	}
-	minis->env_start = 0;
-	minis->exit_status = 0;
-	minis->quote = false;
+	minis->quote = false; // MY FUNCTION
+}
+
+char	**env_init(t_minishell *ms, char **old_env)
+{
+	char	**env;
+	char	*temp;
+	char	*pwd;
+
+	env = NULL;
+	if (!*old_env)
+	{
+		ms->env_start = 1;
+		env = matrix_add_front("SHLVL=1", env);
+		if (!env)
+			return (NULL);
+		temp = getcwd(NULL, 0);
+		pwd = ft_strjoin("PWD=", temp);
+		free(temp);
+		if (!pwd)
+			return (free_split(env), NULL);
+		env = matrix_add_front(pwd, env);
+		free(pwd);
+		if (!env)
+			return (NULL);
+		env = matrix_add_front(VAR_PATH, env);
+		env = matrix_add_front("OLDPWD", env);
+	}
+	else
+	{
+		ms->env_start = 0;
+		env = matrix_dup_char(old_env);
+		if (!env)
+			return (NULL);
+		// add shlvl++
+		temp = get_env("SHLVL=", env);
+		if (temp)
+			replace_env_value(ms, "SHLVL", ft_itoa(new_atoi(temp)),
+				get_env_idx(env, "SHLVL="));
+		else
+			env = matrix_add_front("SHLVL=1", env);
+	}
+	return (env);
+}
+
+int	new_atoi(char *value)
+{
+	int	lvl;
+
+	lvl = 1;
+	return (lvl);
 }
 
 /// @brief Cleans all content from the MINISHELL struct

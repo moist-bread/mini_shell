@@ -13,7 +13,7 @@ char	*my_function(t_minishell ms, char *line, char *limiter)
 	i = 0;
 	while (line[i])
 	{
-		if (ft_strchr(line, '$') && ms.quote == false)
+		if (ft_strchr(line, '$') && ms.quote == false) // MY FUNCTION
 		{
 			expanded = process_expander(line, ms);
 			if (!expanded)
