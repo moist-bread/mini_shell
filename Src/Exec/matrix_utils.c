@@ -47,15 +47,13 @@ char	**matrix_add_front(char *add, char **original)
 		return (original);
 	new = malloc((ft_matrixlen(original) + 2) * sizeof(char *));
 	if (!new)
-		return (original);
+		return (perror("malloc"), original);
 	new[0] = ft_strdup(add);
+	if (!new[0])
+		return (perror("malloc"), original);
 	i = -1;
 	while (original && original[++i])
-	{
 		new[i + 1] = original[i];
-		if (!new[i + 1])
-			free_matrix((void **)new, i + 1);
-	}
 	if (original)
 		new[i + 1] = NULL;
 	else
