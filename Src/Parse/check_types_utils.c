@@ -26,7 +26,7 @@ bool	check_quotes(char *input)
 			i++;
 	}
 	if (quote % 2 != 0)
-		return (printf("Invalid Syntax\n"), false);
+		return (ft_error_check(NULL, 2), false);
 	return (true);
 }
 

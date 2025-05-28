@@ -23,7 +23,8 @@ t_token	*create_tokens(char *input)
 	t_token *tokens;
 
 	tokens = NULL;
-	place_token(input, &tokens);
+	if (place_token(input, &tokens) == -1)
+		return (NULL);
 	assign_type_token(tokens, false);
 	print_tokens(tokens);
 	master_check(&tokens);
@@ -35,7 +36,7 @@ t_token	*create_tokens(char *input)
 /// @param input String received from the Stdout 
 /// @param head Beggining of the list
 /// @return The head of the list
-void	place_token(char *input, t_token **head)
+int	place_token(char *input, t_token **head)
 {
 	t_token	*newtk;
 	char	**newinput;
@@ -44,8 +45,10 @@ void	place_token(char *input, t_token **head)
 
 	*head = NULL;
 	if (!check_quotes(input))
-		return ;
+		return (-1);
 	updated_input = add_spaces(input);
+	if (!updated_input)
+		return (-1);
 	newinput = cracked_split(updated_input);
 	free(updated_input);
 	i = 0;
@@ -56,6 +59,7 @@ void	place_token(char *input, t_token **head)
 		i++;
 	}
 	free_split(newinput);
+	return (0);
 }
 
 /// @brief Adds spaces between operaters in the input
@@ -68,6 +72,8 @@ char	*add_spaces(char *input)
 
 	len = space_length(input);
 	newinput = space_put(input, len);
+	if (!newinput)
+		return (NULL);
 	return (newinput);
 }
 

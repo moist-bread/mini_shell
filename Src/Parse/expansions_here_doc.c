@@ -36,7 +36,7 @@ static	char	*process_expander(char *line, t_minishell ms)
 	result_len = the_length (line, ms);
 	result = ft_calloc(sizeof(char), result_len + 1);
 	if (!result)
-		return (NULL);
+		return (perror("malloc"), NULL);
 	here_doc_expansion(result, line, ms);
 	return (result);
 }

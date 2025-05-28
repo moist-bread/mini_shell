@@ -109,7 +109,7 @@ void		tokenadd_back(t_token **tklst, t_token *newtk);
 void		tokenadd_front(t_token **tklst, t_token *newtk);
 t_token		*newtoken(char *cont);
 t_token		*create_tokens(char *input);
-void	place_token(char *input, t_token **head);
+int			place_token(char *input, t_token **head);
 void		print_tokens(t_token *tokens);
 bool		is_token(t_token *token);
 void		expand_token_list(t_token **head, t_minishell *ms);
@@ -134,6 +134,7 @@ char		**tree_alloc_args(t_token *token);
 
 // EXPANSIONS
 
+void		expander(t_token *curr, t_minishell *ms, t_token **head);
 char		**input_expander(char *input, t_minishell ms);
 char		*process_quote_expansions(char *input, t_minishell ms,
 				int *is_quote);
@@ -157,7 +158,8 @@ char		**separate(char *expanded);
 char		*quote_remover(char *s);
 char		*quote_limiter(char *exp);
 size_t		quote_conter_len(char *s);
-char		*my_function(t_minishell ms, char *line, char *limiter, t_tree_node *node);
+char		*my_function(t_minishell ms, char *line, char *limiter, \
+			t_tree_node *node);
 
 // ASSIGN TYPES
 
@@ -184,7 +186,7 @@ size_t		checked_len(char *input);
 
 // ERRORS
 
-void		ft_error_check(t_token **token);
+void	ft_error_check(t_token **token, int msg);
 
 // SPLIT UTILS
 

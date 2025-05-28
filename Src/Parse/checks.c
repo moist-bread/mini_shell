@@ -16,14 +16,14 @@ void	master_check(t_token **token)
 	while (temp)
 	{
 		if (temp->prev == NULL && temp->type == PIPE)
-			ft_error_check(token);
+			ft_error_check(token, 1);
 		else if (temp->next && temp->type == PIPE && temp->next->type == PIPE)
-			ft_error_check(token);
+			ft_error_check(token, 1);
 		else if (temp->next && temp->type != PIPE && is_token(temp) == true \
 		&& is_token(temp->next) == true)
-			ft_error_check(token);
+			ft_error_check(token, 1);
 		else if (is_token(temp) == true && temp->next == NULL)
-			ft_error_check(token);
+			ft_error_check(token, 1);
 		if (!*token)
 			return;
 		temp = temp->next;

@@ -18,7 +18,7 @@ char	*quote_remover(char *s)
 	j = 0;
 	str = ft_calloc(sizeof(char), (ft_strlen(s) - quote_conter_len(s)) + 1);
 	if (!str)
-		return (NULL);
+		return (perror("malloc"), NULL);
 	while (s[i])
 	{	
 		if (s[i] == '\"' || s[i] == '\'')
@@ -77,7 +77,7 @@ char	*quote_limiter(char	*exp)
 	i = 0;
 	quoted = ft_calloc(sizeof(char), ft_strlen(exp) + quote_count(exp) + 1);
 	if (!quoted)
-		return (NULL);
+		return (perror("malloc"), NULL);
 	while (exp[i])
 	{
 		if (exp[i] == '\'')
