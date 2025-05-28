@@ -12,6 +12,7 @@ void	echo_built_in(t_minishell *ms, t_tree_node *node, int fd)
 	int	i;
 
 	printf(YEL "\nEntering echo built in" DEF "\n\n");
+	n_opt = 0;
 	i = -1;
 	while (node->right && node->right->cont.args[++i])
 	{

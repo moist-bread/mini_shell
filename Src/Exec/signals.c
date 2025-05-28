@@ -58,7 +58,7 @@ static void	here_doc_sig_handler(int signal)
 void	ft_error_check(t_token **token)
 {
 	printf("syntax error near unexpected token\n");
-	g_ms_struct->exit_status = 1;
+	g_ms_struct->exit_status = 2;
 	syntax_clear(*token);
 	*token = NULL;
 }
