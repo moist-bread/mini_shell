@@ -15,7 +15,6 @@ t_tree_node	*newtreenode(t_node_cont cont)
 	newnode->prev = NULL;
 	newnode->left = NULL;
 	newnode->right = NULL;
-	// newnode->cont.quote = false;
 	return (newnode);
 }
 
@@ -66,6 +65,17 @@ void	free_tree_node_cont(t_node_cont cont)
 		free(cont.file);
 	if (cont.limiter)
 		free(cont.limiter);
+}
+
+void	expander(t_token *curr, t_minishell *ms, t_token **head)
+{
+	char	**expanded;
+
+	expanded = input_expander(curr->cont, *ms);
+	if (!expanded)
+		return (syntax_clear(*head));
+	curr = replace_expanded_token(head, curr, expanded);
+	free_split(expanded);
 }
 
 /// @brief Function that prints the AST_Tree
