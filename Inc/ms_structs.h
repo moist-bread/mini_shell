@@ -50,6 +50,7 @@ typedef struct s_token
 {
 	t_node_type			type;
 	char				*cont;
+	bool				quote;
 	struct s_token		*next;
 	struct s_token		*prev; // MY FUNCTION
 }						t_token;
@@ -69,6 +70,7 @@ typedef struct s_node_cont
 	t_pipe_data			pipe;
 	char				*file;
 	char				*limiter; // MY FUNCTION
+	bool				quote;
 }						t_node_cont;
 
 /// @brief Abstract Syntax Tree Node
@@ -96,7 +98,6 @@ typedef struct s_minishell
 	char				**env;
 	int					env_start;
 	int					exit_status;
-	bool				quote; // MY FUNCTION
 }						t_minishell;
 
 #endif // MS_STRUCTS_H

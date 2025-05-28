@@ -20,7 +20,7 @@ void	minishell_struct_init(t_minishell *ms, char **env)
 		ft_printf_fd(2, "malloc: failed memory allocation on initialization\n");
 		exit(1);
 	}
-	ms->quote = false; // MY FUNCTION
+	// ms->quote = false; // MY FUNCTION
 }
 
 /// @brief Initializes the environment depending on the recieved OLD_ENV

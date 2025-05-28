@@ -42,7 +42,7 @@ void	expand_token_list(t_token **head, t_minishell *ms)
 		{
 			if (curr->type == LIM && (ft_strchr(curr->cont, '\"') 
 			|| ft_strchr(curr->cont, '\''))) // MY FUNCTION
-				ms->quote = true;
+				curr->quote = true;
 			new_cont = quote_remover(curr->cont);
 			free(curr->cont);
        		curr->cont = new_cont;
@@ -63,7 +63,10 @@ t_node_cont	assign_tree_cont(t_token *token)
 	if (token && (token->type == CMD || token->type == BUILT_IN))
 		cont.cmd = token->cont;
 	else if (token && token->type == LIM)
+	{
 		cont.limiter = token->cont;
+		cont.quote = token->quote;
+	}
 	else if (token && token->prev && (token->prev->type == RED_IN \
 	|| token->prev->type == RED_OUT || token->prev->type == RED_APP) \
 	&& token->type == ARG)
