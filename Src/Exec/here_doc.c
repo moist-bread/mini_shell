@@ -1,8 +1,8 @@
 
 #include "../../Inc/minishell.h"
 
-static int	here_doc_redir(t_minishell minishell, char *limiter);
-static void	here_doc_readline(t_minishell ms, char *limiter, int fd);
+static int	here_doc_redir(t_minishell minishell, char *limiter, t_tree_node *node);
+static void	here_doc_readline(t_minishell ms, char *limiter, int fd, t_tree_node *node);
 
 /// @brief Executes all here docs in a PIPE tree and stores the fds in PDATA
 /// @param ms Overarching Minishell Structure
@@ -40,7 +40,7 @@ void	single_here_doc_handler(t_minishell ms, t_tree_node *pin, int *in)
 	{
 		printf("redir node loop_\n");
 		if (runner->type == RED_HD)
-			*in = here_doc_redir(ms, runner->cont.limiter);
+			*in = here_doc_redir(ms, runner->cont.limiter, runner); // MY FUNCTION
 		else if (runner->type == RED_IN)
 		{
 			safe_close(*in);
@@ -54,7 +54,7 @@ void	single_here_doc_handler(t_minishell ms, t_tree_node *pin, int *in)
 /// @param minishell Overarching Minishell Structure
 /// @param limiter sentence that stops the here_doc
 /// @return Read end fd of opened pipe, -1 on error, -2 on signal end
-static int	here_doc_redir(t_minishell minishell, char *limiter)
+static int	here_doc_redir(t_minishell minishell, char *limiter, t_tree_node *node)
 {
 	int	here_pipe[2];
 	int	exit_status;
@@ -70,7 +70,7 @@ static int	here_doc_redir(t_minishell minishell, char *limiter)
 	if (id == 0)
 	{
 		init_sigact(&minishell, 'H');
-		here_doc_readline(minishell, limiter, here_pipe[1]);
+		here_doc_readline(minishell, limiter, here_pipe[1], node); // MY FUNCTION
 		minishell_clean(minishell, 0);
 	}
 	waitpid(id, &exit_status, 0);
@@ -84,7 +84,7 @@ static int	here_doc_redir(t_minishell minishell, char *limiter)
 /// @brief Starts a readline and writes the input in FD until LIMITER is written
 /// @param limiter String that stops the readline
 /// @param fd Write end of a pipe to write to
-static void	here_doc_readline(t_minishell ms, char *limiter, int fd)
+static void	here_doc_readline(t_minishell ms, char *limiter, int fd, t_tree_node *node)
 {
 	char	*line;
 
@@ -95,7 +95,7 @@ static void	here_doc_readline(t_minishell ms, char *limiter, int fd)
 		{
 			if (!ft_strcmp(line, limiter))
 				break ;
-			line = my_function(ms, line, limiter);
+			line = my_function(ms, line, limiter, node); // MY FUNCTION
 			ft_printf_fd(fd, "%s\n", line);
 			free(line);
 		}

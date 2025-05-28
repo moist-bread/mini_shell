@@ -96,6 +96,10 @@
 
 // messages
 # define M_HERE_EOF "warning: here-document delimited by end-of-file "
+# define VAR_PATH "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+# define SHLVL_WARN \
+	"warning: shell level (2147483647) too high, \
+resetting to 1\n"
 
 // ------------------------PARSING----------------------------
 
@@ -105,7 +109,7 @@ void		tokenadd_back(t_token **tklst, t_token *newtk);
 void		tokenadd_front(t_token **tklst, t_token *newtk);
 t_token		*newtoken(char *cont);
 t_token		*create_tokens(char *input);
-bool		place_token(char *input, t_token **head);
+void	place_token(char *input, t_token **head);
 void		print_tokens(t_token *tokens);
 bool		is_token(t_token *token);
 void		expand_token_list(t_token **head, t_minishell *ms);
@@ -153,7 +157,7 @@ char		**separate(char *expanded);
 char		*quote_remover(char *s);
 char		*quote_limiter(char *exp);
 size_t		quote_conter_len(char *s);
-char		*my_function(t_minishell ms, char *line, char *limiter);
+char		*my_function(t_minishell ms, char *line, char *limiter, t_tree_node *node);
 
 // ASSIGN TYPES
 
@@ -198,9 +202,12 @@ void		fake_clear_token_lst(t_token *token);
 
 // --------------------------EXECUTION--------------------------
 
-// STRUCT UTILS
+// STRUCT INIT
 
-void		minishell_struct_init(t_minishell *minis, char **env);
+void		minishell_struct_init(t_minishell *ms, char **env);
+
+// GENERAL UTILS
+
 void		minishell_clean(t_minishell minishell, int status);
 void		process_waiting(int proc_n, int *ids, int *status);
 void		master_close(void);

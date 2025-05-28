@@ -4,7 +4,7 @@
 static	char	*process_expander(char *line, t_minishell ms);
 static	void	here_doc_expansion(char *result, char *input, t_minishell ms);
 
-char	*my_function(t_minishell ms, char *line, char *limiter)
+char	*my_function(t_minishell ms, char *line, char *limiter, t_tree_node *node)
 {
 	char	*expanded;
 	int		i;
@@ -13,7 +13,7 @@ char	*my_function(t_minishell ms, char *line, char *limiter)
 	i = 0;
 	while (line[i])
 	{
-		if (ft_strchr(line, '$') && ms.quote == false)
+		if (ft_strchr(line, '$') && node->cont.quote == false) // MY FUNCTION
 		{
 			expanded = process_expander(line, ms);
 			if (!expanded)

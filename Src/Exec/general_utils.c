@@ -1,24 +1,6 @@
 
 #include "../../Inc/minishell.h"
 
-/// @brief Initializes the values of the Minishell Struct
-/// @param minis Overarching Minishell Structure
-/// @param env Environment recieved by the program
-void	minishell_struct_init(t_minishell *minis, char **env)
-{
-	init_sigact(minis, 'P');
-	minis->tree_head = NULL;
-	minis->env = matrix_dup_char(env); // needs proper env
-	if (!minis->env)
-	{
-		ft_printf_fd(2, "malloc: failed memory allocation on initialization\n");
-		exit(1);
-	}
-	minis->env_start = 0;
-	minis->exit_status = 0;
-	minis->quote = false;
-}
-
 /// @brief Cleans all content from the MINISHELL struct
 /// @param minishell Overarching Minishell Structure
 /// @param status Process exit status

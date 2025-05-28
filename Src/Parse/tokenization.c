@@ -9,7 +9,7 @@ char	*fake_readinput(t_minishell ms, char	*input)
 	input = readline("minishell > "); 
 	if (!input)
 	{
-		printf(BLU "exit" DEF "\n");
+		printf(BLU "\nexit" DEF "\n");
 		minishell_clean(ms, ms.exit_status);
 	}
 	add_history(input);
@@ -26,7 +26,6 @@ t_token	*create_tokens(char *input)
 	place_token(input, &tokens);
 	assign_type_token(tokens, false);
 	print_tokens(tokens);
-	printf("\n");
 	master_check(&tokens);
 	free(input);
 	return (tokens);
@@ -36,7 +35,7 @@ t_token	*create_tokens(char *input)
 /// @param input String received from the Stdout 
 /// @param head Beggining of the list
 /// @return The head of the list
-bool	place_token(char *input, t_token **head)
+void	place_token(char *input, t_token **head)
 {
 	t_token	*newtk;
 	char	**newinput;
@@ -45,7 +44,7 @@ bool	place_token(char *input, t_token **head)
 
 	*head = NULL;
 	if (!check_quotes(input))
-		return (false);
+		return ;
 	updated_input = add_spaces(input);
 	newinput = cracked_split(updated_input);
 	free(updated_input);
@@ -57,7 +56,6 @@ bool	place_token(char *input, t_token **head)
 		i++;
 	}
 	free_split(newinput);
-	return (true);
 }
 
 /// @brief Adds spaces between operaters in the input
