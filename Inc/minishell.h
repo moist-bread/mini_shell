@@ -109,7 +109,7 @@ void		tokenadd_back(t_token **tklst, t_token *newtk);
 void		tokenadd_front(t_token **tklst, t_token *newtk);
 t_token		*newtoken(char *cont);
 t_token		*create_tokens(char *input);
-bool		place_token(char *input, t_token **head);
+void	place_token(char *input, t_token **head);
 void		print_tokens(t_token *tokens);
 bool		is_token(t_token *token);
 void		expand_token_list(t_token **head, t_minishell *ms);

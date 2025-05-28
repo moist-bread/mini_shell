@@ -14,6 +14,8 @@ char	**input_expander(char *input, t_minishell ms)
 
 	is_quote = 1;
 	expanded = process_quote_expansions(input, ms, &is_quote);
+	if (!expanded)
+		return (NULL);
 	final_result = separator_3000(expanded, is_quote);
 	if (!final_result)
 		return (NULL);
@@ -94,7 +96,7 @@ char	**separator_3000(char *expanded, int is_quote)
 			return (free(expanded), NULL);
 		final_result[0] = quote_remover(expanded);
 		final_result[1] = NULL;
-		printf("final_result: %s\n", final_result[0] );
+		// printf("final_result: %s\n", final_result[0] );
 	}
 	free(expanded);
 	return (final_result);

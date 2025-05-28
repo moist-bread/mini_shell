@@ -34,6 +34,8 @@ void	expand_token_list(t_token **head, t_minishell *ms)
 		if (curr->type != LIM && ft_strchr(curr->cont, '$'))
 		{
 			expanded = input_expander(curr->cont, *ms);
+			// if (!expanded)
+			// 	free(tokene), return something
 			curr = replace_expanded_token(head, curr, expanded);
 			free_split(expanded);
 			continue ;
