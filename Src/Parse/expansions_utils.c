@@ -16,6 +16,7 @@ char	**input_expander(char *input, t_minishell ms)
 	expanded = process_quote_expansions(input, ms, &is_quote);
 	if (!expanded)
 		return (NULL);
+	// printf("exp: %s\n", expanded);
 	final_result = separator_3000(expanded, is_quote);
 	if (!final_result)
 		return (free(expanded), NULL);

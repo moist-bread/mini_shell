@@ -28,7 +28,6 @@ void	expand_token_list(t_token **head, t_minishell *ms)
 {
 	t_token	*curr;
 	t_token	*next;
-	char	*new_cont;
 
 	curr = *head;
 	while (curr)
@@ -41,12 +40,8 @@ void	expand_token_list(t_token **head, t_minishell *ms)
 		}
 		else
 		{
-			if (curr->type == LIM && (ft_strchr(curr->cont, '\"') \
-			|| ft_strchr(curr->cont, '\'')))
-				curr->quote = true;
-			new_cont = quote_remover(curr->cont);
-			free(curr->cont);
-			curr->cont = new_cont;
+			if (process_token_quotes(curr) == 1)
+				return ;
 		}
 		curr = next;
 	}
