@@ -62,6 +62,5 @@ void	ft_error_check(t_token **token, int msg)
 	if (msg == 2)
 		ft_printf_fd(2, "Invalid Syntax\n");
 	g_ms_struct->exit_status = 2;
-	syntax_clear(*token);
-	*token = NULL;
+	syntax_clear(token);
 }

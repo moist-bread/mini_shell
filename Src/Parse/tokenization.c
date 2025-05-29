@@ -1,12 +1,13 @@
 
 #include "../../Inc/minishell.h"
 
-/// @brief Reads the input, adds a history, places a node in a list, assigns a type and prints
+/// @brief Reads the input, adds a history, places a node in a list,
+/// assigns a type and prints
 /// @param input The string received from the Stdout
 /// @return Input
-char	*fake_readinput(t_minishell ms, char	*input)
+char	*fake_readinput(t_minishell ms, char *input)
 {
-	input = readline("minishell > "); 
+	input = readline("minishell > ");
 	if (!input)
 	{
 		printf(BLU "\nexit" DEF "\n");
@@ -20,7 +21,7 @@ char	*fake_readinput(t_minishell ms, char	*input)
 /// @param input The string received from the Stdout
 t_token	*create_tokens(char *input)
 {
-	t_token *tokens;
+	t_token	*tokens;
 
 	tokens = NULL;
 	if (place_token(input, &tokens) == -1)

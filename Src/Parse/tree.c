@@ -7,7 +7,7 @@
 t_tree_node	*create_tree(t_token **tokens, t_minishell *ms)
 {
 	t_tree_node	*tree_node;
-	
+
 	tree_node = NULL;
 	expand_token_list(tokens, ms);
 	if (!tokens)
@@ -15,9 +15,9 @@ t_tree_node	*create_tree(t_token **tokens, t_minishell *ms)
 	assign_type_token(*tokens, true);
 	printf("\nafter expansion:\n");
 	print_tokens(*tokens);
-	place_treenode(*tokens, &tree_node, false);
+	if (place_treenode(*tokens, &tree_node, false) == -1)
+		return (NULL);
 	tree_apply_print(tree_node, 0, "Root");
-	// printf("\n");
 	return (tree_node);
 }
 
@@ -35,15 +35,18 @@ void	expand_token_list(t_token **head, t_minishell *ms)
 	{
 		next = curr->next;
 		if (curr->type != LIM && ft_strchr(curr->cont, '$'))
-			expander(curr, ms, head);
+		{
+			if (expander(curr, ms, head) == 1)
+				return ;
+		}
 		else
 		{
-			if (curr->type == LIM && (ft_strchr(curr->cont, '\"') 
-			|| ft_strchr(curr->cont, '\''))) // MY FUNCTION
+			if (curr->type == LIM && (ft_strchr(curr->cont, '\"') \
+			|| ft_strchr(curr->cont, '\'')))
 				curr->quote = true;
 			new_cont = quote_remover(curr->cont);
 			free(curr->cont);
-       		curr->cont = new_cont;
+			curr->cont = new_cont;
 		}
 		curr = next;
 	}
@@ -81,32 +84,41 @@ t_node_cont	assign_tree_cont(t_token *token)
 /// @param tokens Node from the token list
 /// @param new_tree_node New node of the AST_Tree
 /// @param root The root of the AST_Tree
-static void	if_not_pipe(t_token *tokens, t_tree_node *new_tree_node, t_tree_node **root)
+static int	if_not_pipe(t_token *tokens, t_tree_node *new_tree_node, \
+t_tree_node **root)
 {
-	t_token *cmd_token;
-	
+	t_token	*cmd_token;
+
 	cmd_token = tokens;
-	while (cmd_token && cmd_token->type != PIPE && cmd_token->type != CMD && cmd_token->type != BUILT_IN)
+	while (cmd_token && cmd_token->type != PIPE && cmd_token->type != CMD \
+	&& cmd_token->type != BUILT_IN)
 		cmd_token = cmd_token->next;
 	if (cmd_token && (cmd_token->type == CMD || cmd_token->type == BUILT_IN))
 	{
 		new_tree_node = newtreenode(assign_tree_cont(cmd_token));
+		if (!new_tree_node)
+			return (-1);
 		new_tree_node->type = cmd_token->type;
 	}
 	else
 	{
 		new_tree_node = newtreenode(assign_tree_cont(NULL));
+		if (!new_tree_node)
+			return (-1);
 		new_tree_node->type = CMD;
 	}
-	if_command(tokens, new_tree_node);
+	if (if_command(tokens, new_tree_node) == -1)
+		return (-1);
 	*root = new_tree_node;
+	return (0);
 }
 
-/// @brief This functions puts the new tree_node in the right place in the AST_Tree
+/// @brief This functions puts the new tree_node in the right 
+/// place in the AST_Tree
 /// @param tokens Node from the token list
 /// @param root The first node of the AST_Tree
 /// @param cont The content of the nodes of the AST_Tree
-void	place_treenode(t_token *tokens, t_tree_node **root, bool pipe)
+int	place_treenode(t_token *tokens, t_tree_node **root, bool pipe)
 {
 	t_token		*pipe_token;
 	t_tree_node	*new_tree_node;
@@ -118,6 +130,8 @@ void	place_treenode(t_token *tokens, t_tree_node **root, bool pipe)
 	if (pipe_token && pipe_token->type == PIPE)
 	{
 		new_tree_node = newtreenode(assign_tree_cont(pipe_token));
+		if (!new_tree_node)
+			return (-1);
 		new_tree_node->type = pipe_token->type;
 		if (pipe_token->next)
 			place_treenode(pipe_token->next, &new_tree_node->right, false);
@@ -125,5 +139,9 @@ void	place_treenode(t_token *tokens, t_tree_node **root, bool pipe)
 		*root = new_tree_node;
 	}
 	else
-		if_not_pipe(tokens, new_tree_node, root);
+	{
+		if (if_not_pipe(tokens, new_tree_node, root) == -1)
+			return (-1);
+	}
+	return (0);
 }

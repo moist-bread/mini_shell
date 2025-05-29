@@ -1,16 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   types.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/22 18:20:38 by andcarva          #+#    #+#             */
-/*   Updated: 2025/05/22 18:34:35 by andcarva         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-
 
 #include "../../Inc/minishell.h"
 
@@ -25,7 +12,7 @@ void	assign_type_token(t_token *token, bool exp)
 	temp = token;
 	while (temp)
 	{
-		if (temp->type != PIPE && temp->type < RED_IN 
+		if (temp->type != PIPE && temp->type < RED_IN \
 			&& temp->type > RED_APP && exp == true)
 			assigns_types(temp, exp);
 		else if (exp == false)

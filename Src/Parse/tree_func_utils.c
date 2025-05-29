@@ -7,8 +7,8 @@
 /// @return Returns the number of arguments
 static int	tree_arg_len(t_token *token, t_token *temp)
 {
-	t_token *content;
-	int	i;
+	t_token	*content;
+	int		i;
 
 	i = 0;
 	content = token;
@@ -32,7 +32,7 @@ static int	tree_arg_len(t_token *token, t_token *temp)
 /// @return The char** that is the consecutive arguments
 char	**tree_alloc_args(t_token *token)
 {
-	t_token *temp;
+	t_token	*temp;
 	char	**args;
 	int		i;
 
@@ -40,7 +40,7 @@ char	**tree_alloc_args(t_token *token)
 	i = tree_arg_len(token, temp);
 	args = ft_calloc(i + 1, sizeof(char *));
 	if (!args)
-		return (NULL);
+		return (perror("malloc"), NULL);
 	i = 0;
 	while (temp && temp->type != PIPE)
 	{
@@ -59,51 +59,56 @@ char	**tree_alloc_args(t_token *token)
 /// @param temp Temporary Node
 /// @param cmd_node Cmd node of the AST_Tree
 /// @param last_redir The last created Node of the AST_Tree that is type Redir
-static void	if_redir(t_token **temp, t_tree_node *cmd_node, t_tree_node	**last_redir)
+static int	if_redir(t_token **temp, t_tree_node \
+*cmd_node, t_tree_node	**last_redir)
 {
-	t_tree_node *redir_node;
+	t_tree_node	*redir_node;
 
 	if (!(*temp) || !(*temp)->next)
-		return;
+		return (-1);
 	redir_node = newtreenode(assign_tree_cont((*temp)->next));
+	if (!redir_node)
+		return (-1);
 	redir_node->type = (*temp)->type;
-	// printf("Creating REDIR node for: %s\n", redir_node->cont.file);
 	if (!cmd_node->left)
 		cmd_node->left = redir_node;
 	else if (*last_redir)
 		(*last_redir)->left = redir_node;
 	*last_redir = redir_node;
 	*temp = (*temp)->next;
+	return (0);
 }
 
 /// @brief The fuction will assingn the content if the Node is a CMD node
 /// @param tokens The Node from the token list
 /// @param cmd_node The Node from the AST_Tree
-void	if_command(t_token *tokens, t_tree_node *cmd_node)
+int	if_command(t_token *tokens, t_tree_node *cmd_node)
 {
 	t_token		*temp;
 	t_tree_node	*last_redir;
-	bool		st_arg;
-	
-	st_arg = false;
+	bool		ag;
+
+	ag = false;
 	last_redir = NULL;
 	temp = tokens;
 	while (temp && temp->type != PIPE)
 	{
 		if (temp && (temp->type >= RED_IN && temp->type <= RED_APP))
-			if_redir(&temp, cmd_node, &last_redir);
-		else if (temp && temp->type == ARG && st_arg == false && temp->cont != NULL)
 		{
-			// printf("Creating ARG node for: ");
+			if (if_redir(&temp, cmd_node, &last_redir) == -1)
+				return (-1);
+		}
+		else if (temp && temp->type == ARG && ag == false && temp->cont != NULL)
+		{
 			cmd_node->right = newtreenode(assign_tree_cont(temp));
+			if (!cmd_node->right)
+				return (-1);
 			cmd_node->right->type = ARG;
-			st_arg = true; 
-			for (int i = 0; cmd_node->right->cont.args[i]; i++)
-			// printf("%s ",cmd_node->right->cont.args[i]);
-			printf("\n");
+			ag = true;
 		}
 		temp = temp->next;
 	}
+	return (0);
 }
 
 /// @brief Goes through the token until it finds a PIPE
@@ -122,4 +127,3 @@ t_token	*iteri_till_pipe(t_token *token)
 	}
 	return (NULL);
 }
-

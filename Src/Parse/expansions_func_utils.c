@@ -20,13 +20,13 @@ char	*quote_remover(char *s)
 	if (!str)
 		return (perror("malloc"), NULL);
 	while (s[i])
-	{	
+	{
 		if (s[i] == '\"' || s[i] == '\'')
 		{
 			quote = s[i++];
 			while (s[i] && s[i] != quote)
 				str[j++] = s[i++];
-			if(s[i] && s[i] == quote)
+			if (s[i] && s[i] == quote)
 				i++;
 		}
 		else
@@ -55,9 +55,9 @@ size_t	quote_conter_len(char *s)
 			len++;
 			while (s[i] && s[i] != quote)
 				i++;
-			if(s[i] && s[i] == quote)
+			if (s[i] && s[i] == quote)
 			{
-				i++;	
+				i++;
 				len++;
 			}
 		}
