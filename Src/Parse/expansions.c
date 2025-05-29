@@ -38,7 +38,8 @@ int	the_expansion(char *input, t_minishell ms, int *is_quote, char *result)
 {
 	int		i[2];
 
-	ft_bzero(i, 2);
+	i[0] = 0;
+	i[1] = 0;
 	while (input[i[0]])
 	{
 		if (input[i[0]] == '\"')

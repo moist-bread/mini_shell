@@ -3,8 +3,8 @@
 
 static char	**env_init(t_minishell *ms, char **old_env);
 static char	**shell_level_updater(t_minishell *ms, int old_val);
-static int	create_needed_vars(char ***env, int *env_start);
 static int	assign_sh_lvl(char *value);
+static int	create_needed_vars(char ***env, int *env_start);
 
 /// @brief Initializes the values of the Minishell Struct
 /// @param ms Overarching Minishell Structure
@@ -52,6 +52,10 @@ static char	**env_init(t_minishell *ms, char **old_env)
 	return (env);
 }
 
+/// @brief Replaces the old SHLVL value with an updated one
+/// @param ms Overarching Minishell Structure
+/// @param shl_idx Index that correspondes to the SHLVL variable
+/// @return New Environemnt
 static char	**shell_level_updater(t_minishell *ms, int shl_idx)
 {
 	char	*new_val;
@@ -65,6 +69,9 @@ static char	**shell_level_updater(t_minishell *ms, int shl_idx)
 	return (ms->env);
 }
 
+/// @brief Assigns the New Shell Level based on the previous one
+/// @param value Value of the previous shel level
+/// @return New Shell Level
 static int	assign_sh_lvl(char *value)
 {
 	long	lvl;
@@ -84,6 +91,11 @@ static int	assign_sh_lvl(char *value)
 		return (1);
 }
 
+/// @brief Checks if the needed variables to start minishell exist
+/// , if not, creates them
+/// @param env Pointer to the New Environemnt
+/// @param env_start Index in the MS struct that indicated valueless vars
+/// @return 0 on success, -1 on failure
 static int	create_needed_vars(char ***env, int *env_start)
 {
 	char	*temp;
