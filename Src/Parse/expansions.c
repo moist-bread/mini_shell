@@ -38,10 +38,9 @@ char	*process_quote_expansions(char *input, t_minishell ms, int *is_quote)
 /// @param is_quote Flag to know if the expansion is between quotes
 int	the_expansion(char *input, t_minishell ms, int *is_quote, char *result)
 {
-	int		i[2];
+	int	i[2];
 
-	i[0] = 0;
-	i[1] = 0;
+	ft_bzero(i, sizeof(i));
 	while (input[i[0]])
 	{
 		if (input[i[0]] == '\"')
