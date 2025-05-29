@@ -48,7 +48,7 @@ static	int	here_doc_expansion(char *result, char *s, t_minishell ms)
 	int		i[2];
 	char	*exp;
 
-	ft_bzero(i, 2);
+	ft_bzero(i, sizeof(i));
 	while (s[i[0]])
 	{
 		if (s[i[0]] == '$' && (ft_isalpha(s[i[0] + 1]) || s[i[0] + 1] == '_'))
