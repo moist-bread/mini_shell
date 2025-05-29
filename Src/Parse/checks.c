@@ -1,5 +1,4 @@
 
-
 #include "../../Inc/minishell.h"
 
 static void	ft_copy(char *input, char *checked, int *i, int *j);
@@ -25,7 +24,7 @@ void	master_check(t_token **token)
 		else if (is_token(temp) == true && temp->next == NULL)
 			ft_error_check(token, 1);
 		if (!*token)
-			return;
+			return ;
 		temp = temp->next;
 	}
 }
@@ -38,7 +37,8 @@ char	*check_expansion(char *input)
 
 	i = 0;
 	j = 0;
-	checked = ft_calloc(sizeof(char), (ft_strlen(input) - checked_len(input)) + 1);
+	checked = ft_calloc(sizeof(char), \
+	(ft_strlen(input) - checked_len(input)) + 1);
 	if (!checked)
 		return (perror("malloc"), NULL);
 	while (input[i])
@@ -67,7 +67,7 @@ size_t	checked_len(char *input)
 		while (input[i] && (input[i] == '\"' || input[i] == '\''))
 		{
 			quote = input[i++];
-			while(input[i] && input[i] != quote)
+			while (input[i] && input[i] != quote)
 				i++;
 			i++;
 		}
@@ -86,7 +86,7 @@ static void	ft_copy(char *input, char *checked, int *i, int *j)
 
 	quote = input[*i];
 	checked[(*j)++] = input[(*i)++];
-	while(input[*i] && input[*i] != quote)
+	while (input[*i] && input[*i] != quote)
 		checked[(*j)++] = input[(*i)++];
 	checked[(*j)++] = input[(*i)++];
 }

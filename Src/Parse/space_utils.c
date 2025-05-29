@@ -52,7 +52,7 @@ int	space_length(char *input)
 static	void	between_quotes(char *input, char *dest, int *i, int *j)
 {
 	char	quote;
-	
+
 	quote = input[*i];
 	dest[(*j)++] = input[(*i)++];
 	while (input[*i] && ft_isprint(input[*i]) && input[*i] != quote)
@@ -108,7 +108,7 @@ char	*space_put(char *input, int len)
 		else if (input[i] && ft_strchr("|<>", input[i]))
 		{
 			if_operators(input, dest, &i, &j);
-			continue;
+			continue ;
 		}
 		else
 			dest[j++] = input[i];

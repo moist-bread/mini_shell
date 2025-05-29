@@ -6,8 +6,10 @@
 /// @param newtk The new token
 void	tokenadd_back(t_token **tklst, t_token *newtk)
 {
-	t_token *temptk;
+	t_token	*temptk;
 
+	if (!newtk)
+		return ;
 	if (!*tklst)
 	{
 		*tklst = newtk;
@@ -46,7 +48,7 @@ t_token	*newtoken(char *cont)
 
 	newtk = ft_calloc(1, sizeof(t_token));
 	if (!newtk)
-		return (NULL);
+		return (perror("malloc"), NULL);
 	newtk->cont = ft_strdup(cont);
 	newtk->next = NULL;
 	newtk->prev = NULL;
@@ -57,29 +59,29 @@ t_token	*newtoken(char *cont)
 
 t_token	*join_token_list(t_token **head, t_token *curr, t_token *first_new)
 {
-    t_token *last_new;
+	t_token	*last_new;
 
 	last_new = first_new;
-  	if (curr->prev)
-    {
-        curr->prev->next = first_new;
-        first_new->prev = curr->prev;
-    }
-    else
-    {
-        *head = first_new;
-        first_new->prev = NULL;
-    }
-    while (last_new->next)
-        last_new = last_new->next;
-    if (curr->next)
-    {
-        last_new->next = curr->next;
-        curr->next->prev = last_new;
-    }
-    else
+	if (curr->prev)
 	{
-        last_new->next = NULL;
+		curr->prev->next = first_new;
+		first_new->prev = curr->prev;
+	}
+	else
+	{
+		*head = first_new;
+		first_new->prev = NULL;
+	}
+	while (last_new->next)
+		last_new = last_new->next;
+	if (curr->next)
+	{
+		last_new->next = curr->next;
+		curr->next->prev = last_new;
+	}
+	else
+	{
+		last_new->next = NULL;
 	}
 	return (last_new->next);
 }
@@ -87,7 +89,7 @@ t_token	*join_token_list(t_token **head, t_token *curr, t_token *first_new)
 t_token	*replace_expanded_token(t_token **head, t_token *curr, char **expanded)
 {
 	t_token	*first_new;
-	t_token *next;
+	t_token	*next;
 	int		i;
 
 	i = 0;
