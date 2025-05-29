@@ -39,8 +39,10 @@ char	*process_quote_expansions(char *input, t_minishell ms, int *is_quote)
 int	the_expansion(char *input, t_minishell ms, int *is_quote, char *result)
 {
 	int	i[2];
+	// int	j;
 
 	ft_bzero(i, sizeof(i));
+	// j = -1;
 	while (input[i[0]])
 	{
 		if (input[i[0]] == '\"')
@@ -54,6 +56,11 @@ int	the_expansion(char *input, t_minishell ms, int *is_quote, char *result)
 		{
 			if (expand_unquotes(input, result, i, ms) == 1)
 				return (1);
+			// while (input[++j])
+			// {
+			// 	if (input[j] == '$' && (ft_isalpha(input[j + 1]) || input[j + 1] == '_'))
+			// 		*is_quote = 0;
+			// }
 			*is_quote = 0;
 		}
 	}
@@ -89,7 +96,7 @@ int	expand_double_quotes(char *s, char *result, int *i, t_minishell ms)
 		else
 			result[i[1]++] = s[i[0]++];
 	}
-	result[i[1]++] = s[i[0]++];
+	result[i[1]] = s[i[0]]; // tirei os ++
 	return (0);
 }
 

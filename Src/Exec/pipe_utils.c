@@ -85,6 +85,6 @@ int	error_code_for_exec(char *path)
 	}
 	dir = opendir(path);
 	if (dir)
-		return (free(dir), ft_printf_fd(2, "%s: Is a directory\n", path), 126);
+		return (closedir(dir), ft_printf_fd(2, "%s: Is a directory\n", path), 126);
 	return (0);
 }

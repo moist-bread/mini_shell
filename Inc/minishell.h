@@ -176,6 +176,7 @@ int			space_length(char *input);
 char		*space_put(char *input, int len);
 void		write_and_advance(char *result, int *res_idx, \
 			char *exp);
+int			process_token_quotes(t_token *curr);
 
 // CHECKS
 
