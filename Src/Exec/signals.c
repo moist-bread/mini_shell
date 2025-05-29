@@ -55,10 +55,12 @@ static void	here_doc_sig_handler(int signal)
 
 /// @brief Basic error function
 /// @param token Node of the token list
-void	ft_error_check(t_token **token)
+void	ft_error_check(t_token **token, int msg)
 {
-	printf("syntax error near unexpected token\n");
-	g_ms_struct->exit_status = 1;
-	syntax_clear(*token);
-	*token = NULL;
+	if (msg == 1)
+		ft_printf_fd(2, "syntax error near unexpected token\n");
+	if (msg == 2)
+		ft_printf_fd(2, "Invalid Syntax\n");
+	g_ms_struct->exit_status = 2;
+	syntax_clear(token);
 }

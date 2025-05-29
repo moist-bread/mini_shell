@@ -6,23 +6,25 @@
 /// @param env The enviorment 
 /// @param i Indexes
 /// @return The lenght
-size_t	len_double_quotes(char *input, char **env, int *i, int exit_status)
+long	len_double_quotes(char *s, char **env, int *i, int exit_status)
 {
-	size_t len;
+	long	len;
 
 	len = 1;
 	(*i)++;
-	while (input[(*i)] && input[*i] != '\"')
+	while (s[(*i)] && s[*i] != '\"')
 	{
-		if (input[*i] == '$' && (ft_isalpha(input[*i + 1]) || input[*i + 1] == '_'))
+		if (s[*i] == '$' && (ft_isalpha(s[*i + 1]) || s[*i + 1] == '_'))
 		{
-			len += len_expansion(input + *i, env);
-			while (input[++(*i)] == '_' || ft_isalnum(input[*i]))
+			len += len_expansion(s + *i, env);
+			if (len == -1)
+				return (-1);
+			while (s[++(*i)] == '_' || ft_isalnum(s[*i]))
 				;
 		}
-		else if (input[*i] == '$' && ft_isdigit(input[*i + 1]))
+		else if (s[*i] == '$' && ft_isdigit(s[*i + 1]))
 			*i += 2;
-		else if (input[*i] == '$' && input[*i + 1] == '?')
+		else if (s[*i] == '$' && s[*i + 1] == '?')
 			len_exit_status(ft_itoa(exit_status), &len, i);
 		else
 		{
@@ -30,18 +32,16 @@ size_t	len_double_quotes(char *input, char **env, int *i, int exit_status)
 			len++;
 		}
 	}
-	if (input[(*i)++] == '\"')
-        len++;
-	return (len);
+	return ((*i)++, len + 1);
 }
 
 /// @brief Retrieves the lenght of the single quoted string
 /// @param input The string passed
 /// @param i Indexes
 /// @return The length
-size_t	len_single_quote(char *input, int *i)
+long	len_single_quote(char *input, int *i)
 {
-	size_t len;
+	long	len;
 
 	len = 1;
 	(*i)++;
@@ -52,9 +52,9 @@ size_t	len_single_quote(char *input, int *i)
 	}
 	if (input[*i] == '\'')
 	{
-        len++;
-        (*i)++;
-    }
+		len++;
+		(*i)++;
+	}
 	return (len);
 }
 
@@ -63,22 +63,24 @@ size_t	len_single_quote(char *input, int *i)
 /// @param env The enviorment 
 /// @param i Indexes
 /// @return The length
-size_t	len_unquoted(char *input, char **env, int *i, int exit_status)
+long	len_unquoted(char *s, char **env, int *i, int exit_status)
 {
-	size_t	len;
+	long	len;
 
 	len = 0;
-	while (input[*i] && input[*i] != '\"' && input[*i] != '\'')
+	while (s[*i] && s[*i] != '\"' && s[*i] != '\'')
 	{
-		if (input[*i] == '$' && (ft_isalpha(input[*i + 1]) || input[*i + 1] == '_'))
+		if (s[*i] == '$' && (ft_isalpha(s[*i + 1]) || s[*i + 1] == '_'))
 		{
-			len += len_expansion(input + *i, env);
-			while (input[++(*i)] == '_' || ft_isalnum(input[*i]))
+			len += len_expansion(s + *i, env);
+			if (len == -1)
+				return (-1);
+			while (s[++(*i)] == '_' || ft_isalnum(s[*i]))
 				;
 		}
-		else if (input[*i] == '$' && ft_isdigit(input[*i + 1]))
+		else if (s[*i] == '$' && ft_isdigit(s[*i + 1]))
 			*i += 2;
-		else if (input[*i] == '$' && input[*i + 1] == '?')
+		else if (s[*i] == '$' && s[*i + 1] == '?')
 			len_exit_status(ft_itoa(exit_status), &len, i);
 		else
 		{
@@ -93,9 +95,9 @@ size_t	len_unquoted(char *input, char **env, int *i, int exit_status)
 /// @param input The string passed
 /// @param env The enviorment 
 /// @return The length
-size_t	the_length(char *input, t_minishell ms)
+long	the_length(char *input, t_minishell ms)
 {
-	size_t	len;
+	long	len;
 	int		i;
 
 	len = 0;
@@ -103,11 +105,19 @@ size_t	the_length(char *input, t_minishell ms)
 	while (input[i])
 	{
 		if (input[i] == '\"')
+		{
 			len += len_double_quotes(input, ms.env, &i, ms.exit_status);
+			if (len == -1)
+				return (-1);
+		}
 		else if (input[i] == '\'')
 			len += len_single_quote(input, &i);
 		else
+		{
 			len += len_unquoted(input, ms.env, &i, ms.exit_status);
+			if (len == -1)
+				return (-1);
+		}
 	}
 	return (len);
 }
@@ -116,14 +126,16 @@ size_t	the_length(char *input, t_minishell ms)
 /// @param input The string passed
 /// @param env The enviorment 
 /// @return the length
-size_t	len_expansion(char *input, char **env)
+long	len_expansion(char *input, char **env)
 {
 	char	*value;
 	char	*search;
-	size_t	len;
+	long	len;
 
 	len = 0;
 	search = get_search(input);
+	if (!search)
+		return (-1);
 	value = get_env(search, env);
 	if (!value)
 		return (free(search), 0);

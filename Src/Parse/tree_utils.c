@@ -10,12 +10,11 @@ t_tree_node	*newtreenode(t_node_cont cont)
 
 	newnode = ft_calloc(1, sizeof(t_tree_node));
 	if (!newnode)
-		return (NULL);
+		return (perror("malloc"), NULL);
 	newnode->cont = cont;
 	newnode->prev = NULL;
 	newnode->left = NULL;
 	newnode->right = NULL;
-	// newnode->cont.quote = false;
 	return (newnode);
 }
 
@@ -68,6 +67,18 @@ void	free_tree_node_cont(t_node_cont cont)
 		free(cont.limiter);
 }
 
+int	expander(t_token *curr, t_minishell *ms, t_token **head)
+{
+	char	**expanded;
+
+	expanded = input_expander(curr->cont, *ms);
+	if (!expanded)
+		return (syntax_clear(head), 1);
+	curr = replace_expanded_token(head, curr, expanded);
+	free_split(expanded);
+	return (0);
+}
+
 /// @brief Function that prints the AST_Tree
 /// @param tree_node The First Node of the Tree
 /// @param depth Where i am in the AST_Tree
@@ -76,18 +87,12 @@ void	print_tree(t_tree_node *tree_node, int depth, char *side)
 {
 	if (!tree_node)
 		return;
-
-	// Indentation
 	for (int i = 0; i < depth; i++)
 		printf("\t");
-
 	assign_name(tree_node->type);
 	printf(" (%s)\n", side);
-
 	for (int i = 0; i < depth; i++)
 		printf("\t");
-
-	// Print content based on type
 	if (tree_node->cont.cmd)
 		printf("CONT: %s\n", tree_node->cont.cmd);
 	else if (tree_node->cont.pipe_c)
@@ -107,9 +112,9 @@ void	print_tree(t_tree_node *tree_node, int depth, char *side)
 
 void    tree_apply_print(t_tree_node *root, int depth, char *side)
 {
-    if (root->right)
-        tree_apply_print(root->right, depth + 1, "Right");
-    print_tree(root, depth, side);
+	if (root->right)
+		tree_apply_print(root->right, depth + 1, "Right");
+	print_tree(root, depth, side);
 	if (root->left)
-    	tree_apply_print(root->left, depth + 1, "Left");
+		tree_apply_print(root->left, depth + 1, "Left");
 }

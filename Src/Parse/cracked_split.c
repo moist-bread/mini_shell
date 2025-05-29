@@ -1,7 +1,5 @@
 
-
 #include "../../Inc/minishell.h"
-
 
 static int	count_str(char const *s)
 {

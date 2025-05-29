@@ -18,7 +18,7 @@ char	**input_expander(char *input, t_minishell ms)
 		return (NULL);
 	final_result = separator_3000(expanded, is_quote);
 	if (!final_result)
-		return (NULL);
+		return (free(expanded), NULL);
 	return (final_result);
 }
 
@@ -30,7 +30,7 @@ char	*get_search(char *input)
 	char	*search;
 	int		i;
 	int		search_len;
-	
+
 	i = 0;
 	search_len = 0;
 	while (input[i] && input[i] != '$')
@@ -43,7 +43,7 @@ char	*get_search(char *input)
 		search_len++;
 	search = ft_calloc(sizeof(char), search_len + 2);
 	if (!search)
-		return (NULL);
+		return (perror("malloc1"), NULL);
 	ft_strlcpy(search, input + i, search_len + 1);
 	search[search_len] = '=';
 	return (search);
@@ -58,7 +58,7 @@ char	*expansion(char *input, char **env)
 	char	*value;
 	char	*search;
 	char	*result;
-	
+
 	search = get_search(input);
 	if (!search)
 		return (NULL);
@@ -78,7 +78,7 @@ char	*expansion(char *input, char **env)
 /// @return The new unquoted string
 char	**separator_3000(char *expanded, int is_quote)
 {
-	char 	**final_result;
+	char	**final_result;
 	char	*quoted;
 
 	final_result = NULL;
@@ -86,6 +86,8 @@ char	**separator_3000(char *expanded, int is_quote)
 	if (is_quote == 0)
 	{
 		quoted = quote_limiter(expanded);
+		if (!quoted)
+			return (NULL);
 		final_result = separate(quoted);
 		free(quoted);
 	}
@@ -93,10 +95,11 @@ char	**separator_3000(char *expanded, int is_quote)
 	{
 		final_result = ft_calloc(sizeof(char *), 2);
 		if (!final_result)
-			return (free(expanded), NULL);
+			return (perror("malloc"), NULL);
 		final_result[0] = quote_remover(expanded);
+		if (!final_result[0])
+			return (NULL);
 		final_result[1] = NULL;
-		// printf("final_result: %s\n", final_result[0] );
 	}
 	free(expanded);
 	return (final_result);
@@ -119,9 +122,13 @@ char	**separate(char *expanded)
 		count++;
 	final_result = ft_calloc(sizeof(char *), count + 1);
 	if (!final_result)
-		return (free_split(result), free(expanded), NULL);
+		return (perror("malloc"), free_split(result), NULL);
 	while (++i < count)
+	{
 		final_result[i] = quote_remover(result[i]);
+		if (!final_result)
+			return (free_split(result), free_split(final_result), NULL);
+	}
 	final_result[count] = NULL;
 	free_split(result);
 	return (final_result);

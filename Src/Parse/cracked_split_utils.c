@@ -1,10 +1,9 @@
 
-
 #include "../../Inc/minishell.h"
 
 /// @brief 
 /// @param c 
-/// @return 
+/// @return
 bool is_sep(char c)
 {
 	if ((c >= 9 && c <= 13) || c == ' ')
@@ -53,7 +52,7 @@ int	skip_quote(const char *s)
 	quote = s[i++];
 	while (s[i] && s[i] != quote)
 		i++;
-	if(s[i] && s[i] == quote)
+	if (s[i] && s[i] == quote)
 		i++;
 	return (i);
 }

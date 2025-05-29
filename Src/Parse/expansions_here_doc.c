@@ -2,9 +2,10 @@
 #include "../../Inc/minishell.h"
 
 static	char	*process_expander(char *line, t_minishell ms);
-static	void	here_doc_expansion(char *result, char *input, t_minishell ms);
+static	int	here_doc_expansion(char *result, char *input, t_minishell ms);
 
-char	*my_function(t_minishell ms, char *line, char *limiter, t_tree_node *node)
+char	*my_function(t_minishell ms, char *line, \
+char *limiter, t_tree_node *node)
 {
 	char	*expanded;
 	int		i;
@@ -13,7 +14,7 @@ char	*my_function(t_minishell ms, char *line, char *limiter, t_tree_node *node)
 	i = 0;
 	while (line[i])
 	{
-		if (ft_strchr(line, '$') && node->cont.quote == false) // MY FUNCTION
+		if (ft_strchr(line, '$') && node->cont.quote == false)
 		{
 			expanded = process_expander(line, ms);
 			if (!expanded)
@@ -29,44 +30,47 @@ char	*my_function(t_minishell ms, char *line, char *limiter, t_tree_node *node)
 static	char	*process_expander(char *line, t_minishell ms)
 {
 	char	*result;
-	size_t	result_len;
+	long	result_len;
 
 	if (!line)
 		return (ft_strdup(""));
 	result_len = the_length (line, ms);
+	if (result_len == -1)
+		return (NULL);
 	result = ft_calloc(sizeof(char), result_len + 1);
 	if (!result)
-		return (NULL);
-	here_doc_expansion(result, line, ms);
+		return (perror("malloc"), NULL);
+	if (here_doc_expansion(result, line, ms) == 1)
+		return (free(result), NULL);
 	return (result);
 }
 
-static	void	here_doc_expansion(char *result, char *input, t_minishell ms)
+static	int	here_doc_expansion(char *result, char *s, t_minishell ms)
 {
-	int	i[2] = {0, 0};
+	int		i[2];
 	char	*exp;
 
-	while (input[i[0]])
+	ft_bzero(i, 2);
+	while (s[i[0]])
 	{
-		if (input[i[0]] == '$' && (ft_isalpha(input[i[0] + 1]) || input[i[0] + 1] == '_'))
+		if (s[i[0]] == '$' && (ft_isalpha(s[i[0] + 1]) || s[i[0] + 1] == '_'))
 		{
-			exp = expansion(input + i[0], ms.env);
+			exp = expansion(s + i[0], ms.env);
+			if (!exp)
+				return (1);
 			if (exp)
-			{
-				ft_memcpy(result + i[1], exp, ft_strlen(exp));
-				i[1] += ft_strlen(exp);
-				free(exp);
-			}
-			while (input[++i[0]] && (input[i[0]] == '_' || ft_isalnum(input[i[0]])))
+				write_and_advance(result, &i[0], exp);
+			while (s[++i[0]] && (s[i[0]] == '_' || ft_isalnum(s[i[0]])))
 				;
 		}
-		else if (input[i[0]] == '$' && ft_isdigit(input[i[0] + 1]))
+		else if (s[i[0]] == '$' && ft_isdigit(s[i[0] + 1]))
 			i[0] += 2;
-		else if (input[i[0]] == '$' && input[i[0] + 1] == '?')
+		else if (s[i[0]] == '$' && s[i[0] + 1] == '?')
 			expansion_exit_status(result, i, ft_itoa(ms.exit_status));
 		else
-			result[i[1]++] = input[i[0]++];
+			result[i[1]++] = s[i[0]++];
 	}
+	return (0);
 }
 
 void	expansion_exit_status(char *result, int *i, char *exit_status)
