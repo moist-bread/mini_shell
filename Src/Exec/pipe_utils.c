@@ -14,33 +14,27 @@ void	assign_pipe_fds(t_minishell ms, t_pipe_data *pdata, int *redir_fd,
 
 	if (redir_fd[0] > 2)
 	{
-		printf("in redir --\n");
 		pdata->cur_pipe[0] = redir_fd[0];
 		safe_close(pdata->next_pipe);
 	}
-	else // no in redir
-	{
-		printf("no in redir --\n");
+	else
 		pdata->cur_pipe[0] = pdata->next_pipe;
-	}
-	printf("create pipe --\n");
 	if (pipe(new_pipe) == -1)
 		return (perror("pipe"), minishell_clean(ms, 1));
 	pdata->cur_pipe[1] = new_pipe[1];
 	pdata->next_pipe = new_pipe[0];
-	if (redir_fd[1] > 2 || idx + 1 == pdata->cmd_n) // out redir or last cmd
+	if (redir_fd[1] > 2 || idx + 1 == pdata->cmd_n)
 	{
-		printf("out redir or last cmd --\n");
 		close(pdata->cur_pipe[1]);
 		pdata->cur_pipe[1] = redir_fd[1];
 		if (idx + 1 == pdata->cmd_n)
 			close(pdata->next_pipe);
 	}
-	printf("\nAFTER FDS\n\nredir_fd[0]: %d\nredir_fd[1]: %d\n", redir_fd[0],
-		redir_fd[1]);
-	printf("pdata->cur_pipe[0]: %d\npdata->cur_pipe[1]: %d\n",
-		pdata->cur_pipe[0], pdata->cur_pipe[1]);
-	printf("pdata->next_pipe: %d\n", pdata->next_pipe);
+	// printf("\nAFTER FDS\n\nredir_fd[0]: %d\nredir_fd[1]: %d\n", redir_fd[0],
+	// 	redir_fd[1]);
+	// printf("pdata->cur_pipe[0]: %d\npdata->cur_pipe[1]: %d\n",
+	// 	pdata->cur_pipe[0], pdata->cur_pipe[1]);
+	// printf("pdata->next_pipe: %d\n", pdata->next_pipe);
 }
 
 /// @brief Searches for the true path to the CMD program
@@ -82,26 +76,15 @@ int	error_code_for_exec(char *path)
 	DIR	*dir;
 
 	if (access(path, F_OK) < 0)
-	{
-		ft_printf_fd(2, "%s: command not found\n", path);
-		return (127);
-	}
+		return (ft_printf_fd(2, "%s: command not found\n", path), 127);
 	else if (access(path, X_OK) < 0)
 	{
 		if (ft_strchr(path, '/'))
-		{
-			ft_printf_fd(2, "%s: Permission denied\n", path);
-			return (126);
-		}
-		ft_printf_fd(2, "%s: command not found\n", path);
-		return (127);
+			return (ft_printf_fd(2, "%s: Permission denied\n", path), 126);
+		return (ft_printf_fd(2, "%s: command not found\n", path), 127);
 	}
 	dir = opendir(path);
 	if (dir)
-	{
-		free(dir);
-		ft_printf_fd(2, "%s: Is a directory\n", path);
-		return (126);
-	}
+		return (free(dir), ft_printf_fd(2, "%s: Is a directory\n", path), 126);
 	return (0);
 }

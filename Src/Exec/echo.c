@@ -1,7 +1,7 @@
 
 #include "../../Inc/minishell.h"
 
-static int	echo_validate_options(char *arg);
+static int	echo_validate_option(char *arg);
 
 /// @brief Echoes NODES's arguments and handles the option -n
 /// @param ms Overarching Minishell Structure
@@ -11,13 +11,14 @@ void	echo_built_in(t_minishell *ms, t_tree_node *node, int fd)
 	int	n_opt;
 	int	i;
 
-	printf(YEL "\nEntering echo built in" DEF "\n\n");
+	// printf(YEL "\nEntering echo built in" DEF "\n\n");
+	n_opt = 0;
 	i = -1;
 	while (node->right && node->right->cont.args[++i])
 	{
 		if (i == 0)
 		{
-			n_opt = echo_validate_options(node->right->cont.args[i]);
+			n_opt = echo_validate_option(node->right->cont.args[i]);
 			if (n_opt)
 				continue ;
 		}
@@ -33,7 +34,7 @@ void	echo_built_in(t_minishell *ms, t_tree_node *node, int fd)
 /// @brief Checks if ARG is a valid -n option or just an argument
 /// @param arg Possible option argument
 /// @return 0 when invalid, 1 when valid
-static int	echo_validate_options(char *arg)
+static int	echo_validate_option(char *arg)
 {
 	int	i;
 

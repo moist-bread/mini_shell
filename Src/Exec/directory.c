@@ -11,7 +11,7 @@ void	cd_built_in(t_minishell *ms, t_tree_node *node)
 {
 	char	*path;
 
-	printf(YEL "\nEntering cd built in" DEF "\n\n");
+	// printf(YEL "\nEntering cd built in" DEF "\n\n");
 	if (node->right && invalid_cd(node->right, &ms->exit_status))
 		return ;
 	if (node->right) // caso "cd coisa"
@@ -60,26 +60,22 @@ static void	cd_update_pwd(t_minishell *ms)
 	int		env_len;
 	char	*cur;
 
-	printf("old env oldpwd:\t%s\n", get_env("OLDPWD=", ms->env));
-	printf("old env pwd:\t%s\n", get_env("PWD=", ms->env));
-	old_pi = get_env_idx(ms->env, "OLDPWD=");
+	// printf("old env oldpwd:\t%s\n", get_env("OLDPWD=", ms->env));
+	// printf("old env pwd:\t%s\n", get_env("PWD=", ms->env));
+	old_pi = get_env_idx("OLDPWD=", ms->env);
 	if (old_pi == -1)
 	{
 		env_len = (int)ft_matrixlen(ms->env);
 		ms->env = matrix_add_to_index(ms->env, "OLDPWD=", env_len, env_len);
 		old_pi = env_len;
 	}
-	if (replace_env_value(ms, "OLDPWD=", get_env("PWD=", ms->env), old_pi)
-		== -1)
-		return (error_msg_status("malloc", &ms->exit_status, 1));
+	replace_env_value(ms, "OLDPWD=", get_env("PWD=", ms->env), old_pi);
 	cur = getcwd(NULL, 0);
-	if (replace_env_value(ms, "PWD=", cur, get_env_idx(&ms->env[ms->env_start],
-				"PWD=")) == -1)
-		return (free(cur), error_msg_status("malloc", &ms->exit_status, 1));
+	replace_env_value(ms, "PWD=", cur, get_env_idx("PWD=", ms->env));
 	free(cur);
 	ms->exit_status = 0;
-	printf("new env oldpwd:\t%s\n", get_env("OLDPWD=", ms->env));
-	printf("new env pwd:\t%s\n", get_env("PWD=", ms->env));
+	// printf("new env oldpwd:\t%s\n", get_env("OLDPWD=", ms->env));
+	// printf("new env pwd:\t%s\n", get_env("PWD=", ms->env));
 }
 
 /// @brief Print name of current/working directory
@@ -90,7 +86,7 @@ void	pwd_built_in(t_minishell *ms, t_tree_node *node, int fd)
 {
 	char	*pwd;
 
-	printf(YEL "\nEntering pwd built in" DEF "\n\n");
+	// printf(YEL "\nEntering pwd built in" DEF "\n\n");
 	if (node->right && *node->right->cont.args[0] == '-'
 		&& node->right->cont.args[0][1])
 	{

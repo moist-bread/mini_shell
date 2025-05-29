@@ -6,7 +6,7 @@
 /// @param status Process exit status
 void	minishell_clean(t_minishell minishell, int status)
 {
-	printf("exiting with: %d\n", status);
+	// printf("exiting with: %d\n", status);
 	if (minishell.tree_head)
 		free_tree(minishell.tree_head);
 	free_split(minishell.env);

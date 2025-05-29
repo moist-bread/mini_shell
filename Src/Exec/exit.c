@@ -10,7 +10,7 @@ void	exit_built_in(t_minishell *ms, t_tree_node *node)
 {
 	long	arg_n;
 
-	printf(YEL "\nEntering exit built in" DEF "\n\n");
+	// printf(YEL "\nEntering exit built in" DEF "\n\n");
 	printf(BLU "\nexit" DEF "\n");
 	arg_n = 0;
 	if (!node->right)

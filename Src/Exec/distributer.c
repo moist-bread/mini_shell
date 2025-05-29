@@ -8,7 +8,7 @@ void	master_distributer(t_minishell *ms, t_tree_node *node)
 {
 	if (!node)
 		return ;
-	printf(YEL "\nEntering master distributer" DEF "\n\n");
+	// printf(YEL "\nEntering master distributer" DEF "\n\n");
 	if (node->type == PIPE)
 		pipe_process(ms, node);
 	else if (node->type == CMD)
@@ -25,17 +25,15 @@ void	command_process(t_minishell *ms, t_tree_node *node)
 	int	id;
 	int	redir[2];
 
-	printf(YEL "\nEntering Command Process" DEF "\n\n");
-	// step 1: check redir and open needed --
-	printf("step 1 --\n");
+	// printf(YEL "\nEntering Command Process" DEF "\n\n");
+	// printf("step 1 --\n");
 	if (cmd_redir_executer(ms, node, &redir[0], &redir[1]) == -1)
-		return (error_msg_status(NULL, &ms->exit_status, 1));
-	// step 2: child pro, parse, dup execute --
-	printf("step 2 --\n");
+		return ;
+	// printf("step 2 --\n");
 	init_sigact(ms, 'I');
 	id = fork();
 	if (id < 0)
-		minishell_clean(*ms, 1); // fail fork ABORT?
+		return (error_msg_status("fork", &ms->exit_status, 1));
 	else if (id == 0)
 	{
 		init_sigact(ms, 'D');
@@ -60,7 +58,6 @@ void	cmd_parse_and_exe(t_minishell ms, t_tree_node *node, int *redir)
 	char	*path;
 	int		status;
 
-	printf(YEL "\nEntering CMD PARSE EXEC" DEF "\n\n");
 	if (node->right)
 		cmd = matrix_add_front(node->cont.cmd, node->right->cont.args);
 	else
@@ -91,10 +88,9 @@ void	built_in_process(t_minishell *ms, t_tree_node *node)
 {
 	int	redir[2];
 
-	printf(YEL "\nEntering Built In Process" DEF "\n\n");
-	printf("step 1 --\n");
+	// printf(YEL "\nEntering Built In Process" DEF "\n\n");
 	if (cmd_redir_executer(ms, node, &redir[0], &redir[1]) == -1)
-		return (error_msg_status(NULL, &ms->exit_status, 1));
+		return ;
 	built_in_exe(ms, node, redir[1]);
 	safe_close(redir[0]);
 	safe_close(redir[1]);
@@ -105,7 +101,6 @@ void	built_in_process(t_minishell *ms, t_tree_node *node)
 /// @param node Current node of type BUILT_IN to be executed
 void	built_in_exe(t_minishell *ms, t_tree_node *node, int out)
 {
-	printf("step 2 --\n");
 	if (!ft_strcmp("echo", node->cont.cmd))
 		echo_built_in(ms, node, out);
 	else if (!ft_strcmp("cd", node->cont.cmd))

@@ -7,7 +7,7 @@
 /// @param fd possible redir file descriptor
 void	env_built_in(t_minishell *ms, t_tree_node *node, int fd)
 {
-	printf(YEL "\nEntering env built in" DEF "\n\n");
+	// printf(YEL "\nEntering env built in" DEF "\n\n");
 	if (node->right)
 	{
 		if (node->right->cont.args[0][0] == '-' && node->right->cont.args[0][1])
