@@ -9,7 +9,7 @@ void	unset_built_in(t_minishell *ms, t_tree_node *node)
 	int	env_idx;
 	int	i;
 
-	printf(YEL "\nEntering unset built in" DEF "\n\n");
+	// printf(YEL "\nEntering unset built in" DEF "\n\n");
 	ms->exit_status = 0;
 	if (!node->right)
 		return ;
@@ -24,8 +24,8 @@ void	unset_built_in(t_minishell *ms, t_tree_node *node)
 	i = -1;
 	while (node->right->cont.args[++i])
 	{
-		printf("unset arg[%d]: \"%s\"\n", i, node->right->cont.args[i]);
-		env_idx = get_env_idx(ms->env, node->right->cont.args[i]);
+		// printf("unset arg[%d]: \"%s\"\n", i, node->right->cont.args[i]);
+		env_idx = get_env_idx(node->right->cont.args[i], ms->env);
 		if (env_idx == -1)
 			continue ;
 		else

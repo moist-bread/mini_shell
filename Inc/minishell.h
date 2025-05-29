@@ -109,7 +109,7 @@ void		tokenadd_back(t_token **tklst, t_token *newtk);
 void		tokenadd_front(t_token **tklst, t_token *newtk);
 t_token		*newtoken(char *cont);
 t_token		*create_tokens(char *input);
-void	place_token(char *input, t_token **head);
+void		place_token(char *input, t_token **head);
 void		print_tokens(t_token *tokens);
 bool		is_token(t_token *token);
 void		expand_token_list(t_token **head, t_minishell *ms);
@@ -157,7 +157,7 @@ char		**separate(char *expanded);
 char		*quote_remover(char *s);
 char		*quote_limiter(char *exp);
 size_t		quote_conter_len(char *s);
-char		*my_function(t_minishell ms, char *line, char *limiter, t_tree_node *node);
+char		*my_function(t_minishell ms, char *line, bool lim_flag);
 
 // ASSIGN TYPES
 
@@ -290,7 +290,7 @@ void		move_env_var(t_minishell *ms, int *old_idx, int new_idx);
 // GET ENV
 
 char		*get_env(char *search, char **env);
-int			get_env_idx(char **env, char *search);
+int			get_env_idx(char *search, char **env);
 char		*get_export_key(char *var);
 char		*get_export_value(char *var);
 int			env_elem_len(char *var, int key_flag);

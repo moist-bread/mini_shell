@@ -25,7 +25,7 @@ t_token	*create_tokens(char *input)
 	tokens = NULL;
 	place_token(input, &tokens);
 	assign_type_token(tokens, false);
-	print_tokens(tokens);
+	// print_tokens(tokens);
 	master_check(&tokens);
 	free(input);
 	return (tokens);

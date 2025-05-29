@@ -11,17 +11,17 @@ char	*get_env(char *search, char **env)
 
 	if (!env || !search)
 		return (NULL);
-	i = get_env_idx(env, search);
+	i = get_env_idx(search, env);
 	if (i != -1)
 		return ((env[i] + ft_strlen(search)));
 	return (NULL);
 }
 
 /// @brief Gets the index associated with Key SEARCH
-/// @param env Environment
 /// @param search  Key Name for which to search in ENV
+/// @param env Environment
 /// @return Index where the SEARCH key name was found
-int	get_env_idx(char **env, char *search)
+int	get_env_idx(char *search, char **env)
 {
 	int	len;
 	int	i;

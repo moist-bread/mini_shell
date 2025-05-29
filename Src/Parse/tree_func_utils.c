@@ -98,9 +98,9 @@ void	if_command(t_token *tokens, t_tree_node *cmd_node)
 			cmd_node->right = newtreenode(assign_tree_cont(temp));
 			cmd_node->right->type = ARG;
 			st_arg = true; 
-			for (int i = 0; cmd_node->right->cont.args[i]; i++)
+			// for (int i = 0; cmd_node->right->cont.args[i]; i++)
 			// printf("%s ",cmd_node->right->cont.args[i]);
-			printf("\n");
+			// printf("\n");
 		}
 		temp = temp->next;
 	}

@@ -21,9 +21,9 @@ void	export_append(t_minishell *ms, int idx, char *new)
 	if (!append)
 		return (error_msg_status("malloc", &ms->exit_status, 1));
 	j = ft_strlcpy(append, ms->env[idx], ft_strlen(ms->env[idx]) + 1);
-	printf("original: %s\n", append);
+	// printf("original: %s\n", append);
 	i = ft_strlcpy(&append[j], &new[i + 1], ft_strlen(&new[i]));
-	printf("appended: %s\n", append);
+	// printf("appended: %s\n", append);
 	if (!ft_strchr(ms->env[idx], '='))
 		move_env_var(ms, &idx, (int)ft_matrixlen(ms->env) - 1);
 	free(ms->env[idx]);
@@ -49,12 +49,12 @@ int	replace_env_value(t_minishell *ms, char *key, char *new, int idx)
 	new_val_len = ft_strlen(new) + 2;
 	new_var = ft_calloc(key_len + new_val_len, sizeof(char));
 	if (!new_var)
-		return (-1);
+		return (perror("malloc"), -1);
 	j = ft_strlcpy(new_var, key, key_len + 1);
 	new_var[j - 1] = '=';
-	printf("copied key: %s\n", new_var);
+	// printf("copied key: %s\n", new_var);
 	ft_strlcpy(&new_var[j], new, new_val_len);
-	printf("copied new val: %s\n", new_var);
+	// printf("copied new val: %s\n", new_var);
 	if (idx < ms->env_start)
 		move_env_var(ms, &idx, (int)ft_matrixlen(ms->env) - 1);
 	free(ms->env[idx]);

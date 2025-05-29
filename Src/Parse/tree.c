@@ -11,11 +11,11 @@ t_tree_node	*create_tree(t_token **tokens, t_minishell *ms)
 	tree_node = NULL;
 	expand_token_list(tokens, ms);
 	assign_type_token(*tokens, true);
-	printf("after expansion:\n");
-	print_tokens(*tokens);
+	// printf("after expansion:\n");
+	// print_tokens(*tokens);
 	place_treenode(*tokens, &tree_node, false);
-	tree_apply_print(tree_node, 0, "Root");
-	printf("\n");
+	// tree_apply_print(tree_node, 0, "Root");
+	// printf("\n");
 	return (tree_node);
 }
 

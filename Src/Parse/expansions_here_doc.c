@@ -4,16 +4,15 @@
 static	char	*process_expander(char *line, t_minishell ms);
 static	void	here_doc_expansion(char *result, char *input, t_minishell ms);
 
-char	*my_function(t_minishell ms, char *line, char *limiter, t_tree_node *node)
+char	*my_function(t_minishell ms, char *line, bool lim_flag)
 {
 	char	*expanded;
 	int		i;
 
-	(void)limiter;
 	i = 0;
 	while (line[i])
 	{
-		if (ft_strchr(line, '$') && node->cont.quote == false) // MY FUNCTION
+		if (ft_strchr(line, '$') && lim_flag == false)
 		{
 			expanded = process_expander(line, ms);
 			if (!expanded)
@@ -36,7 +35,7 @@ static	char	*process_expander(char *line, t_minishell ms)
 	result_len = the_length (line, ms);
 	result = ft_calloc(sizeof(char), result_len + 1);
 	if (!result)
-		return (NULL);
+		return (perror("malloc"), NULL);
 	here_doc_expansion(result, line, ms);
 	return (result);
 }

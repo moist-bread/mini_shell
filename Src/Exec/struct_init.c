@@ -2,7 +2,7 @@
 #include "../../Inc/minishell.h"
 
 static char	**env_init(t_minishell *ms, char **old_env);
-static char	**shell_level_updater(t_minishell *ms, char *old_val);
+static char	**shell_level_updater(t_minishell *ms, int old_val);
 static int	create_needed_vars(char ***env, int *env_start);
 static int	assign_sh_lvl(char *value);
 
@@ -29,7 +29,7 @@ void	minishell_struct_init(t_minishell *ms, char **env)
 static char	**env_init(t_minishell *ms, char **old_env)
 {
 	char	**env;
-	char	*sh_lvl;
+	int		sh_lvl;
 
 	env = NULL;
 	ms->env_start = 0;
@@ -39,17 +39,49 @@ static char	**env_init(t_minishell *ms, char **old_env)
 		if (!env)
 			return (NULL);
 	}
-	sh_lvl = get_env("SHLVL=", env);
-	if (sh_lvl)
+	sh_lvl = get_env_idx("SHLVL=", env);
+	if (sh_lvl != -1)
 	{
 		ms->env = env;
-		shell_level_updater(ms, sh_lvl);
+		env = shell_level_updater(ms, sh_lvl);
 	}
 	else
 		env = matrix_add_front("SHLVL=1", env);
 	if (!env || create_needed_vars(&env, &ms->env_start) == -1)
 		return (NULL);
 	return (env);
+}
+
+static char	**shell_level_updater(t_minishell *ms, int shl_idx)
+{
+	char	*new_val;
+
+	new_val = ft_itoa(assign_sh_lvl(ms->env[shl_idx] + 6));
+	if (!new_val)
+		return (free_split(ms->env), NULL);
+	if (replace_env_value(ms, "SHLVL=", new_val, shl_idx) == -1)
+		return (free(new_val), free_split(ms->env), NULL);
+	free(new_val);
+	return (ms->env);
+}
+
+static int	assign_sh_lvl(char *value)
+{
+	long	lvl;
+
+	lvl = 0;
+	if (long_check(value, &lvl))
+	{
+		if (lvl + 1 == INT_MAX)
+			return (ft_printf_fd(2, SHLVL_WARN), 1);
+		if (lvl < INT_MIN)
+			return (1);
+		else if (lvl < 0 || lvl >= INT_MAX)
+			return (0);
+		return (lvl + 1);
+	}
+	else
+		return (1);
 }
 
 static int	create_needed_vars(char ***env, int *env_start)
@@ -78,37 +110,4 @@ static int	create_needed_vars(char ***env, int *env_start)
 		*env_start = 1;
 	}
 	return (0);
-}
-
-static char	**shell_level_updater(t_minishell *ms, char *old_val)
-{
-	char	*new_val;
-
-	new_val = ft_itoa(assign_sh_lvl(old_val));
-	if (!new_val)
-		return (free_split(ms->env), NULL);
-	if (replace_env_value(ms, "SHLVL=", new_val, get_env_idx(ms->env,
-				"SHLVL=") == -1))
-		return (free(new_val), free_split(ms->env), NULL);
-	free(new_val);
-	return (ms->env);
-}
-
-static int	assign_sh_lvl(char *value)
-{
-	long	lvl;
-
-	lvl = 0;
-	if (long_check(value, &lvl))
-	{
-		if (lvl + 1 == INT_MAX)
-			return (ft_printf_fd(2, SHLVL_WARN), 1);
-		if (lvl < INT_MIN)
-			return (1);
-		else if (lvl < 0 || lvl >= INT_MAX)
-			return (0);
-		return (lvl + 1);
-	}
-	else
-		return (1);
 }
