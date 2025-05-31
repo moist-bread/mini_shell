@@ -51,7 +51,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS_MAIN) $(OBJS_EXEC) $(OBJS_PARSE) $(LIBFT)
 	$(M_COMP)
-	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN) $(OBJS_EXEC) $(OBJS_PARSE) $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN) $(OBJS_EXEC) $(OBJS_PARSE) $(LIBFT) $(RL) -o $(NAME)
 	$(M_DONE)
 
 $(OBJS_DIR)/%.o: $(SRC_DIR)/$(MINISHELL_DIR)/%.c | $(OBJS_DIR)
