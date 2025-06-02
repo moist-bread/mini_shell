@@ -19,10 +19,11 @@ void	echo_built_in(t_minishell *ms, t_tree_node *node, int fd)
 		if (i == 0)
 		{
 			n_opt = echo_validate_option(node->right->cont.args[i]);
-			if (n_opt)
-				continue ;
+			while (n_opt && node->right->cont.args[++i]
+				&& echo_validate_option(node->right->cont.args[i]))
+				n_opt++;
 		}
-		if ((!n_opt && i > 0) || (n_opt && i > 1))
+		if ((!n_opt && i > n_opt) || (n_opt && i > n_opt))
 			ft_printf_fd(fd, " ");
 		ft_printf_fd(fd, "%s", node->right->cont.args[i]);
 	}

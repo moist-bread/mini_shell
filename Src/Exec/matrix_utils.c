@@ -45,12 +45,12 @@ char	**matrix_add_front(char *add, char **original)
 		return (NULL);
 	if (!add)
 		return (original);
-	new = malloc((ft_matrixlen(original) + 2) * sizeof(char *));
+	new = ft_calloc(ft_matrixlen(original) + 2, sizeof(char *));
 	if (!new)
-		return (perror("malloc"), original);
+		return (perror("malloc"), NULL);
 	new[0] = ft_strdup(add);
 	if (!new[0])
-		return (perror("malloc"), original);
+		return (perror("malloc"), free(new), NULL);
 	i = -1;
 	while (original && original[++i])
 		new[i + 1] = original[i];

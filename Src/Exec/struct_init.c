@@ -2,7 +2,7 @@
 #include "../../Inc/minishell.h"
 
 static char	**env_init(t_minishell *ms, char **old_env);
-static char	**shell_level_updater(t_minishell *ms, int old_val);
+static char	**shell_level_updater(t_minishell *ms, char **env, int shl_idx);
 static int	assign_sh_lvl(char *value);
 static int	create_needed_vars(char ***env, int *env_start);
 
@@ -31,6 +31,7 @@ static char	**env_init(t_minishell *ms, char **old_env)
 	char	**env;
 	int		sh_lvl;
 
+	// MAKE THIS VOOID
 	env = NULL;
 	ms->env_start = 0;
 	if (*old_env)
@@ -41,12 +42,9 @@ static char	**env_init(t_minishell *ms, char **old_env)
 	}
 	sh_lvl = get_env_idx("SHLVL=", env);
 	if (sh_lvl != -1)
-	{
-		ms->env = env;
-		env = shell_level_updater(ms, sh_lvl);
-	}
+		env = shell_level_updater(ms, env, sh_lvl);
 	else
-		env = matrix_add_front("SHLVL=1", env);
+		env = matrix_add_front("SHLVL=1", env); // this is WRONG
 	if (!env || create_needed_vars(&env, &ms->env_start) == -1)
 		return (NULL);
 	return (env);
@@ -56,10 +54,11 @@ static char	**env_init(t_minishell *ms, char **old_env)
 /// @param ms Overarching Minishell Structure
 /// @param shl_idx Index that correspondes to the SHLVL variable
 /// @return New Environemnt
-static char	**shell_level_updater(t_minishell *ms, int shl_idx)
+static char	**shell_level_updater(t_minishell *ms, char **env, int shl_idx)
 {
 	char	*new_val;
 
+	ms->env = env;
 	new_val = ft_itoa(assign_sh_lvl(ms->env[shl_idx] + 6));
 	if (!new_val)
 		return (free_split(ms->env), NULL);
@@ -98,6 +97,7 @@ static int	assign_sh_lvl(char *value)
 /// @return 0 on success, -1 on failure
 static int	create_needed_vars(char ***env, int *env_start)
 {
+	char	**new_env;
 	char	*temp;
 	char	*cwd;
 
@@ -109,16 +109,27 @@ static int	create_needed_vars(char ***env, int *env_start)
 		free(cwd);
 		if (!temp)
 			return (free_split(*env), -1);
-		*env = matrix_add_front(temp, *env);
+		new_env = matrix_add_front(temp, *env);
+		if (!new_env)
+			return (free_split(*env), -1);
+		*env = new_env;
 		free(temp);
 	}
 	temp = get_env("PATH=", *env);
 	if (!temp)
-		*env = matrix_add_front(VAR_PATH, *env);
+	{
+		new_env = matrix_add_front(VAR_PATH, *env);
+		if (!new_env)
+			return (free_split(*env), -1);
+		*env = new_env;
+	}
 	temp = get_env("OLDPWD=", *env);
 	if (!temp)
 	{
-		*env = matrix_add_front("OLDPWD", *env);
+		new_env = matrix_add_front("OLDPWD", *env);
+		if (!new_env)
+			return (free_split(*env), -1);
+		*env = new_env;
 		*env_start = 1;
 	}
 	return (0);

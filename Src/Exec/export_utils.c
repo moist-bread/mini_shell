@@ -44,7 +44,7 @@ int	replace_env_value(t_minishell *ms, char *key, char *new, int idx)
 	char	*new_var;
 
 	if (!ms->env || !*key || !new || idx < 0)
-		return (-1);
+		return (1);
 	key_len = env_elem_len(key, 1);
 	new_val_len = ft_strlen(new) + 2;
 	new_var = ft_calloc(key_len + new_val_len, sizeof(char));

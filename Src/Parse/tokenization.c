@@ -34,7 +34,7 @@ t_token	*create_tokens(char *input)
 }
 
 /// @brief Places a node in a list
-/// @param input String received from the Stdout 
+/// @param input String received from the Stdout
 /// @param head Beggining of the list
 /// @return The head of the list
 int	place_token(char *input, t_token **head)
@@ -79,7 +79,7 @@ char	*add_spaces(char *input)
 }
 
 /// @brief Prints the node in order, there type and content
-/// @param tokens The token of the list 
+/// @param tokens The token of the list
 void	print_tokens(t_token *tokens)
 {
 	t_token	*curr;
