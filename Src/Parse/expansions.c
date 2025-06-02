@@ -20,6 +20,8 @@ char	*process_quote_expansions(char *input, t_minishell ms, int *is_quote)
 	result_len = the_length(checked, ms);
 	if (result_len == -1)
 		return (free(checked), NULL);
+	if (result_len == 0)
+		return (free(checked), ft_strdup(""));
 	result = ft_calloc(sizeof(char), result_len + 1);
 	if (!result)
 		return (perror("malloc"), free(checked), NULL);
@@ -36,9 +38,9 @@ char	*process_quote_expansions(char *input, t_minishell ms, int *is_quote)
 /// @param is_quote Flag to know if the expansion is between quotes
 int	the_expansion(char *input, t_minishell ms, int *is_quote, char *result)
 {
-	int		i[2];
+	int	i[2];
 
-	ft_bzero(i, 2);
+	ft_bzero(i, sizeof(i));
 	while (input[i[0]])
 	{
 		if (input[i[0]] == '\"')
@@ -87,7 +89,7 @@ int	expand_double_quotes(char *s, char *result, int *i, t_minishell ms)
 		else
 			result[i[1]++] = s[i[0]++];
 	}
-	result[i[1]++] = s[i[0]++];
+	result[i[1]] = s[i[0]]; // tirei os ++
 	return (0);
 }
 

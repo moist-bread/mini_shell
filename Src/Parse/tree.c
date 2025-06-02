@@ -13,11 +13,11 @@ t_tree_node	*create_tree(t_token **tokens, t_minishell *ms)
 	if (!tokens)
 		return (NULL);
 	assign_type_token(*tokens, true);
-	printf("\nafter expansion:\n");
-	print_tokens(*tokens);
+	// printf("\nafter expansion:\n");
+	// print_tokens(*tokens);
 	if (place_treenode(*tokens, &tree_node, false) == -1)
 		return (NULL);
-	tree_apply_print(tree_node, 0, "Root");
+	// tree_apply_print(tree_node, 0, "Root");
 	return (tree_node);
 }
 
@@ -28,7 +28,6 @@ void	expand_token_list(t_token **head, t_minishell *ms)
 {
 	t_token	*curr;
 	t_token	*next;
-	char	*new_cont;
 
 	curr = *head;
 	while (curr)
@@ -41,12 +40,8 @@ void	expand_token_list(t_token **head, t_minishell *ms)
 		}
 		else
 		{
-			if (curr->type == LIM && (ft_strchr(curr->cont, '\"') \
-			|| ft_strchr(curr->cont, '\'')))
-				curr->quote = true;
-			new_cont = quote_remover(curr->cont);
-			free(curr->cont);
-			curr->cont = new_cont;
+			if (process_token_quotes(curr) == 1)
+				return ;
 		}
 		curr = next;
 	}

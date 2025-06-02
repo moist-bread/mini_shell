@@ -35,6 +35,8 @@ static	char	*process_expander(char *line, t_minishell ms)
 	result_len = the_length (line, ms);
 	if (result_len == -1)
 		return (NULL);
+	if (result_len == 0)
+		return (ft_strdup(""));
 	result = ft_calloc(sizeof(char), result_len + 1);
 	if (!result)
 		return (perror("malloc"), NULL);
@@ -48,7 +50,7 @@ static	int	here_doc_expansion(char *result, char *s, t_minishell ms)
 	int		i[2];
 	char	*exp;
 
-	ft_bzero(i, 2);
+	ft_bzero(i, sizeof(i));
 	while (s[i[0]])
 	{
 		if (s[i[0]] == '$' && (ft_isalpha(s[i[0] + 1]) || s[i[0] + 1] == '_'))

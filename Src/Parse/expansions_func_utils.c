@@ -10,29 +10,26 @@ static	void	quotes_quoted(char *quoted, int *j, char put, char between);
 char	*quote_remover(char *s)
 {
 	char	*str;
-	int		i;
-	int		j;
+	int		i[2];
 	char	quote;
 
-	i = 0;
-	j = 0;
+	ft_bzero(i, sizeof(i));
 	str = ft_calloc(sizeof(char), (ft_strlen(s) - quote_conter_len(s)) + 1);
 	if (!str)
 		return (perror("malloc"), NULL);
-	while (s[i])
+	while (s[i[0]])
 	{
-		if (s[i] == '\"' || s[i] == '\'')
+		if (s[i[0]] == '\"' || s[i[0]] == '\'')
 		{
-			quote = s[i++];
-			while (s[i] && s[i] != quote)
-				str[j++] = s[i++];
-			if (s[i] && s[i] == quote)
-				i++;
+			quote = s[i[0]++];
+			while (s[i[0]] && s[i[0]] != quote)
+				str[i[1]++] = s[i[0]++];
+			if (s[i[0]] && s[i[0]] == quote)
+				i[0]++;
 		}
 		else
-			str[j++] = s[i++];
+			str[i[1]++] = s[i[0]++];
 	}
-	str[j] = '\0';
 	return (str);
 }
 

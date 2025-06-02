@@ -7,7 +7,7 @@ LIBFT	=	./Inc/Libft/libft.a
 # -->┊( COMMANDS AND FLAGS )
 CC		=	cc
 CFLAGS	=	-Wall -Wextra -Werror -g
-RL		=	-lreadline
+RL		=	-lreadline 
 VAL		=	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes -s
 FDFLAGS	=	--track-fds=yes #--trace-children=yes
 SUPP	=	--suppressions=readline.supp
@@ -51,7 +51,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS_MAIN) $(OBJS_EXEC) $(OBJS_PARSE) $(LIBFT)
 	$(M_COMP)
-	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN) $(OBJS_EXEC) $(OBJS_PARSE) $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(RL) $(OBJS_MAIN) $(OBJS_EXEC) $(OBJS_PARSE) $(LIBFT) $(RL) -o $(NAME)
 	$(M_DONE)
 
 $(OBJS_DIR)/%.o: $(SRC_DIR)/$(MINISHELL_DIR)/%.c | $(OBJS_DIR)
