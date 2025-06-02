@@ -131,9 +131,10 @@ long	len_expansion(char *input, char **env)
 	char	*value;
 	char	*search;
 	long	len;
+	bool	flag;
 
 	len = 0;
-	search = get_search(input);
+	search = get_search(input, &flag);
 	if (!search)
 		return (-1);
 	value = get_env(search, env);
