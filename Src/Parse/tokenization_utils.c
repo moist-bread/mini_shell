@@ -48,7 +48,7 @@ t_token	*newtoken(char *cont)
 
 	newtk = ft_calloc(1, sizeof(t_token));
 	if (!newtk)
-		return (perror("malloc"), NULL);
+		return (perror("malloc11"), NULL);
 	newtk->cont = ft_strdup(cont);
 	newtk->next = NULL;
 	newtk->prev = NULL;

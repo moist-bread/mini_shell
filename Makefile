@@ -32,7 +32,7 @@ EXEC_FILES_C	=	struct_init.c distributer.c \
 
 PARSE_MAIN_C	=	parse_main.c
 PARSE_FILES_C	= 	tokenization_utils.c tokenization.c checks.c space_utils.c \
-					check_types_utils.c types.c errors.c cracked_split.c cracked_split_utils.c \
+					check_types_utils.c types.c errors_utils.c cracked_split.c cracked_split_utils.c \
 					tree.c tree_utils.c tree_func_utils.c expansions.c expansions_utils.c \
 					expansions_len.c expansions_func_utils.c expansions_here_doc.c
 

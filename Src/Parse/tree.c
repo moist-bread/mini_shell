@@ -9,9 +9,8 @@ t_tree_node	*create_tree(t_token **tokens, t_minishell *ms)
 	t_tree_node	*tree_node;
 
 	tree_node = NULL;
-	expand_token_list(tokens, ms);
-	if (!tokens)
-		return (NULL);
+	if (expand_token_list(tokens, ms) == 1)
+		exit (-1);
 	assign_type_token(*tokens, true);
 	// printf("\nafter expansion:\n");
 	// print_tokens(*tokens);
@@ -23,8 +22,8 @@ t_tree_node	*create_tree(t_token **tokens, t_minishell *ms)
 
 /// @brief Expands the content of the tokens
 /// @param head The head of the tokens list
-/// @param ms The minishell struct
-void	expand_token_list(t_token **head, t_minishell *ms)
+/// @param ms The minishell struct  
+int	expand_token_list(t_token **head, t_minishell *ms)
 {
 	t_token	*curr;
 	t_token	*next;
@@ -36,15 +35,16 @@ void	expand_token_list(t_token **head, t_minishell *ms)
 		if (curr->type != LIM && ft_strchr(curr->cont, '$'))
 		{
 			if (expander(curr, ms, head) == 1)
-				return ;
+				return (1);
 		}
 		else
 		{
 			if (process_token_quotes(curr) == 1)
-				return ;
+				return (1);
 		}
 		curr = next;
 	}
+	return (0);
 }
 
 /// @brief Assigns the content to the right place in the struct
