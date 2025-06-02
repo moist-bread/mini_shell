@@ -100,7 +100,7 @@ char	*space_put(char *input, int len)
 	j = 0;
 	dest = ft_calloc(len + ft_strlen(input) + 1, sizeof(char));
 	if (!dest)
-		return (perror("malloc"), NULL);
+		return (perror("malloc10"), NULL);
 	while (input[i])
 	{
 		if (input[i] && (input[i] == '\"' || input[i] == '\''))

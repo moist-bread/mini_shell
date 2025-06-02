@@ -45,7 +45,7 @@ char	*get_search(char *input, bool *flag)
 	if (!search)
 	{
 		*flag = true;
-		return (perror("malloc"), NULL);
+		return (perror("malloc5"), NULL);
 	}
 	ft_strlcpy(search, input + i, search_len + 1);
 	search[search_len] = '=';
@@ -73,7 +73,7 @@ char	*expansion(char *input, char **env, bool *flag)
 	if (!result)
 	{
 		*flag = true;
-		return (perror("malloc"), NULL);
+		return (perror("malloc6"), NULL);
 	}
 	return (result);
 }
@@ -101,7 +101,7 @@ char	**separator_3000(char *expanded, int is_quote)
 	{
 		final_result = ft_calloc(sizeof(char *), 2);
 		if (!final_result)
-			return (perror("malloc"), NULL);
+			return (perror("malloc7"), NULL);
 		final_result[0] = quote_remover(expanded);
 		if (!final_result[0])
 			return (NULL);
@@ -128,7 +128,7 @@ char	**separate(char *expanded)
 		count++;
 	final_result = ft_calloc(sizeof(char *), count + 1);
 	if (!final_result)
-		return (perror("malloc"), free_split(result), NULL);
+		return (perror("malloc8"), free_split(result), NULL);
 	while (++i < count)
 	{
 		final_result[i] = quote_remover(result[i]);

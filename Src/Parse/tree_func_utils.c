@@ -40,7 +40,7 @@ char	**tree_alloc_args(t_token *token)
 	i = tree_arg_len(token, temp);
 	args = ft_calloc(i + 1, sizeof(char *));
 	if (!args)
-		return (perror("malloc"), NULL);
+		return (perror("malloc12"), NULL);
 	i = 0;
 	while (temp && temp->type != PIPE)
 	{
