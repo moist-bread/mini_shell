@@ -41,7 +41,7 @@ static	char	*process_expander(char *line, t_minishell ms)
 		return (ft_strdup(""));
 	result = ft_calloc(sizeof(char), result_len + 1);
 	if (!result)
-		return (perror("malloc"), NULL);
+		return (perror("malloc4"), NULL);
 	if (here_doc_expansion(result, line, ms, &exp) == 1)
 		return (free(result), NULL);
 	return (result);
