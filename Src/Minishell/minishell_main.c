@@ -9,7 +9,7 @@ int	main(int ac, char **av, char **env)
 	
 	(void)ac;
 	(void)av;
-	srand((unsigned int)time(NULL));
+	// srand((unsigned int)time(NULL));
 	ft_printf_fd(1, YEL "TESTING MINISHELL MAIN" DEF "\n\n");
 	minishell_struct_init(&ms, env);
 	input = NULL;
@@ -22,7 +22,7 @@ int	main(int ac, char **av, char **env)
 			ms.tree_head = create_tree(&tokens, &ms);
 		fake_clear_token_lst(tokens);
 		// execution
-		master_distributer(&ms, ms.tree_head);
+		// master_distributer(&ms, ms.tree_head);
 		if (ms.tree_head)
 		{
 			free_tree(ms.tree_head);

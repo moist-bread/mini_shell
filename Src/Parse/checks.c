@@ -40,7 +40,7 @@ char	*check_expansion(char *input)
 	checked = ft_calloc(sizeof(char), \
 	(ft_strlen(input) - checked_len(input)) + 1);
 	if (!checked)
-		return (perror("malloc"), NULL);
+		return (perror("malloc1"), NULL);
 	while (input[i])
 	{
 		while (input[i] && (input[i] == '\"' || input[i] == '\''))

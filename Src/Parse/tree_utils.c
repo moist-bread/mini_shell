@@ -10,7 +10,7 @@ t_tree_node	*newtreenode(t_node_cont cont)
 
 	newnode = ft_calloc(1, sizeof(t_tree_node));
 	if (!newnode)
-		return (perror("malloc"), NULL);
+		return (perror("malloc13"), NULL);
 	newnode->cont = cont;
 	newnode->prev = NULL;
 	newnode->left = NULL;
@@ -76,7 +76,7 @@ int	expander(t_token *curr, t_minishell *ms, t_token **head)
 	{
 		syntax_clear(head);
 		minishell_clean(*ms, 1);
-		exit (-1);
+		exit (1);
 	}
 	curr = replace_expanded_token(head, curr, expanded);
 	free_split(expanded);

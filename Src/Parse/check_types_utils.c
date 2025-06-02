@@ -58,33 +58,3 @@ void	is_limtiter_or_arg(t_token **temp)
 		assigns_types(*temp, false);
 	}
 }
-
-// char	*merge_adjacent_segments(char *input)
-// {
-// 	char	*result = NULL;
-// 	char	quote;
-// 	int		i;
-// 	int		j;
-
-// 	i = 0;
-// 	j = 0;
-// 	// result = ft_calloc(1, ft_strlen(input) + 1);
-// 	if (!result)
-// 		return (NULL);
-// 	while (input[i])
-// 	{
-// 		if (input[i] == '\'' || input[i] == '\"')
-// 		{
-// 			quote = input[i];
-// 			result[j++] = input[i++];
-// 			while (input[i] && input[i] != quote)
-// 				result[j++] = input[i++];
-// 			if (input[i] == quote)
-// 				result[j++] = input[i++];
-// 		}
-// 		else
-// 			result[j++] = input[i++];
-// 	}
-// 	// result[j] = '\0';
-// 	return (result);
-// }
