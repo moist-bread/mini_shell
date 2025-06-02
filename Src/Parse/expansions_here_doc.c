@@ -2,7 +2,7 @@
 #include "../../Inc/minishell.h"
 
 static	char	*process_expander(char *line, t_minishell ms);
-static	int	here_doc_expansion(char *result, char *input, t_minishell ms);
+static	int	here_doc_expansion(char *result, char *input, t_minishell ms, char **exp);
 
 char	*my_function(t_minishell ms, char *line, bool lim_flag)
 {
@@ -29,7 +29,9 @@ static	char	*process_expander(char *line, t_minishell ms)
 {
 	char	*result;
 	long	result_len;
+	char	*exp;
 
+	exp = NULL;
 	if (!line)
 		return (ft_strdup(""));
 	result_len = the_length (line, ms);
@@ -40,26 +42,27 @@ static	char	*process_expander(char *line, t_minishell ms)
 	result = ft_calloc(sizeof(char), result_len + 1);
 	if (!result)
 		return (perror("malloc"), NULL);
-	if (here_doc_expansion(result, line, ms) == 1)
+	if (here_doc_expansion(result, line, ms, &exp) == 1)
 		return (free(result), NULL);
 	return (result);
 }
 
-static	int	here_doc_expansion(char *result, char *s, t_minishell ms)
+static	int	here_doc_expansion(char *result, char *s, t_minishell ms, char **exp)
 {
 	int		i[2];
-	char	*exp;
+	bool	flag;
 
+	flag = false;
 	ft_bzero(i, sizeof(i));
 	while (s[i[0]])
 	{
 		if (s[i[0]] == '$' && (ft_isalpha(s[i[0] + 1]) || s[i[0] + 1] == '_'))
 		{
-			exp = expansion(s + i[0], ms.env);
-			if (!exp)
+			*exp = expansion(s + i[0], ms.env, &flag);
+			if (flag)
 				return (1);
 			if (exp)
-				write_and_advance(result, &i[0], exp);
+				write_and_advance(result, &i[1], *exp);
 			while (s[++i[0]] && (s[i[0]] == '_' || ft_isalnum(s[i[0]])))
 				;
 		}
@@ -72,6 +75,7 @@ static	int	here_doc_expansion(char *result, char *s, t_minishell ms)
 	}
 	return (0);
 }
+
 
 void	expansion_exit_status(char *result, int *i, char *exit_status)
 {

@@ -9,7 +9,7 @@ int	main(int ac, char **av, char **env)
 	
 	(void)ac;
 	(void)av;
-
+	srand((unsigned int)time(NULL));
 	ft_printf_fd(1, YEL "TESTING MINISHELL MAIN" DEF "\n\n");
 	minishell_struct_init(&ms, env);
 	input = NULL;
