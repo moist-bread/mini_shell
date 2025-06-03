@@ -17,6 +17,7 @@ char	*process_quote_expansions(char *input, t_minishell ms, int *is_quote)
 	checked = check_expansion(input);
 	if (!checked)
 		return (NULL);
+	printf("checked: %s\n", checked);
 	result_len = the_length(checked, ms);
 	if (result_len == -1)
 		return (free(checked), NULL);
