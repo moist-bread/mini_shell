@@ -1,7 +1,7 @@
 
 #include "../../Inc/minishell.h"
 
-static int	pipe_init(t_minishell *ms, t_pipe_data *pdata);
+static void	pipe_init(t_minishell *ms, t_pipe_data *pdata);
 static void	read_and_exe_pipe_tree(t_minishell minishell,
 				t_tree_node *tree_head, t_pipe_data *pdata, int idx);
 static void	setup_pipe_cmd(t_minishell ms, t_tree_node *node,
@@ -17,8 +17,7 @@ void	pipe_process(t_minishell *ms, t_tree_node *node)
 	int	id;
 
 	// ft_printf("\nEntering pipe pro\n");
-	if (pipe_init(ms, &node->cont.pipe) == -1)
-		return (error_msg_status("malloc", &ms->exit_status, 1));
+	pipe_init(ms, &node->cont.pipe);
 	id = fork();
 	if (id < 0)
 		return (error_msg_status("fork", &ms->exit_status, 1));
@@ -39,7 +38,7 @@ void	pipe_process(t_minishell *ms, t_tree_node *node)
 /// @param ms Overarching Minishell Structure
 /// @param pdata Struct used for the execution of pipes
 /// @return 0 on success, -1 on failure
-static int	pipe_init(t_minishell *ms, t_pipe_data *pdata)
+static void	pipe_init(t_minishell *ms, t_pipe_data *pdata)
 {
 	t_tree_node	*node;
 	int			pipe_n;
@@ -54,12 +53,11 @@ static int	pipe_init(t_minishell *ms, t_pipe_data *pdata)
 	pdata->cmd_n = pipe_n;
 	pdata->pid = ft_calloc(pipe_n, sizeof(int));
 	if (!pdata->pid)
-		return (-1);
+		return (perror("malloc"), minishell_clean(*ms, 1));
 	pdata->here_docs = ft_calloc(pipe_n, sizeof(int));
 	if (!pdata->here_docs)
-		return (-1);
+		return (perror("malloc"), minishell_clean(*ms, 1));
 	pdata->env = &ms->env[ms->env_start];
-	return (0);
 }
 
 /// @brief Recurcivelly checks and initiates the execution of all

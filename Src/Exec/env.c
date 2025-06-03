@@ -41,7 +41,7 @@ void	print_env(t_minishell ms, int export_flag, int fd)
 	i = -1;
 	if (export_flag)
 	{
-		temp = sort_matrix(ms.env, (int)ft_matrixlen(ms.env));
+		temp = sort_matrix(ms.env, (int)ft_matrixlen(ms.env)); // HERE
 		if (!temp)
 			return (error_msg_status("malloc", &ms.exit_status, 1));
 		while (temp[++i])

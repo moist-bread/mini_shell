@@ -211,6 +211,7 @@ void		fake_clear_token_lst(t_token *token);
 // STRUCT INIT
 
 void		minishell_struct_init(t_minishell *ms, char **env);
+char	**shell_level_updater(t_minishell *ms, int shl_idx);
 
 // GENERAL UTILS
 

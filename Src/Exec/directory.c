@@ -66,12 +66,12 @@ static void	cd_update_pwd(t_minishell *ms)
 	if (old_pi == -1)
 	{
 		env_len = (int)ft_matrixlen(ms->env);
-		ms->env = matrix_add_to_index(ms->env, "OLDPWD=", env_len, env_len);
+		ms->env = matrix_add_to_index(ms->env, "OLDPWD=", env_len, env_len); // HERE
 		old_pi = env_len;
 	}
-	replace_env_value(ms, "OLDPWD=", get_env("PWD=", ms->env), old_pi);
+	replace_env_value(ms, "OLDPWD=", get_env("PWD=", ms->env), old_pi); // HERE
 	cur = getcwd(NULL, 0);
-	replace_env_value(ms, "PWD=", cur, get_env_idx("PWD=", ms->env));
+	replace_env_value(ms, "PWD=", cur, get_env_idx("PWD=", ms->env)); // HERE
 	free(cur);
 	ms->exit_status = 0;
 	// printf("new env oldpwd:\t%s\n", get_env("OLDPWD=", ms->env));

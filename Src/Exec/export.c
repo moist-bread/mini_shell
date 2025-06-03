@@ -27,7 +27,7 @@ void	export_built_in(t_minishell *ms, t_tree_node *node, int fd)
 		// printf("export arg[%d]: \"%s\"\n", i, node->right->cont.args[i]);
 		if (invalid_export(node->right->cont.args[i], &ms->exit_status))
 			continue ;
-		key = get_export_key(node->right->cont.args[i]);
+		key = get_export_key(node->right->cont.args[i]); // HERE
 		if (!key)
 			return (error_msg_status("malloc", &ms->exit_status, 1));
 		// printf("key= %s\n", key);
@@ -108,24 +108,24 @@ static void	export_distribute(t_minishell *ms, char *arg, char *key,
 			if (arg[key_len - 1] == '+')
 				ft_memmove(&arg[key_len - 1], &arg[key_len],
 					ft_strlen(&arg[key_len - 1]));
-			ms->env = matrix_add_to_index(ms->env, arg, env_len, env_len);
+			ms->env = matrix_add_to_index(ms->env, arg, env_len, env_len); // HERE
 		}
 		else
 		{
 			// printf("key not present (is bad)\n");
 			ms->env = matrix_add_to_index(ms->env, arg, ms->env_start++,
-					env_len);
+					env_len); // HERE
 		}
 	}
 	else if (arg[key_len - 1] == '+')
 	{
 		// printf("key is present, export append\n");
-		return (export_append(ms, env_idx, arg));
+		return (export_append(ms, env_idx, arg)); // HERE
 	}
 	else if (ft_strcmp(ms->env[env_idx], arg) && ft_strchr(arg, '='))
 	{
 		// printf("key is present, different value\n");
-		if (replace_env_value(ms, key, get_export_value(arg), env_idx) == -1)
+		if (replace_env_value(ms, key, get_export_value(arg), env_idx) == -1) // HERE
 			return (error_msg_status(NULL, &ms->exit_status, 1));
 	}
 }
