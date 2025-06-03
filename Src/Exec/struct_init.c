@@ -1,10 +1,10 @@
 
 #include "../../Inc/minishell.h"
 
-static char	**env_init(t_minishell *ms, char **old_env);
-static char	**shell_level_updater(t_minishell *ms, char **env, int shl_idx);
+static void env_init(t_minishell *ms, char **old_env);
+static char	**shell_level_updater(t_minishell *ms, int shl_idx);
 static int	assign_sh_lvl(char *value);
-static int	create_needed_vars(char ***env, int *env_start);
+static void	create_needed_vars(char ***env, int *env_start);
 
 /// @brief Initializes the values of the Minishell Struct
 /// @param ms Overarching Minishell Structure
@@ -14,7 +14,9 @@ void	minishell_struct_init(t_minishell *ms, char **env)
 	init_sigact(ms, 'P');
 	ms->tree_head = NULL;
 	ms->exit_status = 0;
-	ms->env = env_init(ms, env);
+	ms->env_start = 0;
+	ms->env = NULL;
+	env_init(ms, env);
 	if (!ms->env)
 	{
 		ft_printf_fd(2, "malloc: failed memory allocation on initialization\n");
@@ -26,44 +28,43 @@ void	minishell_struct_init(t_minishell *ms, char **env)
 /// @param ms Overarching Minishell Structure
 /// @param old_env Old Environment recieved by the program
 /// @return New Environemnt
-static char	**env_init(t_minishell *ms, char **old_env)
+static void env_init(t_minishell *ms, char **old_env)
 {
-	char	**env;
+	char	**tmp;
 	int		sh_lvl;
 
-	// MAKE THIS VOOID
-	env = NULL;
-	ms->env_start = 0;
 	if (*old_env)
 	{
-		env = matrix_dup_char(old_env);
-		if (!env)
-			return (NULL);
+		ms->env = matrix_dup_char(old_env);
+		if (!ms->env)
+			return ;
 	}
-	sh_lvl = get_env_idx("SHLVL=", env);
+	sh_lvl = get_env_idx("SHLVL=", ms->env);
 	if (sh_lvl != -1)
-		env = shell_level_updater(ms, env, sh_lvl);
+		tmp = shell_level_updater(ms, sh_lvl);
 	else
-		env = matrix_add_front("SHLVL=1", env); // this is WRONG
-	if (!env || create_needed_vars(&env, &ms->env_start) == -1)
-		return (NULL);
-	return (env);
+		tmp = matrix_add_front("SHLVL=1", ms->env);
+	if (!tmp && ms->env)
+		free_split(ms->env);
+	ms->env = tmp;
+	create_needed_vars(&ms->env, &ms->env_start);
+	if (!ms->env)
+		return ;
 }
 
 /// @brief Replaces the old SHLVL value with an updated one
 /// @param ms Overarching Minishell Structure
 /// @param shl_idx Index that correspondes to the SHLVL variable
 /// @return New Environemnt
-static char	**shell_level_updater(t_minishell *ms, char **env, int shl_idx)
+static char	**shell_level_updater(t_minishell *ms, int shl_idx)
 {
 	char	*new_val;
 
-	ms->env = env;
 	new_val = ft_itoa(assign_sh_lvl(ms->env[shl_idx] + 6));
 	if (!new_val)
-		return (free_split(ms->env), NULL);
+		return (NULL);
 	if (replace_env_value(ms, "SHLVL=", new_val, shl_idx) == -1)
-		return (free(new_val), free_split(ms->env), NULL);
+		return (free(new_val), NULL);
 	free(new_val);
 	return (ms->env);
 }
@@ -95,23 +96,23 @@ static int	assign_sh_lvl(char *value)
 /// @param env Pointer to the New Environemnt
 /// @param env_start Index in the MS struct that indicated valueless vars
 /// @return 0 on success, -1 on failure
-static int	create_needed_vars(char ***env, int *env_start)
+static void	create_needed_vars(char ***env, int *env_start)
 {
 	char	**new_env;
 	char	*temp;
 	char	*cwd;
 
+	if (!*env)
+		return ;
 	temp = get_env("PWD=", *env);
 	if (!temp)
 	{
 		cwd = getcwd(NULL, 0);
 		temp = ft_strjoin("PWD=", cwd);
 		free(cwd);
-		if (!temp)
-			return (free_split(*env), -1);
 		new_env = matrix_add_front(temp, *env);
 		if (!new_env)
-			return (free_split(*env), -1);
+			return (free_split(*env));
 		*env = new_env;
 		free(temp);
 	}
@@ -120,7 +121,7 @@ static int	create_needed_vars(char ***env, int *env_start)
 	{
 		new_env = matrix_add_front(VAR_PATH, *env);
 		if (!new_env)
-			return (free_split(*env), -1);
+			return (free_split(*env));
 		*env = new_env;
 	}
 	temp = get_env("OLDPWD=", *env);
@@ -134,3 +135,5 @@ static int	create_needed_vars(char ***env, int *env_start)
 	}
 	return (0);
 }
+
+// SMALL FT TO DO THE MATRIX ADD FRONT AND VERIFY SHIT

@@ -41,10 +41,8 @@ char	**matrix_add_front(char *add, char **original)
 	char	**new;
 	int		i;
 
-	if (!add && !original)
+	if ((!add && !original) || !add)
 		return (NULL);
-	if (!add)
-		return (original);
 	new = ft_calloc(ft_matrixlen(original) + 2, sizeof(char *));
 	if (!new)
 		return (perror("malloc"), NULL);
