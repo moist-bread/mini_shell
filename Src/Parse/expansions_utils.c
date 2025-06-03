@@ -95,6 +95,8 @@ char	**separator_3000(char *expanded, int is_quote)
 		if (!quoted)
 			return (NULL);
 		final_result = separate(quoted);
+		if (!final_result)
+			return (free(quoted), NULL);
 		free(quoted);
 	}
 	else
@@ -104,11 +106,10 @@ char	**separator_3000(char *expanded, int is_quote)
 			return (perror("malloc7"), NULL);
 		final_result[0] = quote_remover(expanded);
 		if (!final_result[0])
-			return (NULL);
+			return (free_split(final_result), NULL);
 		final_result[1] = NULL;
 	}
-	free(expanded);
-	return (final_result);
+	return (free(expanded), final_result);
 }
 
 /// @brief Does the separation with split
@@ -124,6 +125,8 @@ char	**separate(char *expanded)
 	i = -1;
 	count = 0;
 	result = cracked_split(expanded);
+	if (!result)
+		return (NULL);
 	while (result[count])
 		count++;
 	final_result = ft_calloc(sizeof(char *), count + 1);
@@ -132,8 +135,8 @@ char	**separate(char *expanded)
 	while (++i < count)
 	{
 		final_result[i] = quote_remover(result[i]);
-		if (!final_result)
-			return (free_split(result), free_split(final_result), NULL);
+		if (!final_result[i])
+			return (free_split(final_result), free_split(result), NULL);
 	}
 	final_result[count] = NULL;
 	free_split(result);

@@ -203,7 +203,6 @@ bool		is_sep(char c);
 // FAKE
 
 char		*fake_readinput(t_minishell ms, char *input);
-t_tree_node	*fake_create_tree(t_token *tokens);
 void		fake_clear_token_lst(t_token *token);
 
 // --------------------------EXECUTION--------------------------
@@ -221,6 +220,7 @@ void		error_msg_status(char *message, int *status, int value);
 
 // SIGNALS
 void		init_sigact(t_minishell *minishell, int flag);
+t_minishell	*mem_save(t_minishell *minishell);
 
 // MATRIX UTILS
 

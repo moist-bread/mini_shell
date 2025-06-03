@@ -2,7 +2,6 @@
 #include "../../Inc/minishell.h"
 
 char		*fake_readinput(t_minishell ms, char *input);
-t_tree_node	*fake_create_tree(t_token *tokens);
 void		fake_clear_token_lst(t_token *token);
 
 int	main(int ac, char **av, char **env)
