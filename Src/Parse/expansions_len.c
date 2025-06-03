@@ -119,6 +119,7 @@ long	the_length(char *input, t_minishell ms)
 				return (-1);
 		}
 	}
+	
 	return (len);
 }
 

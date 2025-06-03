@@ -32,6 +32,8 @@ void	write_and_advance(char *result, int *res_idx, char *exp)
 	size_t	len;
 
 	len = ft_strlen(exp);
+	printf("len: %zu\n", len);
+	printf("id: %d\n", *res_idx);
 	ft_memcpy(result + *res_idx, exp, len);
 	*res_idx += len;
 	free(exp);
@@ -46,11 +48,11 @@ int	process_token_quotes(t_token *curr)
 	{
 		cont = check_expansion(curr->cont);
 		if (!cont)
-			return (1);
+			return (printf("process tk1\n"), 1);
 		curr->quote = true;
 		new_cont = quote_remover(cont);
 		if (!new_cont)
-			return (1);
+			return (printf("process tk1\n"), 1);
 		free(cont);
 	}
 	else

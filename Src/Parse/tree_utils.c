@@ -76,7 +76,6 @@ int	expander(t_token *curr, t_minishell *ms, t_token **head)
 	{
 		syntax_clear(head);
 		minishell_clean(*ms, 1);
-		exit (1);
 	}
 	curr = replace_expanded_token(head, curr, expanded);
 	free_split(expanded);
