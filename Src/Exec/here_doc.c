@@ -100,7 +100,7 @@ static void	here_doc_readline(t_minishell ms, char *lim, int fd, bool exp_flag)
 				break ;
 			line = my_function(ms, line, exp_flag);
 			if (!line)
-				break ;
+				break ; // Your malloc exit;
 			ft_printf_fd(fd, "%s\n", line);
 			free(line);
 		}

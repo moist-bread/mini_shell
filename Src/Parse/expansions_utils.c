@@ -16,7 +16,6 @@ char	**input_expander(char *input, t_minishell ms)
 	expanded = process_quote_expansions(input, ms, &is_quote);
 	if (!expanded)
 		return (NULL);
-	// printf("exp: %s\n", expanded);
 	final_result = separator_3000(expanded, is_quote);
 	if (!final_result)
 		return (free(expanded), NULL);
@@ -26,7 +25,7 @@ char	**input_expander(char *input, t_minishell ms)
 /// @brief Searches for the variable name
 /// @param input The string passed
 /// @return The variable name
-char	*get_search(char *input)
+char	*get_search(char *input, bool *flag)
 {
 	char	*search;
 	int		i;
@@ -44,7 +43,10 @@ char	*get_search(char *input)
 		search_len++;
 	search = ft_calloc(sizeof(char), search_len + 2);
 	if (!search)
-		return (perror("malloc1"), NULL);
+	{
+		*flag = true;
+		return (perror("malloc5"), NULL);
+	}
 	ft_strlcpy(search, input + i, search_len + 1);
 	search[search_len] = '=';
 	return (search);
@@ -54,13 +56,13 @@ char	*get_search(char *input)
 /// @param input The string passed
 /// @param env The enviorment 
 /// @return The expanded value
-char	*expansion(char *input, char **env)
+char	*expansion(char *input, char **env, bool *flag)
 {
 	char	*value;
 	char	*search;
 	char	*result;
 
-	search = get_search(input);
+	search = get_search(input, flag);
 	if (!search)
 		return (NULL);
 	value = get_env(search, env);
@@ -69,7 +71,10 @@ char	*expansion(char *input, char **env)
 	free(search);
 	result = ft_strdup(value);
 	if (!result)
-		return (NULL);
+	{
+		*flag = true;
+		return (perror("malloc6"), NULL);
+	}
 	return (result);
 }
 
@@ -96,7 +101,7 @@ char	**separator_3000(char *expanded, int is_quote)
 	{
 		final_result = ft_calloc(sizeof(char *), 2);
 		if (!final_result)
-			return (perror("malloc"), NULL);
+			return (perror("malloc7"), NULL);
 		final_result[0] = quote_remover(expanded);
 		if (!final_result[0])
 			return (NULL);
@@ -123,7 +128,7 @@ char	**separate(char *expanded)
 		count++;
 	final_result = ft_calloc(sizeof(char *), count + 1);
 	if (!final_result)
-		return (perror("malloc"), free_split(result), NULL);
+		return (perror("malloc8"), free_split(result), NULL);
 	while (++i < count)
 	{
 		final_result[i] = quote_remover(result[i]);

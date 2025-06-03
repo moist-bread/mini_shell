@@ -14,6 +14,14 @@
 # include "Get_next_line_lib/get_next_line.h"
 # include "Printf_fd/ft_printf_fd.h"
 
+// #define MALLOC_FAIL_PROBABILITY 50
+// static inline void *random_fail_malloc(size_t size) {
+//     if ((rand() % MALLOC_FAIL_PROBABILITY) == 0)
+//         return (NULL);
+//     return (malloc(size));
+// }
+// #define malloc(x) random_fail_malloc(x)
+
 typedef struct s_list
 {
 	void			*content;

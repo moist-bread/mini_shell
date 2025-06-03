@@ -49,11 +49,35 @@ int	process_token_quotes(t_token *curr)
 			return (1);
 		curr->quote = true;
 		new_cont = quote_remover(cont);
+		if (!new_cont)
+			return (1);
 		free(cont);
 	}
 	else
+	{
 		new_cont = quote_remover(curr->cont);
+		if (!new_cont)
+			return (1);
+	}
 	free(curr->cont);
 	curr->cont = new_cont;
+	return (0);
+}
+
+int	handle_variable_expansion(char *s, int *i, char *result, char **env)
+{
+	char *exp;
+	bool flag;
+
+	flag = false;
+	if (s[i[0]] == '$' && (ft_isalpha(s[i[0] + 1]) || s[i[0] + 1] == '_')) {
+		exp = expansion(s + i[0], env, &flag);
+		if (flag)
+			return (1);
+		if (exp)
+			write_and_advance(result, &i[1], exp);
+		while (s[++i[0]] && (s[i[0]] == '_' || ft_isalnum(s[i[0]])))
+			;
+	}
 	return (0);
 }

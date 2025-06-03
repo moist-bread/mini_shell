@@ -112,7 +112,7 @@ t_token		*create_tokens(char *input);
 int			place_token(char *input, t_token **head);
 void		print_tokens(t_token *tokens);
 bool		is_token(t_token *token);
-void		expand_token_list(t_token **head, t_minishell *ms);
+int			expand_token_list(t_token **head, t_minishell *ms);
 t_token		*replace_expanded_token(t_token **head, t_token *curr, \
 			char **expanded);
 t_token		*join_token_list(t_token **head, t_token *curr, t_token *first_new);
@@ -140,13 +140,15 @@ char		*process_quote_expansions(char *input, t_minishell ms,
 				int *is_quote);
 int			the_expansion(char *input, t_minishell ms, \
 			int *is_quote, char *result);
-char		*expansion(char *input, char **env);
+char		*expansion(char *input, char **env, bool *flag);
+int			handle_variable_expansion(char *s, int *i, \
+			char *result, char **env);
 void		expand_single_quotes(char *input, char *result, int *i);
 int			expand_double_quotes(char *input, char *result, \
 			int *i, t_minishell ms);
 int			expand_unquotes(char *input, char *result, int *i, t_minishell ms);
 void		expansion_exit_status(char *result, int *i, char *exit_status);
-char		*get_search(char *input);
+char		*get_search(char *input, bool *flag);
 long		the_length(char *input, t_minishell ms);
 long		len_expansion(char *input, char **env);
 long		len_double_quotes(char *input, char **env, int *i, int exit_status);

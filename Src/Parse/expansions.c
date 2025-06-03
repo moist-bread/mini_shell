@@ -20,11 +20,9 @@ char	*process_quote_expansions(char *input, t_minishell ms, int *is_quote)
 	result_len = the_length(checked, ms);
 	if (result_len == -1)
 		return (free(checked), NULL);
-	if (result_len == 0)
-		return (free(checked), ft_strdup(""));
 	result = ft_calloc(sizeof(char), result_len + 1);
 	if (!result)
-		return (perror("malloc"), free(checked), NULL);
+		return (perror("malloc9"), free(checked), NULL);
 	if (the_expansion(checked, ms, is_quote, result) == 1)
 		return (free(checked), free(result), NULL);
 	free(checked);
@@ -61,27 +59,17 @@ int	the_expansion(char *input, t_minishell ms, int *is_quote, char *result)
 }
 
 /// @brief Expands if the expansion is between quotes
-/// @param input The string passed
+/// @param s The string passed
 /// @param env The enviorment
 /// @param result The string that will receive the expansion
 /// @param i Indexes
 int	expand_double_quotes(char *s, char *result, int *i, t_minishell ms)
 {
-	char	*exp;
-
 	result[i[1]++] = s[i[0]++];
 	while (s[i[0]] && s[i[0]] != '\"')
 	{
-		if (s[i[0]] == '$' && (ft_isalpha(s[i[0] + 1]) || s[i[0] + 1] == '_'))
-		{
-			exp = expansion(s + i[0], ms.env);
-			if (!exp)
-				return (1);
-			if (exp)
-				write_and_advance(result, &i[1], exp);
-			while (s[++i[0]] && (s[i[0]] == '_' || ft_isalnum(s[i[0]])))
-				;
-		}
+		if (handle_variable_expansion(s, i, result, ms.env))
+			return (1);
 		else if (s[i[0]] == '$' && ft_isdigit(s[i[0] + 1]))
 			i[0] += 2;
 		else if (s[i[0]] == '$' && s[i[0] + 1] == '?')
@@ -89,7 +77,7 @@ int	expand_double_quotes(char *s, char *result, int *i, t_minishell ms)
 		else
 			result[i[1]++] = s[i[0]++];
 	}
-	result[i[1]] = s[i[0]]; // tirei os ++
+	result[i[1]] = s[i[0]];
 	return (0);
 }
 
@@ -114,13 +102,15 @@ void	expand_single_quotes(char *input, char *result, int *i)
 int	expand_unquotes(char *s, char *result, int *i, t_minishell ms)
 {
 	char	*exp;
+	bool	flag;
 
+	flag = false;
 	while (s[i[0]] && s[i[0]] != '\"' && s[i[0]] != '\'')
 	{
 		if (s[i[0]] == '$' && (ft_isalpha(s[i[0] + 1]) || s[i[0] + 1] == '_'))
 		{
-			exp = expansion(s + i[0], ms.env);
-			if (!exp)
+			exp = expansion(s + i[0], ms.env, &flag);
+			if (flag)
 				return (1);
 			if (exp)
 				write_and_advance(result, &i[1], exp);

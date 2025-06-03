@@ -10,7 +10,7 @@ t_tree_node	*newtreenode(t_node_cont cont)
 
 	newnode = ft_calloc(1, sizeof(t_tree_node));
 	if (!newnode)
-		return (perror("malloc"), NULL);
+		return (perror("malloc13"), NULL);
 	newnode->cont = cont;
 	newnode->prev = NULL;
 	newnode->left = NULL;
@@ -73,7 +73,11 @@ int	expander(t_token *curr, t_minishell *ms, t_token **head)
 
 	expanded = input_expander(curr->cont, *ms);
 	if (!expanded)
-		return (syntax_clear(head), 1);
+	{
+		syntax_clear(head);
+		minishell_clean(*ms, 1);
+		exit (1);
+	}
 	curr = replace_expanded_token(head, curr, expanded);
 	free_split(expanded);
 	return (0);
@@ -97,42 +101,42 @@ void	syntax_clear(t_token **token)
 	*token = NULL;
 }
 
-// /// @brief Function that prints the AST_Tree
-// /// @param tree_node The First Node of the Tree
-// /// @param depth Where i am in the AST_Tree
-// /// @param side Left or Right
-// void	print_tree(t_tree_node *tree_node, int depth, char *side)
-// {
-// 	if (!tree_node)
-// 		return;
-// 	for (int i = 0; i < depth; i++)
-// 		printf("\t");
-// 	assign_name(tree_node->type);
-// 	printf(" (%s)\n", side);
-// 	for (int i = 0; i < depth; i++)
-// 		printf("\t");
-// 	if (tree_node->cont.cmd)
-// 		printf("CONT: %s\n", tree_node->cont.cmd);
-// 	else if (tree_node->cont.pipe_c)
-// 		printf("CONT: %c\n", tree_node->cont.pipe_c);
-// 	else if (tree_node->cont.file)
-// 		printf("CONT: %s\n", tree_node->cont.file);
-// 	else if (tree_node->cont.limiter)
-// 		printf("CONT: %s\n", tree_node->cont.limiter);
-// 	else if (tree_node->cont.args)
-// 	{
-// 		printf("CONT: ");
-// 		for (int i = 0; tree_node->cont.args[i]; i++)
-// 			printf("%s ", tree_node->cont.args[i]);
-// 		printf("\n");
-// 	}
-// }
+/// @brief Function that prints the AST_Tree
+/// @param tree_node The First Node of the Tree
+/// @param depth Where i am in the AST_Tree
+/// @param side Left or Right
+void	print_tree(t_tree_node *tree_node, int depth, char *side)
+{
+	if (!tree_node)
+		return;
+	for (int i = 0; i < depth; i++)
+		printf("\t");
+	assign_name(tree_node->type);
+	printf(" (%s)\n", side);
+	for (int i = 0; i < depth; i++)
+		printf("\t");
+	if (tree_node->cont.cmd)
+		printf("CONT: %s\n", tree_node->cont.cmd);
+	else if (tree_node->cont.pipe_c)
+		printf("CONT: %c\n", tree_node->cont.pipe_c);
+	else if (tree_node->cont.file)
+		printf("CONT: %s\n", tree_node->cont.file);
+	else if (tree_node->cont.limiter)
+		printf("CONT: %s\n", tree_node->cont.limiter);
+	else if (tree_node->cont.args)
+	{
+		printf("CONT: ");
+		for (int i = 0; tree_node->cont.args[i]; i++)
+			printf("%s ", tree_node->cont.args[i]);
+		printf("\n");
+	}
+}
 
-// void    tree_apply_print(t_tree_node *root, int depth, char *side)
-// {
-// 	if (root->right)
-// 		tree_apply_print(root->right, depth + 1, "Right");
-// 	print_tree(root, depth, side);
-// 	if (root->left)
-// 		tree_apply_print(root->left, depth + 1, "Left");
-// }
+void    tree_apply_print(t_tree_node *root, int depth, char *side)
+{
+	if (root->right)
+		tree_apply_print(root->right, depth + 1, "Right");
+	print_tree(root, depth, side);
+	if (root->left)
+		tree_apply_print(root->left, depth + 1, "Left");
+}
