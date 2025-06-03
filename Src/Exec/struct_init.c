@@ -56,11 +56,10 @@ static void env_init(t_minishell *ms, char **old_env)
 /// @param ms Overarching Minishell Structure
 /// @param shl_idx Index that correspondes to the SHLVL variable
 /// @return New Environemnt
-static char	**shell_level_updater(t_minishell *ms, char **env, int shl_idx)
+static char	**shell_level_updater(t_minishell *ms, int shl_idx)
 {
 	char	*new_val;
 
-	ms->env = env;
 	new_val = ft_itoa(assign_sh_lvl(ms->env[shl_idx] + 6));
 	if (!new_val)
 		return (NULL);
@@ -130,11 +129,10 @@ static void	create_needed_vars(char ***env, int *env_start)
 	{
 		new_env = matrix_add_front("OLDPWD", *env);
 		if (!new_env)
-			return (free_split(*env), -1);
+			return (free_split(*env));
 		*env = new_env;
 		*env_start = 1;
 	}
-	return (0);
 }
 
 // SMALL FT TO DO THE MATRIX ADD FRONT AND VERIFY SHIT
