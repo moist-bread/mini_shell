@@ -10,7 +10,7 @@ char	*fake_readinput(t_minishell ms, char *input)
 	input = readline(CYN "minishell > " DEF);
 	if (!input)
 	{
-		printf(BLU "exit" DEF "\n");
+		printf(BLU "\nexit" DEF "\n");
 		minishell_clean(ms, ms.exit_status);
 	}
 	add_history(input);
