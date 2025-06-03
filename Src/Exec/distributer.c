@@ -63,7 +63,7 @@ void	cmd_parse_and_exe(t_minishell ms, t_tree_node *node, int *redir)
 	else
 		cmd = matrix_add_front(node->cont.cmd, NULL);
 	if (!cmd)
-		return (perror("malloc"), minishell_clean(ms, 1));
+		return (minishell_clean(ms, 1));
 	path = get_path(ms, cmd[0]);
 	if (!path)
 		minishell_clean(ms, 1);

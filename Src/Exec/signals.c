@@ -1,10 +1,9 @@
 
 #include "../../Inc/minishell.h"
 
-t_minishell	*g_ms_struct;
-
 static void	parent_sig_handler(int signal);
 static void	here_doc_sig_handler(int signal);
+t_minishell	*mem_save(t_minishell *minishell);
 
 /// @brief Saves adress to MINISHELL in the global variable and
 /// initialized the signals according to FLAG
@@ -14,7 +13,7 @@ void	init_sigact(t_minishell *minishell, int flag)
 {
 	struct sigaction	sa;
 
-	g_ms_struct = minishell;
+	mem_save(minishell);
 	if (flag == 'D')
 		sa.sa_handler = SIG_DFL;
 	else
@@ -29,16 +28,32 @@ void	init_sigact(t_minishell *minishell, int flag)
 	sigaction(SIGINT, &sa, NULL);
 }
 
+t_minishell	*mem_save(t_minishell *minishell)
+{
+	static t_minishell	*ms_save;
+
+	if (minishell)
+	{
+		ms_save = minishell;
+		return (NULL);
+	}
+	else
+		return (ms_save);
+}
+
 /// @brief Restarts readline in case of CTRL+C
 static void	parent_sig_handler(int signal)
 {
+	t_minishell	*ms;
+
 	if (signal == SIGINT)
 	{
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 1);
 		rl_redisplay();
-		g_ms_struct->exit_status = 130;
+		ms = mem_save(NULL);
+		ms->exit_status = 130;
 	}
 }
 
@@ -46,17 +61,20 @@ static void	parent_sig_handler(int signal)
 static void	here_doc_sig_handler(int signal)
 {
 	if (signal == SIGINT)
-		minishell_clean(*g_ms_struct, 130);
+		minishell_clean(*mem_save(NULL), 130);
 }
 
 /// @brief Basic error function
 /// @param token Node of the token list
 void	ft_error_check(t_token **token, int msg)
 {
+	t_minishell	*ms;
+
+	ms = mem_save(NULL);
+	ms->exit_status = 2;
 	if (msg == 1)
 		ft_printf_fd(2, "syntax error near unexpected token\n");
 	if (msg == 2)
 		ft_printf_fd(2, "Invalid Syntax\n");
-	g_ms_struct->exit_status = 2;
 	syntax_clear(token);
 }

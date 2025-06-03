@@ -100,8 +100,11 @@ void	pwd_built_in(t_minishell *ms, t_tree_node *node, int fd)
 		pwd = getcwd(NULL, 0);
 		if (!pwd)
 			ms->exit_status = 1;
-		ft_printf_fd(fd, "%s\n", pwd);
-		free(pwd);
-		ms->exit_status = 0;
+		else
+		{
+			ft_printf_fd(fd, "%s\n", pwd);
+			free(pwd);
+			ms->exit_status = 0;
+		}
 	}
 }

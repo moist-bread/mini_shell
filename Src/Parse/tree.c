@@ -1,7 +1,7 @@
 
 #include "../../Inc/minishell.h"
 
-/// @brief Main function that creates the AST_Tree 
+/// @brief Main function that creates the AST_Tree
 /// @param tokens Node from the token list
 /// @param cont The content
 t_tree_node	*create_tree(t_token **tokens, t_minishell *ms)
@@ -12,11 +12,11 @@ t_tree_node	*create_tree(t_token **tokens, t_minishell *ms)
 	if (expand_token_list(tokens, ms) == 1)
 		exit (-1);
 	assign_type_token(*tokens, true);
-	printf("\nafter expansion:\n");
-	print_tokens(*tokens);
+	//printf("\nafter expansion:\n");
+	//print_tokens(*tokens);
 	if (place_treenode(*tokens, &tree_node, false) == -1)
 		return (NULL);
-	tree_apply_print(tree_node, 0, "Root");
+	//tree_apply_print(tree_node, 0, "Root");
 	return (tree_node);
 }
 
@@ -63,9 +63,9 @@ t_node_cont	assign_tree_cont(t_token *token)
 		cont.limiter = token->cont;
 		cont.quote = token->quote;
 	}
-	else if (token && token->prev && (token->prev->type == RED_IN \
-	|| token->prev->type == RED_OUT || token->prev->type == RED_APP) \
-	&& token->type == ARG)
+	else if (token && token->prev && (token->prev->type == RED_IN
+			|| token->prev->type == RED_OUT || token->prev->type == RED_APP)
+		&& token->type == ARG)
 		cont.file = token->cont;
 	else if (token && token->type == PIPE)
 		cont.pipe_c = *token->cont;
@@ -79,14 +79,14 @@ t_node_cont	assign_tree_cont(t_token *token)
 /// @param tokens Node from the token list
 /// @param new_tree_node New node of the AST_Tree
 /// @param root The root of the AST_Tree
-static int	if_not_pipe(t_token *tokens, t_tree_node *new_tree_node, \
-t_tree_node **root)
+static int	if_not_pipe(t_token *tokens, t_tree_node *new_tree_node,
+		t_tree_node **root)
 {
 	t_token	*cmd_token;
 
 	cmd_token = tokens;
-	while (cmd_token && cmd_token->type != PIPE && cmd_token->type != CMD \
-	&& cmd_token->type != BUILT_IN)
+	while (cmd_token && cmd_token->type != PIPE && cmd_token->type != CMD
+		&& cmd_token->type != BUILT_IN)
 		cmd_token = cmd_token->next;
 	if (cmd_token && (cmd_token->type == CMD || cmd_token->type == BUILT_IN))
 	{
@@ -108,7 +108,7 @@ t_tree_node **root)
 	return (0);
 }
 
-/// @brief This functions puts the new tree_node in the right 
+/// @brief This functions puts the new tree_node in the right
 /// place in the AST_Tree
 /// @param tokens Node from the token list
 /// @param root The first node of the AST_Tree

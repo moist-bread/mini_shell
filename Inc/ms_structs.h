@@ -66,7 +66,7 @@ typedef struct s_node_cont
 {
 	char				*cmd;
 	char				**args;
-	char				pipe_c;
+	char				pipe_c; // trash
 	t_pipe_data			pipe;
 	char				*file;
 	char				*limiter; // MY FUNCTION

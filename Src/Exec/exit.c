@@ -11,14 +11,14 @@ void	exit_built_in(t_minishell *ms, t_tree_node *node)
 	long	arg_n;
 
 	// printf(YEL "\nEntering exit built in" DEF "\n\n");
-	printf(BLU "\nexit" DEF "\n");
+	printf(BLU "exit" DEF "\n");
 	arg_n = 0;
 	if (!node->right)
 		minishell_clean(*ms, ms->exit_status);
 	if (long_check(node->right->cont.args[0], &arg_n))
 	{
 		if (!node->right->cont.args[1])
-			minishell_clean(*ms, WEXITSTATUS(arg_n));
+			minishell_clean(*ms, arg_n);
 		else
 		{
 			ft_printf_fd(2, "exit: too many arguments\n");
