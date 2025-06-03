@@ -22,7 +22,7 @@ int	main(int ac, char **av, char **env)
 			ms.tree_head = create_tree(&tokens, &ms);
 		fake_clear_token_lst(tokens);
 		// execution
-		master_distributer(&ms, ms.tree_head);
+		// master_distributer(&ms, ms.tree_head);
 		if (ms.tree_head)
 		{
 			free_tree(ms.tree_head);
