@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree_func_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:54:47 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 12:54:49 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/04 18:55:10 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,10 @@ char	**tree_alloc_args(t_token *token)
 	i = 0;
 	while (temp && temp->type != PIPE)
 	{
-		if (temp->prev && temp->type == ARG && temp->prev->type >= RED_IN
+		if (temp->prev && temp->type == ARG && temp->prev->type >= RED_IN \
 			&& temp->prev->type <= RED_APP)
 			temp = temp->next;
-		if (temp && temp->type == ARG)
+		if (temp && temp->type == ARG && temp->cont != NULL)
 			args[i++] = temp->cont;
 		if (temp && temp->type != PIPE)
 			temp = temp->next;
