@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:53:59 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 13:49:41 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/04 16:35:30 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ static char	*process_expander(char *line, t_minishell ms)
 		return (NULL);
 	if (result_len == 0)
 		return (ft_strdup(""));
-	printf("len_result: %zu\n", result_len);
 	result = ft_calloc(sizeof(char), result_len + 1);
 	if (!result)
 		return (perror("malloc4"), NULL);
