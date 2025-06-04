@@ -19,7 +19,7 @@ void	export_append(t_minishell *ms, int idx, char *new)
 	append = ft_calloc(ft_strlen(ms->env[idx]) + ft_strlen(&new[i + 1]) + 1,
 			sizeof(char));
 	if (!append)
-		return (error_msg_status("malloc", &ms->exit_status, 1));
+		return (perror("malloc"), minishell_clean(*ms, 1));
 	j = ft_strlcpy(append, ms->env[idx], ft_strlen(ms->env[idx]) + 1);
 	// printf("original: %s\n", append);
 	i = ft_strlcpy(&append[j], &new[i + 1], ft_strlen(&new[i]));
@@ -28,7 +28,6 @@ void	export_append(t_minishell *ms, int idx, char *new)
 		move_env_var(ms, &idx, (int)ft_matrixlen(ms->env) - 1);
 	free(ms->env[idx]);
 	ms->env[idx] = append;
-	ms->exit_status = 0;
 }
 
 /// @brief Replaces the old value at ms->env[IDX] with the NEW value

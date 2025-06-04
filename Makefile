@@ -23,7 +23,7 @@ PARSE_DIR		=	Parse
 MAIN_C			=	minishell_main.c
 
 EXEC_MAIN_C		=	exec_main.c 
-EXEC_FILES_C	=	struct_init.c distributer.c \
+EXEC_FILES_C	=	struct_init.c shell_level.c distributer.c \
 					pipe.c redir_handler.c pipe_utils.c \
 					matrix_utils.c matrix_quick_sort.c \
 					export.c export_utils.c env.c get_env.c unset.c echo.c exit.c directory.c \

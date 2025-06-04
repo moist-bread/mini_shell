@@ -210,6 +210,7 @@ void		fake_clear_token_lst(t_token *token);
 // STRUCT INIT
 
 void		minishell_struct_init(t_minishell *ms, char **env);
+char	**shell_level_updater(t_minishell *ms, int shl_idx);
 
 // GENERAL UTILS
 
@@ -229,6 +230,7 @@ char		**matrix_add_to_index(char **env, char *add, size_t idx,
 char		**matrix_add_front(char *add, char **original);
 size_t		ft_matrixlen(char **matrix);
 char		**matrix_dup_char(char **original_matrix);
+int	safe_add_to_index(char ***og, char *add, size_t idx, size_t len);
 
 // NEW LIBFT
 

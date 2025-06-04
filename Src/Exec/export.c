@@ -29,12 +29,12 @@ void	export_built_in(t_minishell *ms, t_tree_node *node, int fd)
 			continue ;
 		key = get_export_key(node->right->cont.args[i]);
 		if (!key)
-			return (error_msg_status("malloc", &ms->exit_status, 1));
+			return (perror("malloc"), minishell_clean(*ms, 1));
 		// printf("key= %s\n", key);
+		ms->exit_status = 0;
 		export_distribute(ms, node->right->cont.args[i], key, get_env_idx(key,
 				ms->env));
-		if (key)
-			free(key);
+		free(key);
 	}
 }
 
@@ -65,8 +65,6 @@ static int	invalid_export(char *arg, int *status)
 	int	inv;
 	int	i;
 
-	// must begin with a letter or underscore
-	// can only contain letters, digits, and underscores
 	inv = 0;
 	if (arg[0] == '_' && arg[1] == '=')
 		return (1);
@@ -100,32 +98,21 @@ static void	export_distribute(t_minishell *ms, char *arg, char *key,
 	key_len = ft_strlen(key);
 	if (env_idx == -1)
 	{
-		ms->exit_status = 0;
 		env_len = (int)ft_matrixlen(ms->env);
-		if (ft_strchr(arg, '='))
+		if (ft_strchr(arg, '=')) // printf("key not pres (is good)\n");
 		{
-			// printf("key not present (is good)\n");
 			if (arg[key_len - 1] == '+')
 				ft_memmove(&arg[key_len - 1], &arg[key_len],
 					ft_strlen(&arg[key_len - 1]));
-			ms->env = matrix_add_to_index(ms->env, arg, env_len, env_len);
+			if (!safe_add_to_index(&ms->env, arg, env_len, env_len))
+				minishell_clean(*ms, 1);
 		}
-		else
-		{
-			// printf("key not present (is bad)\n");
-			ms->env = matrix_add_to_index(ms->env, arg, ms->env_start++,
-					env_len);
-		}
+		else if (!safe_add_to_index(&ms->env, arg, ms->env_start++, env_len))
+			minishell_clean(*ms, 1); // printf("key not pres (is bad)\n");
 	}
-	else if (arg[key_len - 1] == '+')
-	{
-		// printf("key is present, export append\n");
-		return (export_append(ms, env_idx, arg));
-	}
-	else if (ft_strcmp(ms->env[env_idx], arg) && ft_strchr(arg, '='))
-	{
-		// printf("key is present, different value\n");
-		if (replace_env_value(ms, key, get_export_value(arg), env_idx) == -1)
-			return (error_msg_status(NULL, &ms->exit_status, 1));
-	}
+	else if (arg[key_len - 1] == '+') // printf("key is pres, +=\n");
+		export_append(ms, env_idx, arg);
+	else if (ft_strcmp(ms->env[env_idx], arg) && ft_strchr(arg, '=')
+		&& replace_env_value(ms, key, get_export_value(arg), env_idx) == -1)
+		minishell_clean(*ms, 1); // printf("key is pres, different value\n");
 }

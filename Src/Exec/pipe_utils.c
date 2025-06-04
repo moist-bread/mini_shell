@@ -56,11 +56,11 @@ char	*get_path(t_minishell ms, char *cmd)
 	{
 		bar = ft_strjoin(path[i], "/");
 		if (!bar)
-			return (perror("malloc"), NULL);
+			return (NULL);
 		joined = ft_strjoin(bar, cmd);
 		free(bar);
 		if (!joined)
-			return (perror("malloc"), NULL);
+			return (NULL);
 		if (access(joined, F_OK) == 0)
 			return (free_split(path), joined);
 		free(joined);
@@ -76,15 +76,26 @@ int	error_code_for_exec(char *path)
 	DIR	*dir;
 
 	if (access(path, F_OK) < 0)
+	{
+		if (ft_strchr(path, '/'))
+			return (ft_printf_fd(2, "%s: No such file or directory\n", path), 127);
 		return (ft_printf_fd(2, "%s: command not found\n", path), 127);
+	}
 	else if (access(path, X_OK) < 0)
 	{
 		if (ft_strchr(path, '/'))
 			return (ft_printf_fd(2, "%s: Permission denied\n", path), 126);
 		return (ft_printf_fd(2, "%s: command not found\n", path), 127);
 	}
-	dir = opendir(path);
-	if (dir)
-		return (closedir(dir), ft_printf_fd(2, "%s: Is a directory\n", path), 126);
+	else if (ft_strchr(path, '/'))
+	{
+		dir = opendir(path);
+		if (dir)
+			return (closedir(dir), ft_printf_fd(2, "%s: Is a directory\n",
+					path), 126);
+		return (ft_printf_fd(2, "%s: No such file or directory\n", path), 127);
+	}
+	else
+		return (ft_printf_fd(2, "%s: command not found\n", path), 127);
 	return (0);
 }

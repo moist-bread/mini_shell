@@ -19,7 +19,7 @@ char	**matrix_add_to_index(char **matrix, char *add, size_t idx, size_t len)
 		return (matrix);
 	new = ft_calloc(len + 2, sizeof(char *));
 	if (!new)
-		return (perror("malloc"), matrix);
+		return (perror("malloc"), NULL);
 	i = -1;
 	j = -1;
 	while (++i <= (int)len)
@@ -28,7 +28,7 @@ char	**matrix_add_to_index(char **matrix, char *add, size_t idx, size_t len)
 		{
 			new[++j] = ft_strdup(add);
 			if (!new[j])
-				return (free(new), perror("malloc"), matrix);
+				return (free(new), perror("malloc"), NULL);
 		}
 		new[++j] = matrix[i];
 	}

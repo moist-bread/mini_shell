@@ -15,7 +15,7 @@ char	**sort_matrix(char **original, int len)
 
 	sorted = ft_calloc(len + 1, sizeof(char *));
 	if (!sorted)
-		return (NULL);
+		return (perror("malloc"), NULL);
 	i = -1;
 	while (original[++i])
 		sorted[i] = original[i];

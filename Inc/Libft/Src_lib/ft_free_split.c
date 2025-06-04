@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:38:07 by andcarva          #+#    #+#             */
-/*   Updated: 2025/06/03 08:28:23 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/03 18:25:16 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,4 @@ void	free_split(char **split)
 		i++;
 	}
 	free(split);
-	split = NULL;
 }
