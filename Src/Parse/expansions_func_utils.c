@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansions_func_utils.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:53:53 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 12:53:55 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/04 16:55:37 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,13 +80,18 @@ char	*quote_limiter(char *exp)
 	char	*quoted;
 	int		i;
 	int		j;
+	int		size;
 
 	j = 0;
+	size = ft_strlen(exp) - (exp[ft_strlen(exp) - 1] == '\"' \
+	|| exp[ft_strlen(exp) - 1] == '\'');
 	i = 0;
 	quoted = ft_calloc(sizeof(char), ft_strlen(exp) + quote_count(exp) + 1);
 	if (!quoted)
 		return (perror("malloc3"), NULL);
-	while (exp[i])
+	if (exp[0] == '\"' || exp[0] == '\'')
+		i++;
+	while (i < size)
 	{
 		if (exp[i] == '\'')
 			quotes_quoted(quoted, &j, '\'', '\"');
@@ -110,10 +115,18 @@ static int	quote_count(char *exp)
 {
 	int	i;
 	int	len;
+	int	size;
 
 	i = 0;
 	len = 0;
-	while (exp[i])
+	size = ft_strlen(exp) - (exp[ft_strlen(exp) - 1] == '\"' \
+	|| exp[ft_strlen(exp) - 1] == '\'');
+	if (exp[0] == '\"' || exp[0] == '\'')
+	{
+		len -= 1;
+		i++;
+	}
+	while (i < size)
 	{
 		if (exp[i] == '\'' || exp[i] == '\"')
 			len++;

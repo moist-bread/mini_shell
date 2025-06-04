@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:54:09 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 16:14:12 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/06/04 16:57:15 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,26 +99,23 @@ char	**separator_3000(char *expanded, int is_quote)
 	char	*quoted;
 
 	final_result = NULL;
-	quoted = NULL;
+	quoted = quote_limiter(expanded);
+	free(expanded);
+	if (!quoted)
+		return (NULL);
 	if (is_quote == 0)
-	{
-		quoted = quote_limiter(expanded);
-		if (!quoted)
-			return (NULL);
 		final_result = separate(quoted);
-		free(quoted);
-	}
 	else
 	{
 		final_result = ft_calloc(sizeof(char *), 2);
 		if (!final_result)
-			return (perror("malloc7"), free(expanded), NULL);
-		final_result[0] = quote_remover(expanded);
+			return (perror("malloc7"), free(quoted), NULL);
+		final_result[0] = quote_remover(quoted);
 		if (!final_result[0])
-			return (free(expanded), free_split(final_result), NULL);
+			return (free(quoted), free_split(final_result), NULL);
 		final_result[1] = NULL;
 	}
-	return (free(expanded), final_result);
+	return (free(quoted), final_result);
 }
 
 /// @brief Does the separation with split
