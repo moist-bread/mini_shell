@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:53:53 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 16:55:37 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/06/04 19:22:17 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,28 +78,26 @@ size_t	quote_conter_len(char *s)
 char	*quote_limiter(char *exp)
 {
 	char	*quoted;
-	int		i;
-	int		j;
-	int		size;
+	int		i[3];
 
-	j = 0;
-	size = ft_strlen(exp) - (exp[ft_strlen(exp) - 1] == '\"' \
-	|| exp[ft_strlen(exp) - 1] == '\'');
-	i = 0;
+	ft_bzero(i, sizeof(i));
+	if (strlen(exp) > 0)
+		i[2] = ft_strlen(exp) - (exp[ft_strlen(exp) - 1] == '\"' \
+		|| exp[ft_strlen(exp) - 1] == '\'');
 	quoted = ft_calloc(sizeof(char), ft_strlen(exp) + quote_count(exp) + 1);
 	if (!quoted)
 		return (perror("malloc3"), NULL);
 	if (exp[0] == '\"' || exp[0] == '\'')
-		i++;
-	while (i < size)
+		i[0]++;
+	while (i[0] < i[2])
 	{
-		if (exp[i] == '\'')
-			quotes_quoted(quoted, &j, '\'', '\"');
-		else if (exp[i] == '\"')
-			quotes_quoted(quoted, &j, '\"', '\'');
+		if (exp[i[0]] == '\'')
+			quotes_quoted(quoted, &i[1], '\'', '\"');
+		else if (exp[i[0]] == '\"')
+			quotes_quoted(quoted, &i[1], '\"', '\'');
 		else
-			quoted[j++] = exp[i];
-		i++;
+			quoted[i[1]++] = exp[i[0]];
+		i[0]++;
 	}
 	return (quoted);
 }
@@ -119,7 +117,9 @@ static int	quote_count(char *exp)
 
 	i = 0;
 	len = 0;
-	size = ft_strlen(exp) - (exp[ft_strlen(exp) - 1] == '\"' \
+	size = 0;
+	if (strlen(exp) > 0)
+		size = ft_strlen(exp) - (exp[ft_strlen(exp) - 1] == '\"' \
 	|| exp[ft_strlen(exp) - 1] == '\'');
 	if (exp[0] == '\"' || exp[0] == '\'')
 	{
