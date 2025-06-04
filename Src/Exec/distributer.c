@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:50:38 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 13:04:16 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/04 15:15:49 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	built_in_process(t_minishell *ms, t_tree_node *node)
 
 	if (cmd_redir_executer(ms, node, &redir[0], &redir[1]) == -1)
 		return ;
-	built_in_exe(ms, node, redir[1]);
+	built_in_exe(ms, node, redir[1], false);
 	safe_close(redir[0]);
 	safe_close(redir[1]);
 }
@@ -105,7 +105,8 @@ void	built_in_process(t_minishell *ms, t_tree_node *node)
 /// @brief Opens rediractions and sends BUILT_IN NODE to be executed
 /// @param ms Overarching Minishell Structure
 /// @param node Current node of type BUILT_IN to be executed
-void	built_in_exe(t_minishell *ms, t_tree_node *node, int out)
+void	built_in_exe(t_minishell *ms, t_tree_node *node, int out,
+		bool pipe_flag)
 {
 	if (!ft_strcmp("echo", node->cont.cmd))
 		echo_built_in(ms, node, out);
@@ -120,5 +121,5 @@ void	built_in_exe(t_minishell *ms, t_tree_node *node, int out)
 	else if (!ft_strcmp("env", node->cont.cmd))
 		env_built_in(ms, node, out);
 	else if (!ft_strcmp("exit", node->cont.cmd))
-		exit_built_in(ms, node);
+		exit_built_in(ms, node, pipe_flag);
 }

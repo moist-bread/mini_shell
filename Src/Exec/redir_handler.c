@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:52:20 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 13:00:05 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/04 14:56:22 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,14 @@ static void	ambiguous_redir_verify(t_tree_node *node, int *in, int *out)
 	if (node->left->type == RED_IN)
 	{
 		ft_printf_fd(2, "ambiguous redirect\n");
+		mem_save(NULL)->exit_status = 1;
 		safe_close(*in);
 		*in = -1;
 	}
 	else if (node->left->type == RED_OUT || node->left->type == RED_APP)
 	{
 		ft_printf_fd(2, "ambiguous redirect\n");
+		mem_save(NULL)->exit_status = 1;
 		safe_close(*out);
 		*out = -1;
 	}
