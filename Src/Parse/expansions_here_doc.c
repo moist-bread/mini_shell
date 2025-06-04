@@ -34,7 +34,7 @@ static	char	*process_expander(char *line, t_minishell ms)
 	exp = NULL;
 	if (!line)
 		return (ft_strdup(""));
-	result_len = the_length (line, ms); // prblem when is here_doc single_quotes;
+	result_len = the_length (line, ms, true); // prblem when is here_doc single_quotes;
 	if (result_len == -1)
 		return (NULL);
 	if (result_len == 0)
