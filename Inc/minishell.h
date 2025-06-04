@@ -149,10 +149,10 @@ int			expand_double_quotes(char *input, char *result, \
 int			expand_unquotes(char *input, char *result, int *i, t_minishell ms);
 void		expansion_exit_status(char *result, int *i, char *exit_status);
 char		*get_search(char *input, bool *flag);
-long		the_length(char *input, t_minishell ms);
+long		the_length(char *input, t_minishell ms, bool exp);
 long		len_expansion(char *input, char **env);
 long		len_double_quotes(char *input, char **env, int *i, int exit_status);
-long		len_single_quote(char *input, int *i);
+long		len_single_quote(char *input, int *i, bool exp, t_minishell ms);
 long		len_unquoted(char *input, char **env, int *i, int exit_status);
 void		len_exit_status(char *exit_status, long *len, int *i);
 char		**separator_3000(char *expanded, int is_quote);
