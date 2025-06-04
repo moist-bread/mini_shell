@@ -14,9 +14,9 @@ void	cd_built_in(t_minishell *ms, t_tree_node *node)
 	// printf(YEL "\nEntering cd built in" DEF "\n\n");
 	if (node->right && invalid_cd(node->right, &ms->exit_status))
 		return ;
-	if (node->right) // caso "cd coisa"
+	if (node->right)
 		path = *node->right->cont.args;
-	else // caso "cd"
+	else
 		path = get_env("HOME=", &ms->env[ms->env_start]);
 	if (!path || chdir(path) == -1)
 	{
@@ -43,7 +43,7 @@ static int	invalid_cd(t_tree_node *node, int *status)
 		*status = 2;
 		return (1);
 	}
-	else if (node->cont.args[1]) // caso "cd esta coisa"
+	else if (node->cont.args[1])
 	{
 		ft_printf_fd(2, "cd: too many arguments\n");
 		*status = 1;
@@ -60,22 +60,37 @@ static void	cd_update_pwd(t_minishell *ms)
 	int		env_len;
 	char	*cur;
 
-	// printf("old env oldpwd:\t%s\n", get_env("OLDPWD=", ms->env));
-	// printf("old env pwd:\t%s\n", get_env("PWD=", ms->env));
 	old_pi = get_env_idx("OLDPWD=", ms->env);
 	if (old_pi == -1)
 	{
 		env_len = (int)ft_matrixlen(ms->env);
-		ms->env = matrix_add_to_index(ms->env, "OLDPWD=", env_len, env_len); // HERE
+		if (!safe_add_to_index(&ms->env, "OLDPWD=", env_len, env_len))
+			minishell_clean(*ms, 1);
 		old_pi = env_len;
 	}
-	replace_env_value(ms, "OLDPWD=", get_env("PWD=", ms->env), old_pi); // HERE
+	if (replace_env_value(ms, "OLDPWD=", get_env("PWD=", ms->env), old_pi) ==
+		-1)
+		minishell_clean(*ms, 1);
 	cur = getcwd(NULL, 0);
-	replace_env_value(ms, "PWD=", cur, get_env_idx("PWD=", ms->env)); // HERE
+	if (replace_env_value(ms, "PWD=", cur, get_env_idx("PWD=", ms->env)) == -1)
+		return (free(cur), minishell_clean(*ms, 1));
 	free(cur);
 	ms->exit_status = 0;
-	// printf("new env oldpwd:\t%s\n", get_env("OLDPWD=", ms->env));
-	// printf("new env pwd:\t%s\n", get_env("PWD=", ms->env));
+}
+
+int	safe_add_to_index(char ***og, char *add, size_t idx, size_t len)
+{
+	char	**new;
+
+	new = matrix_add_to_index(*og, add, idx, len);
+	if (!new)
+	{
+		free_split(*og);
+		*og = NULL;
+		return (0);
+	}
+	*og = new;
+	return (1);
 }
 
 /// @brief Print name of current/working directory

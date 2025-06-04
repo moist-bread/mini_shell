@@ -222,6 +222,7 @@ void		error_msg_status(char *message, int *status, int value);
 
 // SIGNALS
 void		init_sigact(t_minishell *minishell, int flag);
+t_minishell	*mem_save(t_minishell *minishell);
 
 // MATRIX UTILS
 
@@ -230,6 +231,7 @@ char		**matrix_add_to_index(char **env, char *add, size_t idx,
 char		**matrix_add_front(char *add, char **original);
 size_t		ft_matrixlen(char **matrix);
 char		**matrix_dup_char(char **original_matrix);
+int	safe_add_to_index(char ***og, char *add, size_t idx, size_t len);
 
 // NEW LIBFT
 

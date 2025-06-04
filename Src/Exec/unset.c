@@ -27,9 +27,7 @@ void	unset_built_in(t_minishell *ms, t_tree_node *node)
 		// printf("unset arg[%d]: \"%s\"\n", i, node->right->cont.args[i]);
 		env_idx = get_env_idx(node->right->cont.args[i], ms->env);
 		if (env_idx != -1)
-			remove_env_var(ms, env_idx, ft_matrixlen(ms->env)); // HERE
-		else
-			continue ;
+			remove_env_var(ms, env_idx, ft_matrixlen(ms->env));
 	}
 }
 
@@ -48,7 +46,7 @@ void	remove_env_var(t_minishell *ms, size_t idx, size_t len)
 		return ;
 	new = ft_calloc(len, sizeof(char *));
 	if (!new)
-		return (error_msg_status("malloc", &ms->exit_status, 1));
+		return (perror("malloc"), minishell_clean(*ms, 1));
 	if ((int)idx < ms->env_start)
 		ms->env_start--;
 	i = -1;

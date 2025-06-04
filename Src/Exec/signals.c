@@ -3,7 +3,6 @@
 
 static void	parent_sig_handler(int signal);
 static void	here_doc_sig_handler(int signal);
-t_minishell	*mem_save(t_minishell *minishell);
 
 /// @brief Saves adress to MINISHELL in the global variable and
 /// initialized the signals according to FLAG
