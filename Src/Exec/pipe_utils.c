@@ -76,7 +76,11 @@ int	error_code_for_exec(char *path)
 	DIR	*dir;
 
 	if (access(path, F_OK) < 0)
+	{
+		if (ft_strchr(path, '/'))
+			return (ft_printf_fd(2, "%s: No such file or directory\n", path), 127);
 		return (ft_printf_fd(2, "%s: command not found\n", path), 127);
+	}
 	else if (access(path, X_OK) < 0)
 	{
 		if (ft_strchr(path, '/'))
