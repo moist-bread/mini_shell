@@ -27,7 +27,7 @@ void	export_built_in(t_minishell *ms, t_tree_node *node, int fd)
 		// printf("export arg[%d]: \"%s\"\n", i, node->right->cont.args[i]);
 		if (invalid_export(node->right->cont.args[i], &ms->exit_status))
 			continue ;
-		key = get_export_key(node->right->cont.args[i]); // HERE
+		key = get_export_key(node->right->cont.args[i]);
 		if (!key)
 			return (perror("malloc"), minishell_clean(*ms, 1));
 		// printf("key= %s\n", key);
