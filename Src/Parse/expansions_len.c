@@ -39,16 +39,25 @@ long	len_double_quotes(char *s, char **env, int *i, int exit_status)
 /// @param input The string passed
 /// @param i Indexes
 /// @return The length
-long	len_single_quote(char *input, int *i)
+long	len_single_quote(char *input, int *i, bool exp, t_minishell ms)
 {
 	long	len;
 
 	len = 1;
 	(*i)++;
-	while (input[*i] && input[*i] != '\'')
+	if (exp == false)
 	{
-		(*i)++;
-		len++;
+		while (input[*i] && input[*i] != '\'')
+		{
+			(*i)++;
+			len++;
+		}
+	}
+	else if (exp == true)
+	{
+		while (input[*i] && input[*i] != '\'')
+			(*i)++;
+		len += len_expansion(input, ms.env);
 	}
 	if (input[*i] == '\'')
 	{
@@ -95,7 +104,7 @@ long	len_unquoted(char *s, char **env, int *i, int exit_status)
 /// @param input The string passed
 /// @param env The enviorment 
 /// @return The length
-long	the_length(char *input, t_minishell ms)
+long	the_length(char *input, t_minishell ms, bool exp)
 {
 	long	len;
 	int		i;
@@ -111,7 +120,7 @@ long	the_length(char *input, t_minishell ms)
 				return (-1);
 		}
 		else if (input[i] == '\'')
-			len += len_single_quote(input, &i);
+			len += len_single_quote(input, &i, exp, ms);
 		else
 		{
 			len += len_unquoted(input, ms.env, &i, ms.exit_status);

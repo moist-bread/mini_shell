@@ -25,8 +25,7 @@ t_token	*create_tokens(char *input)
 
 	tokens = NULL;
 	if (place_token(input, &tokens) == -1)
-		exit (1);
-		// minishell_clean(NULL, 1); // Memsave insatead of null
+		minishell_clean(*mem_save(NULL), 1);
 	assign_type_token(tokens, false);
 	// print_tokens(tokens);
 	master_check(&tokens);
@@ -56,9 +55,9 @@ int	place_token(char *input, t_token **head)
 	i = 0;
 	while (newinput && newinput[i])
 	{
-		newtk = newtoken(newinput[i]); // malloc2 leaks here
+		newtk = newtoken(newinput[i]);
 		if (!newtk)
-			return (-1);
+			return (free_split(newinput), -1);
 		tokenadd_back(head, newtk);
 		i++;
 	}

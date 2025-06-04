@@ -10,13 +10,16 @@ t_tree_node	*create_tree(t_token **tokens, t_minishell *ms)
 
 	tree_node = NULL;
 	if (expand_token_list(tokens, ms) == 1)
-		exit (-1);
+	{
+		syntax_clear(tokens);
+		minishell_clean(*ms, 1);
+	}
 	assign_type_token(*tokens, true);
-	//printf("\nafter expansion:\n");
-	//print_tokens(*tokens);
+	printf("\nafter expansion:\n");
+	print_tokens(*tokens);
 	if (place_treenode(*tokens, &tree_node, false) == -1)
 		return (NULL);
-	//tree_apply_print(tree_node, 0, "Root");
+	tree_apply_print(tree_node, 0, "Root");
 	return (tree_node);
 }
 

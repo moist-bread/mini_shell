@@ -149,10 +149,10 @@ int			expand_double_quotes(char *input, char *result, \
 int			expand_unquotes(char *input, char *result, int *i, t_minishell ms);
 void		expansion_exit_status(char *result, int *i, char *exit_status);
 char		*get_search(char *input, bool *flag);
-long		the_length(char *input, t_minishell ms);
+long		the_length(char *input, t_minishell ms, bool exp);
 long		len_expansion(char *input, char **env);
 long		len_double_quotes(char *input, char **env, int *i, int exit_status);
-long		len_single_quote(char *input, int *i);
+long		len_single_quote(char *input, int *i, bool exp, t_minishell ms);
 long		len_unquoted(char *input, char **env, int *i, int exit_status);
 void		len_exit_status(char *exit_status, long *len, int *i);
 char		**separator_3000(char *expanded, int is_quote);
@@ -203,7 +203,6 @@ bool		is_sep(char c);
 // FAKE
 
 char		*fake_readinput(t_minishell ms, char *input);
-t_tree_node	*fake_create_tree(t_token *tokens);
 void		fake_clear_token_lst(t_token *token);
 
 // --------------------------EXECUTION--------------------------
@@ -221,6 +220,7 @@ void		error_msg_status(char *message, int *status, int value);
 
 // SIGNALS
 void		init_sigact(t_minishell *minishell, int flag);
+t_minishell	*mem_save(t_minishell *minishell);
 
 // MATRIX UTILS
 

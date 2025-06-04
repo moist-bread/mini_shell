@@ -19,7 +19,14 @@ int	main(int ac, char **av, char **env)
 		input = fake_readinput(ms, input);
 		tokens = create_tokens(input);
 		if (tokens)
+		{
 			ms.tree_head = create_tree(&tokens, &ms);
+			if (!ms.tree_head)
+			{
+				syntax_clear(&tokens);
+				minishell_clean(ms, 1);
+			}
+		}
 		fake_clear_token_lst(tokens);
 		// execution
 		master_distributer(&ms, ms.tree_head);

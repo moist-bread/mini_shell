@@ -28,7 +28,7 @@ void	assigns_built_in(t_token *token)
 {
 	if (token->cont == NULL)
 		token->type = CMD;
-	else if (ft_strncmp("echo", token->cont, 5) == 0)
+	if (ft_strncmp("echo", token->cont, 5) == 0)
 		token->type = BUILT_IN;
 	else if (ft_strncmp("cd", token->cont, 3) == 0)
 		token->type = BUILT_IN;

@@ -34,11 +34,12 @@ static	char	*process_expander(char *line, t_minishell ms)
 	exp = NULL;
 	if (!line)
 		return (ft_strdup(""));
-	result_len = the_length (line, ms);
+	result_len = the_length (line, ms, true); // prblem when is here_doc single_quotes;
 	if (result_len == -1)
 		return (NULL);
 	if (result_len == 0)
 		return (ft_strdup(""));
+	printf("len_result: %zu\n", result_len);
 	result = ft_calloc(sizeof(char), result_len + 1);
 	if (!result)
 		return (perror("malloc4"), NULL);
@@ -61,7 +62,7 @@ static	int	here_doc_expansion(char *result, char *s, t_minishell ms, char **exp)
 			*exp = expansion(s + i[0], ms.env, &flag);
 			if (flag)
 				return (1);
-			if (exp)
+			if (*exp)
 				write_and_advance(result, &i[1], *exp);
 			while (s[++i[0]] && (s[i[0]] == '_' || ft_isalnum(s[i[0]])))
 				;
