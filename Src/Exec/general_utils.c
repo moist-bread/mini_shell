@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   general_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:51:13 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 13:31:34 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
@@ -6,9 +17,8 @@
 /// @param status Process exit status
 void	minishell_clean(t_minishell minishell, int status)
 {
-	// printf("exiting with: %d\n", status);
 	if (minishell.tree_head)
-		free_tree(minishell.tree_head);
+		free_tree(&minishell.tree_head);
 	free_split(minishell.env);
 	master_close();
 	exit(status);

@@ -1,19 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cracked_split_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 13:45:31 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 13:45:32 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
-/// @brief 
-/// @param c 
+/// @brief
+/// @param c
 /// @return
-bool is_sep(char c)
+bool	is_sep(char c)
 {
 	if ((c >= 9 && c <= 13) || c == ' ')
 		return (true);
 	return (false);
 }
 
-/// @brief 
-/// @param s 
-/// @return 
+/// @brief
+/// @param s
+/// @return
 int	word_len(const char *s)
 {
 	int	quote_len;
@@ -24,7 +35,8 @@ int	word_len(const char *s)
 		s++;
 	while (*s && !is_sep(*s))
 	{
-		if (*s && (quote_len = skip_quote(s)) > 0)
+		quote_len = skip_quote(s);
+		if (quote_len > 0)
 		{
 			len += quote_len;
 			s += quote_len;
@@ -38,9 +50,9 @@ int	word_len(const char *s)
 	return (len);
 }
 
-/// @brief 
-/// @param s 
-/// @return 
+/// @brief
+/// @param s
+/// @return
 int	skip_quote(const char *s)
 {
 	int		i;
@@ -57,8 +69,8 @@ int	skip_quote(const char *s)
 	return (i);
 }
 
-/// @brief 
-/// @param s 
+/// @brief
+/// @param s
 void	word_runner(const char **s)
 {
 	int	skip;
@@ -68,7 +80,8 @@ void	word_runner(const char **s)
 	{
 		while (**s && !is_sep(**s))
 		{
-			if ((skip = skip_quote(*s)) > 0)
+			skip = skip_quote(*s);
+			if (skip > 0)
 				(*s) += skip;
 			else
 				(*s)++;

@@ -1,71 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:43:11 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 13:26:06 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
-// NOTES: ANDRE
-
-// char *input = "< infile cat | cat | "ls -l" > out";
-// cracked slpit returns t_node just for basic token and sep is space.
-// Nodes:
-// 1 - "<"; 2 - "infile"; 3 - "cat"; 4 - "|"; 5 - "cat"; etc;
-// funcs that check the new list of tokens.
-// Funcs:
-// Check Pipes and redir for spaces,
-// if they
-//	dont have it put space after and before
-// Diverse check enquanto corro a lista the tokens;
-// Assign types to the tokens;
-// Func That will create the tree for varios Casos;
-
-// -------------------------------------------------------------------------------------------------|
-
-// First pipe initilize pipe data and put number of cmds.
-// Other pipes just the type and the correspondant left and right nodes;
-// If Pipe, Left always cmds;
-// If Pipe, Right next Operator or The final cmds;
-// If Cmd, Left Redir, Right Args "Flags e afins"
-// If Redir, Left Redir, cont the file name or LIMITER,
-// Consult on the .h for the Types of Redir;
-// Check with rackel if is Build it for the correct Type;
-// If There Redir, Right is Arg, Check if next after Arg is Redir.
-// If is Redir do the normal, if not check if is Pipe,
-// If is Pipe start over.
-// If theres no CMD but REDIR exists vreate CMD node NULL and the REDIR stays in the left:
-// EX: > outfile | > outfile
-// -------------------------------------------------------------------------------------------------|
-
-// CHECKS ERROR
-
-// Check what is after here_doc, strncmp, if for redirs ou pipe Error the syntax
-//	- Done
-// If there is no space between quotes is considered 1 token: - Done
-// Example: "easd"'O'""
-// Get ridof len in working quotes and do a funciton that gets me the lenght in get word;
-//	- Done
-// Implement in split that needs to split spaces and tabs in the same String;
-//	- Done
-// This CMD:  >> banana cmd banana
-// Needs to be REDIR ARG CMD ARG but is doing REDIR ARG ARG ARG
-//	- I think is Done;
-// In the tree the last node redir is over writig the prrevious ones;
-// > file > | a - Syntax Error - done
-
-// Reminder EXPANSIONS HERE_DOC:
-// cat << $"$HOME" does not expand and the lim is $HOME
-// if the LIM has a "" like EOf"f" it does not expand
-// if the LIM is the expansion like $HOME it works as a lim and does not expand
-// if is a normal LIM without any quotes it always expands
-// DO a bolean to say if the lim had quotes; for the here_doc expansions
-
-// REDIRS: not HERE_DOC
-// If after redir there is an expansion ansd inside of said expansion there is more than one word
-// the redir fails because of ambiguous redirect
-
-// TAREFAS:
-// 		// line = atuafuncao(line, limiter);
-//	Take of exit in syntax error
-
-// -------------------------------------------------------------------------------------------------|
 
 // LIBS
 # include "Libft/libft.h"
@@ -95,8 +41,11 @@
 # define DEF "\e[0m"
 
 // messages
+# define M_NO_SUCH "No such file or directory\n"
 # define M_HERE_EOF "warning: here-document delimited by end-of-file "
-# define VAR_PATH "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+# define VAR_PATH \
+	"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:\
+/usr/bin:/sbin:/bin"
 # define SHLVL_WARN \
 	"warning: shell level (2147483647) too high, \
 resetting to 1\n"
@@ -113,8 +62,8 @@ int			place_token(char *input, t_token **head);
 void		print_tokens(t_token *tokens);
 bool		is_token(t_token *token);
 int			expand_token_list(t_token **head, t_minishell *ms);
-t_token		*replace_expanded_token(t_token **head, t_token *curr, \
-			char **expanded);
+t_token		*replace_expanded_token(t_token **head, t_token *curr,
+				char **expanded);
 t_token		*join_token_list(t_token **head, t_token *curr, t_token *first_new);
 
 // TREE UTILS
@@ -127,7 +76,7 @@ t_node_cont	assign_tree_cont(t_token *token);
 int			if_command(t_token *tokens, t_tree_node *cmd_node);
 int			place_treenode(t_token *tokens, t_tree_node **root, bool pipe);
 void		free_tree_node_cont(t_node_cont cont);
-void		free_tree(t_tree_node *tree_head);
+void		free_tree(t_tree_node **tree_head);
 void		tree_cont_init(t_node_cont *cont);
 t_token		*iteri_till_pipe(t_token *token);
 char		**tree_alloc_args(t_token *token);
@@ -138,14 +87,14 @@ int			expander(t_token *curr, t_minishell *ms, t_token **head);
 char		**input_expander(char *input, t_minishell ms);
 char		*process_quote_expansions(char *input, t_minishell ms,
 				int *is_quote);
-int			the_expansion(char *input, t_minishell ms, \
-			int *is_quote, char *result);
+int			the_expansion(char *input, t_minishell ms, int *is_quote,
+				char *result);
 char		*expansion(char *input, char **env, bool *flag);
-int			handle_variable_expansion(char *s, int *i, \
-			char *result, char **env);
+int			handle_variable_expansion(char *s, int *i, char *result,
+				char **env);
 void		expand_single_quotes(char *input, char *result, int *i);
-int			expand_double_quotes(char *input, char *result, \
-			int *i, t_minishell ms);
+int			expand_double_quotes(char *input, char *result, int *i,
+				t_minishell ms);
 int			expand_unquotes(char *input, char *result, int *i, t_minishell ms);
 void		expansion_exit_status(char *result, int *i, char *exit_status);
 char		*get_search(char *input, bool *flag);
@@ -176,8 +125,7 @@ void		is_limtiter_or_arg(t_token **temp);
 char		*add_spaces(char *input);
 int			space_length(char *input);
 char		*space_put(char *input, int len);
-void		write_and_advance(char *result, int *res_idx, \
-			char *exp);
+void		write_and_advance(char *result, int *res_idx, char *exp);
 int			process_token_quotes(t_token *curr);
 
 // CHECKS
@@ -210,7 +158,7 @@ void		fake_clear_token_lst(t_token *token);
 // STRUCT INIT
 
 void		minishell_struct_init(t_minishell *ms, char **env);
-char	**shell_level_updater(t_minishell *ms, int shl_idx);
+char		**shell_level_updater(t_minishell *ms, int shl_idx);
 
 // GENERAL UTILS
 
@@ -230,7 +178,7 @@ char		**matrix_add_to_index(char **env, char *add, size_t idx,
 char		**matrix_add_front(char *add, char **original);
 size_t		ft_matrixlen(char **matrix);
 char		**matrix_dup_char(char **original_matrix);
-int	safe_add_to_index(char ***og, char *add, size_t idx, size_t len);
+int			safe_add_to_index(char ***og, char *add, size_t idx, size_t len);
 
 // NEW LIBFT
 

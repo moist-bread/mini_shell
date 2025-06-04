@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tree.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:54:56 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 13:32:06 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
@@ -15,17 +26,14 @@ t_tree_node	*create_tree(t_token **tokens, t_minishell *ms)
 		minishell_clean(*ms, 1);
 	}
 	assign_type_token(*tokens, true);
-	printf("\nafter expansion:\n");
-	print_tokens(*tokens);
 	if (place_treenode(*tokens, &tree_node, false) == -1)
 		return (NULL);
-	tree_apply_print(tree_node, 0, "Root");
 	return (tree_node);
 }
 
 /// @brief Expands the content of the tokens
 /// @param head The head of the tokens list
-/// @param ms The minishell struct  
+/// @param ms The minishell struct
 int	expand_token_list(t_token **head, t_minishell *ms)
 {
 	t_token	*curr;

@@ -1,8 +1,18 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   space_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:54:37 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 12:54:37 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
-static	void	lenght_util(char *input, int *i)
+static void	lenght_util(char *input, int *i)
 {
 	char	quote;
 
@@ -18,8 +28,8 @@ static	void	lenght_util(char *input, int *i)
 /// @return lenght
 int	space_length(char *input)
 {
-	int		i;
-	int		spaces;
+	int	i;
+	int	spaces;
 
 	i = 0;
 	spaces = 0;
@@ -49,7 +59,7 @@ int	space_length(char *input)
 /// @param dest New string with the spaces
 /// @param i increment
 /// @param j increment
-static	void	between_quotes(char *input, char *dest, int *i, int *j)
+static void	between_quotes(char *input, char *dest, int *i, int *j)
 {
 	char	quote;
 

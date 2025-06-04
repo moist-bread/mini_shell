@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redir_handler.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:52:20 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 13:00:05 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
@@ -36,27 +47,26 @@ int	cmd_redir_executer(t_minishell *ms, t_tree_node *node, int *in, int *out)
 /// @param out Var where to store output redirections
 void	redir_handler(t_minishell *ms, t_tree_node *node, int *in, int *out)
 {
-	// no redir || empty redir
 	if (!node->left || (node->left->type != RED_HD && !node->left->cont.file))
 		return (ambiguous_redir_verify(node, in, out));
-	if (node->left->type == RED_IN) // IN <
+	if (node->left->type == RED_IN)
 	{
 		safe_close(*in);
 		*in = open(node->left->cont.file, O_RDONLY);
 	}
-	else if (node->left->type == RED_OUT) // OUT >
+	else if (node->left->type == RED_OUT)
 	{
 		safe_close(*out);
 		*out = open(node->left->cont.file, O_RDWR | O_TRUNC | O_CREAT, 0644);
 	}
-	else if (node->left->type == RED_APP) // APPEND OUT >>
+	else if (node->left->type == RED_APP)
 	{
 		safe_close(*out);
 		*out = open(node->left->cont.file, O_RDWR | O_APPEND | O_CREAT, 0644);
 	}
 	if (*in == -1 || *out == -1)
 		return (error_msg_status(node->left->cont.file, &ms->exit_status, 1));
-	if (node->left->left) // more redir
+	if (node->left->left)
 		redir_handler(ms, node->left, in, out);
 }
 

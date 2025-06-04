@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:50:52 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 12:59:26 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
@@ -10,7 +21,6 @@ void	exit_built_in(t_minishell *ms, t_tree_node *node)
 {
 	long	arg_n;
 
-	// printf(YEL "\nEntering exit built in" DEF "\n\n");
 	printf(BLU "exit" DEF "\n");
 	arg_n = 0;
 	if (!node->right)

@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipe_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:51:42 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 12:59:13 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
@@ -30,11 +41,6 @@ void	assign_pipe_fds(t_minishell ms, t_pipe_data *pdata, int *redir_fd,
 		if (idx + 1 == pdata->cmd_n)
 			close(pdata->next_pipe);
 	}
-	// printf("\nAFTER FDS\n\nredir_fd[0]: %d\nredir_fd[1]: %d\n", redir_fd[0],
-	// 	redir_fd[1]);
-	// printf("pdata->cur_pipe[0]: %d\npdata->cur_pipe[1]: %d\n",
-	// 	pdata->cur_pipe[0], pdata->cur_pipe[1]);
-	// printf("pdata->next_pipe: %d\n", pdata->next_pipe);
 }
 
 /// @brief Searches for the true path to the CMD program
@@ -78,7 +84,7 @@ int	error_code_for_exec(char *path)
 	if (access(path, F_OK) < 0)
 	{
 		if (ft_strchr(path, '/'))
-			return (ft_printf_fd(2, "%s: No such file or directory\n", path), 127);
+			return (ft_printf_fd(2, "%s: " M_NO_SUCH, path), 127);
 		return (ft_printf_fd(2, "%s: command not found\n", path), 127);
 	}
 	else if (access(path, X_OK) < 0)
@@ -93,7 +99,7 @@ int	error_code_for_exec(char *path)
 		if (dir)
 			return (closedir(dir), ft_printf_fd(2, "%s: Is a directory\n",
 					path), 126);
-		return (ft_printf_fd(2, "%s: No such file or directory\n", path), 127);
+		return (ft_printf_fd(2, "%s: " M_NO_SUCH, path), 127);
 	}
 	else
 		return (ft_printf_fd(2, "%s: command not found\n", path), 127);

@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:50:46 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 13:04:29 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
@@ -7,7 +18,6 @@
 /// @param fd possible redir file descriptor
 void	env_built_in(t_minishell *ms, t_tree_node *node, int fd)
 {
-	// printf(YEL "\nEntering env built in" DEF "\n\n");
 	if (node->right)
 	{
 		if (node->right->cont.args[0][0] == '-' && node->right->cont.args[0][1])

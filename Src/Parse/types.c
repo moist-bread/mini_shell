@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   types.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:55:00 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 12:55:01 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
 /// @brief Assigns a Type to the Node
-/// @param token Node of a list 
+/// @param token Node of a list
 void	assign_type_token(t_token *token, bool exp)
 {
 	t_token	*temp;
@@ -12,8 +23,8 @@ void	assign_type_token(t_token *token, bool exp)
 	temp = token;
 	while (temp)
 	{
-		if (temp->type != PIPE && temp->type < RED_IN \
-			&& temp->type > RED_APP && exp == true)
+		if (temp->type != PIPE && temp->type < RED_IN && temp->type > RED_APP
+			&& exp == true)
 			assigns_types(temp, exp);
 		else if (exp == false)
 			assigns_types(temp, exp);

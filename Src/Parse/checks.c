@@ -1,10 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   checks.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:53:17 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 13:45:57 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
 static void	ft_copy(char *input, char *checked, int *i, int *j);
 
-/// @brief The master function for the checks in the list of tokens 
-/// @param token Node of a list 
+/// @brief The master function for the checks in the list of tokens
+/// @param token Node of a list
 void	master_check(t_token **token)
 {
 	t_token	*temp;
@@ -18,8 +29,8 @@ void	master_check(t_token **token)
 			ft_error_check(token, 1);
 		else if (temp->next && temp->type == PIPE && temp->next->type == PIPE)
 			ft_error_check(token, 1);
-		else if (temp->next && temp->type != PIPE && is_token(temp) == true \
-		&& is_token(temp->next) == true)
+		else if (temp->next && temp->type != PIPE && is_token(temp) == true
+			&& is_token(temp->next) == true)
 			ft_error_check(token, 1);
 		else if (is_token(temp) == true && temp->next == NULL)
 			ft_error_check(token, 1);
@@ -37,16 +48,17 @@ char	*check_expansion(char *input)
 
 	i = 0;
 	j = 0;
-	checked = ft_calloc(sizeof(char), \
-	(ft_strlen(input) - checked_len(input)) + 1);
+	checked = ft_calloc(sizeof(char), (ft_strlen(input) - checked_len(input))
+			+ 1);
 	if (!checked)
 		return (perror("malloc1"), NULL);
 	while (input[i])
 	{
 		while (input[i] && (input[i] == '\"' || input[i] == '\''))
 			ft_copy(input, checked, &i, &j);
-		if (input[i] == '$' && !ft_isalpha(input[i + 1]) && input[i + 1] != '_' \
-		&& input[i + 1] != '?' && !ft_isdigit(input[i + 1]) && input[i + 1] != 0)
+		if (input[i] == '$' && !ft_isalpha(input[i + 1]) && input[i + 1] != '_'
+			&& input[i + 1] != '?' && !ft_isdigit(input[i + 1]) && input[i
+				+ 1] != 0)
 			i++;
 		else if (input[i])
 			checked[j++] = input[i++];
@@ -71,8 +83,9 @@ size_t	checked_len(char *input)
 				i++;
 			i++;
 		}
-		if (input[i] == '$' && !ft_isalpha(input[i + 1]) && input[i + 1] != '_' \
-		&& input[i + 1] != '?'  && !ft_isdigit(input[i + 1]) && input[i + 1] != 0)
+		if (input[i] == '$' && !ft_isalpha(input[i + 1]) && input[i + 1] != '_'
+			&& input[i + 1] != '?' && !ft_isdigit(input[i + 1]) && input[i
+				+ 1] != 0)
 			len += 1;
 		if (input[i])
 			i++;

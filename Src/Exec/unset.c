@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:52:43 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 13:01:53 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
@@ -9,7 +20,6 @@ void	unset_built_in(t_minishell *ms, t_tree_node *node)
 	int	env_idx;
 	int	i;
 
-	// printf(YEL "\nEntering unset built in" DEF "\n\n");
 	ms->exit_status = 0;
 	if (!node->right)
 		return ;
@@ -24,7 +34,6 @@ void	unset_built_in(t_minishell *ms, t_tree_node *node)
 	i = -1;
 	while (node->right->cont.args[++i])
 	{
-		// printf("unset arg[%d]: \"%s\"\n", i, node->right->cont.args[i]);
 		env_idx = get_env_idx(node->right->cont.args[i], ms->env);
 		if (env_idx != -1)
 			remove_env_var(ms, env_idx, ft_matrixlen(ms->env));
@@ -41,7 +50,6 @@ void	remove_env_var(t_minishell *ms, size_t idx, size_t len)
 	int		i;
 	int		j;
 
-	// printf("remove var(idx: %zu, len: %zu)\n", idx, len);
 	if (!ms->env || len < 1 || idx >= len)
 		return ;
 	new = ft_calloc(len, sizeof(char *));

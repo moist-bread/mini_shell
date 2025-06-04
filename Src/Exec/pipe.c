@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipe.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:52:15 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 13:04:56 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
@@ -16,7 +27,6 @@ void	pipe_process(t_minishell *ms, t_tree_node *node)
 {
 	int	id;
 
-	// ft_printf("\nEntering pipe pro\n");
 	pipe_init(ms, &node->cont.pipe);
 	id = fork();
 	if (id < 0)
@@ -89,21 +99,16 @@ static void	setup_pipe_cmd(t_minishell ms, t_tree_node *node,
 {
 	int	redir[2];
 
-	// ft_printf("\nEntering setup pipe cmd\n\n");
-	// printf("step 1: check redirs --\n");
 	redir[0] = 0;
 	redir[1] = 1;
 	redir_handler(&ms, node, &redir[0], &redir[1]);
 	successful_redir_check(&redir[0], &redir[1], pdata->here_docs[idx]);
-	// printf("step 2: create pipe and assign fds --\n");
 	assign_pipe_fds(ms, pdata, redir, idx);
-	// printf("step 3: child pro, parse, dup exec --\n");
 	pdata->pid[idx] = fork();
 	if (pdata->pid[idx] < 0)
 		return (perror("fork"), minishell_clean(ms, 1));
 	if (pdata->pid[idx] == 0)
 		distribute_pipe_cmd(ms, node, pdata, redir);
-	// printf("step 4: parent close --\n");
 	safe_close(pdata->cur_pipe[1]);
 	pdata->cur_pipe[1] = 1;
 	safe_close(pdata->cur_pipe[0]);

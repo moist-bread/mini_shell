@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   directory.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:50:34 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 13:01:03 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
@@ -11,7 +22,6 @@ void	cd_built_in(t_minishell *ms, t_tree_node *node)
 {
 	char	*path;
 
-	// printf(YEL "\nEntering cd built in" DEF "\n\n");
 	if (node->right && invalid_cd(node->right, &ms->exit_status))
 		return ;
 	if (node->right)
@@ -68,8 +78,8 @@ static void	cd_update_pwd(t_minishell *ms)
 			minishell_clean(*ms, 1);
 		old_pi = env_len;
 	}
-	if (replace_env_value(ms, "OLDPWD=", get_env("PWD=", ms->env), old_pi) ==
-		-1)
+	if (replace_env_value(ms, "OLDPWD=", get_env("PWD=", ms->env), old_pi)
+		== -1)
 		minishell_clean(*ms, 1);
 	cur = getcwd(NULL, 0);
 	if (replace_env_value(ms, "PWD=", cur, get_env_idx("PWD=", ms->env)) == -1)
@@ -101,7 +111,6 @@ void	pwd_built_in(t_minishell *ms, t_tree_node *node, int fd)
 {
 	char	*pwd;
 
-	// printf(YEL "\nEntering pwd built in" DEF "\n\n");
 	if (node->right && *node->right->cont.args[0] == '-'
 		&& node->right->cont.args[0][1])
 	{

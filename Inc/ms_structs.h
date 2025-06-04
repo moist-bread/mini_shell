@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ms_structs.h                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:42:54 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 12:45:06 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef MS_STRUCTS_H
 # define MS_STRUCTS_H
@@ -52,7 +63,7 @@ typedef struct s_token
 	char				*cont;
 	bool				quote;
 	struct s_token		*next;
-	struct s_token		*prev; // MY FUNCTION
+	struct s_token		*prev;
 }						t_token;
 
 /// @brief Place where the content of t_node_type is stored
@@ -66,10 +77,10 @@ typedef struct s_node_cont
 {
 	char				*cmd;
 	char				**args;
-	char				pipe_c; // trash
+	char				pipe_c;
 	t_pipe_data			pipe;
 	char				*file;
-	char				*limiter; // MY FUNCTION
+	char				*limiter;
 	bool				quote;
 }						t_node_cont;
 

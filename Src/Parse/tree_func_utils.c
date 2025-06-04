@@ -1,9 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tree_func_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:54:47 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 12:54:49 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
 /// @brief Counts the number of arguments that the CMD contain
 /// @param token The node that has the arguments
-/// @param temp Temporary node 
+/// @param temp Temporary node
 /// @return Returns the number of arguments
 static int	tree_arg_len(t_token *token, t_token *temp)
 {
@@ -16,8 +27,8 @@ static int	tree_arg_len(t_token *token, t_token *temp)
 	{
 		if (temp->type == ARG)
 		{
-			if (temp->prev && temp->type == ARG \
-			&& temp->prev->type >= RED_IN && temp->prev->type <= RED_APP)
+			if (temp->prev && temp->type == ARG && temp->prev->type >= RED_IN
+				&& temp->prev->type <= RED_APP)
 				i--;
 			i++;
 		}
@@ -26,7 +37,7 @@ static int	tree_arg_len(t_token *token, t_token *temp)
 	return (i);
 }
 
-/// @brief Allocates memory if the content is ARG 
+/// @brief Allocates memory if the content is ARG
 /// @param token The Node from the token list
 /// @param cont The content
 /// @return The char** that is the consecutive arguments
@@ -44,8 +55,8 @@ char	**tree_alloc_args(t_token *token)
 	i = 0;
 	while (temp && temp->type != PIPE)
 	{
-		if (temp->prev && temp->type == ARG \
-			&& temp->prev->type >= RED_IN && temp->prev->type <= RED_APP)
+		if (temp->prev && temp->type == ARG && temp->prev->type >= RED_IN
+			&& temp->prev->type <= RED_APP)
 			temp = temp->next;
 		if (temp && temp->type == ARG)
 			args[i++] = temp->cont;
@@ -59,8 +70,8 @@ char	**tree_alloc_args(t_token *token)
 /// @param temp Temporary Node
 /// @param cmd_node Cmd node of the AST_Tree
 /// @param last_redir The last created Node of the AST_Tree that is type Redir
-static int	if_redir(t_token **temp, t_tree_node \
-*cmd_node, t_tree_node	**last_redir)
+static int	if_redir(t_token **temp, t_tree_node *cmd_node,
+		t_tree_node **last_redir)
 {
 	t_tree_node	*redir_node;
 
@@ -112,9 +123,9 @@ int	if_command(t_token *tokens, t_tree_node *cmd_node)
 }
 
 /// @brief Goes through the token until it finds a PIPE
-/// @param token Node of the list 
-/// @return The token that have the PIPE or The start 
-///of the list if doesn't find something
+/// @param token Node of the list
+/// @return The token that have the PIPE or The start
+/// of the list if doesn't find something
 t_token	*iteri_till_pipe(t_token *token)
 {
 	if (!token)

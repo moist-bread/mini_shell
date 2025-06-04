@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   distributer.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:50:38 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 13:04:16 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
@@ -8,7 +19,6 @@ void	master_distributer(t_minishell *ms, t_tree_node *node)
 {
 	if (!node)
 		return ;
-	// printf(YEL "\nEntering master distributer" DEF "\n\n");
 	if (node->type == PIPE)
 		pipe_process(ms, node);
 	else if (node->type == CMD)
@@ -25,11 +35,8 @@ void	command_process(t_minishell *ms, t_tree_node *node)
 	int	id;
 	int	redir[2];
 
-	// printf(YEL "\nEntering Command Process" DEF "\n\n");
-	// printf("step 1 --\n");
 	if (cmd_redir_executer(ms, node, &redir[0], &redir[1]) == -1)
 		return ;
-	// printf("step 2 --\n");
 	init_sigact(ms, 'I');
 	id = fork();
 	if (id < 0)
@@ -88,7 +95,6 @@ void	built_in_process(t_minishell *ms, t_tree_node *node)
 {
 	int	redir[2];
 
-	// printf(YEL "\nEntering Built In Process" DEF "\n\n");
 	if (cmd_redir_executer(ms, node, &redir[0], &redir[1]) == -1)
 		return ;
 	built_in_exe(ms, node, redir[1]);

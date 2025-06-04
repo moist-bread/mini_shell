@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expansions_here_doc.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:53:59 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 13:49:41 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
-static	char	*process_expander(char *line, t_minishell ms);
-static	int	here_doc_expansion(char *result, char *input, t_minishell ms, char **exp);
+static char	*process_expander(char *line, t_minishell ms);
+static int	here_doc_expansion(char *result, char *input, t_minishell ms,
+				char **exp);
 
 char	*my_function(t_minishell ms, char *line, bool lim_flag)
 {
@@ -25,7 +37,7 @@ char	*my_function(t_minishell ms, char *line, bool lim_flag)
 	return (line);
 }
 
-static	char	*process_expander(char *line, t_minishell ms)
+static char	*process_expander(char *line, t_minishell ms)
 {
 	char	*result;
 	long	result_len;
@@ -34,7 +46,7 @@ static	char	*process_expander(char *line, t_minishell ms)
 	exp = NULL;
 	if (!line)
 		return (ft_strdup(""));
-	result_len = the_length (line, ms, true); // prblem when is here_doc single_quotes;
+	result_len = the_length(line, ms, true);
 	if (result_len == -1)
 		return (NULL);
 	if (result_len == 0)
@@ -48,7 +60,8 @@ static	char	*process_expander(char *line, t_minishell ms)
 	return (result);
 }
 
-static	int	here_doc_expansion(char *result, char *s, t_minishell ms, char **exp)
+static int	here_doc_expansion(char *result, char *s, t_minishell ms,
+		char **exp)
 {
 	int		i[2];
 	bool	flag;
@@ -76,7 +89,6 @@ static	int	here_doc_expansion(char *result, char *s, t_minishell ms, char **exp)
 	}
 	return (0);
 }
-
 
 void	expansion_exit_status(char *result, int *i, char *exit_status)
 {

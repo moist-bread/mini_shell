@@ -1,9 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expansions_utils.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:54:09 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 13:53:47 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
 /// @brief Receives the expanded string and puts in a new token
 /// @param input The string passed
-/// @param env The enviorment 
+/// @param env The enviorment
 /// @param newtk New token
 /// @param head Head of the token list
 char	**input_expander(char *input, t_minishell ms)
@@ -18,7 +29,7 @@ char	**input_expander(char *input, t_minishell ms)
 		return (NULL);
 	final_result = separator_3000(expanded, is_quote);
 	if (!final_result)
-		return (free(expanded), NULL);
+		return (NULL);
 	return (final_result);
 }
 
@@ -38,8 +49,8 @@ char	*get_search(char *input, bool *flag)
 	if (!input[i])
 		return (NULL);
 	i++;
-	while (input[i + search_len] && (input[i + search_len] == '_' \
-	|| ft_isalnum(input[i + search_len])))
+	while (input[i + search_len] && (input[i + search_len] == '_'
+			|| ft_isalnum(input[i + search_len])))
 		search_len++;
 	search = ft_calloc(sizeof(char), search_len + 2);
 	if (!search)
@@ -54,7 +65,7 @@ char	*get_search(char *input, bool *flag)
 
 /// @brief Gets the expanded value from the eviorment
 /// @param input The string passed
-/// @param env The enviorment 
+/// @param env The enviorment
 /// @return The expanded value
 char	*expansion(char *input, char **env, bool *flag)
 {
@@ -95,18 +106,16 @@ char	**separator_3000(char *expanded, int is_quote)
 		if (!quoted)
 			return (NULL);
 		final_result = separate(quoted);
-		if (!final_result)
-			return (free(quoted), NULL);
 		free(quoted);
 	}
 	else
 	{
 		final_result = ft_calloc(sizeof(char *), 2);
 		if (!final_result)
-			return (perror("malloc7"), NULL);
+			return (perror("malloc7"), free(expanded), NULL);
 		final_result[0] = quote_remover(expanded);
 		if (!final_result[0])
-			return (free_split(final_result), NULL);
+			return (free(expanded), free_split(final_result), NULL);
 		final_result[1] = NULL;
 	}
 	return (free(expanded), final_result);

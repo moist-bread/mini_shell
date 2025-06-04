@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenization.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:54:44 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 13:49:10 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
@@ -27,7 +38,6 @@ t_token	*create_tokens(char *input)
 	if (place_token(input, &tokens) == -1)
 		minishell_clean(*mem_save(NULL), 1);
 	assign_type_token(tokens, false);
-	// print_tokens(tokens);
 	master_check(&tokens);
 	free(input);
 	return (tokens);
@@ -46,7 +56,7 @@ int	place_token(char *input, t_token **head)
 
 	*head = NULL;
 	if (!check_quotes(input))
-		return (-1);
+		return (1);
 	updated_input = add_spaces(input);
 	if (!updated_input)
 		return (-1);
@@ -80,25 +90,43 @@ char	*add_spaces(char *input)
 	return (newinput);
 }
 
-/// @brief Prints the node in order, there type and content
-/// @param tokens The token of the list
-void	print_tokens(t_token *tokens)
+void	syntax_clear(t_token **token)
 {
-	t_token	*curr;
-	int		i;
+	t_token	*current;
+	t_token	*next;
 
-	if (!tokens)
+	if (!token)
 		return ;
-	curr = tokens;
-	i = 0;
-	while (curr)
+	current = *token;
+	while (current)
 	{
-		printf("Token[%d]: %s", i, curr->cont);
-		printf("\t");
-		assign_name(curr->type);
-		printf("\t");
-		printf("(ID: %u)\n", curr->type);
-		curr = curr->next;
-		i++;
+		next = current->next;
+		free(current->cont);
+		free(current);
+		current = next;
 	}
+	*token = NULL;
 }
+
+// /// @brief Prints the node in order, there type and content
+// /// @param tokens The token of the list
+// void	print_tokens(t_token *tokens)
+// {
+// 	t_token	*curr;
+// 	int		i;
+
+// 	if (!tokens)
+// 		return ;
+// 	curr = tokens;
+// 	i = 0;
+// 	while (curr)
+// 	{
+// 		printf("Token[%d]: %s", i, curr->cont);
+// 		printf("\t");
+// 		assign_name(curr->type);
+// 		printf("\t");
+// 		printf("(ID: %u)\n", curr->type);
+// 		curr = curr->next;
+// 		i++;
+// 	}
+// }

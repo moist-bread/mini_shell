@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   errors_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:53:49 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 13:38:23 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
@@ -12,8 +23,8 @@ void	fake_clear_token_lst(t_token *token)
 	while (current)
 	{
 		next = current->next;
-		if (current->type == PIPE || (current->type >= RED_IN \
-			&& current->type <= RED_APP))
+		if (current->type == PIPE || (current->type >= RED_IN
+				&& current->type <= RED_APP))
 			free(current->cont);
 		free(current);
 		current = next;
@@ -32,8 +43,6 @@ void	write_and_advance(char *result, int *res_idx, char *exp)
 	size_t	len;
 
 	len = ft_strlen(exp);
-	printf("len: %zu\n", len);
-	printf("id: %d\n", *res_idx);
 	ft_memcpy(result + *res_idx, exp, len);
 	*res_idx += len;
 	free(exp);
@@ -44,7 +53,8 @@ int	process_token_quotes(t_token *curr)
 	char	*new_cont;
 	char	*cont;
 
-	if (curr->type == LIM && (ft_strchr(curr->cont, '\"') || ft_strchr(curr->cont, '\'')))
+	if (curr->type == LIM && (ft_strchr(curr->cont, '\"')
+			|| ft_strchr(curr->cont, '\'')))
 	{
 		cont = check_expansion(curr->cont);
 		if (!cont)
@@ -68,11 +78,12 @@ int	process_token_quotes(t_token *curr)
 
 int	handle_variable_expansion(char *s, int *i, char *result, char **env)
 {
-	char *exp;
-	bool flag;
+	char	*exp;
+	bool	flag;
 
 	flag = false;
-	if (s[i[0]] == '$' && (ft_isalpha(s[i[0] + 1]) || s[i[0] + 1] == '_')) {
+	if (s[i[0]] == '$' && (ft_isalpha(s[i[0] + 1]) || s[i[0] + 1] == '_'))
+	{
 		exp = expansion(s + i[0], env, &flag);
 		if (flag)
 			return (1);

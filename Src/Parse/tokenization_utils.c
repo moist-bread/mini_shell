@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenization_utils.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:54:40 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 13:11:40 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
 /// @brief Puts the node in the end of the list
-/// @param tklst List of tokens 
+/// @param tklst List of tokens
 /// @param newtk The new token
 void	tokenadd_back(t_token **tklst, t_token *newtk)
 {
@@ -26,7 +37,7 @@ void	tokenadd_back(t_token **tklst, t_token *newtk)
 }
 
 /// @brief Puts the node in the beggining of the list
-/// @param tklst List of tokens 
+/// @param tklst List of tokens
 /// @param newtk New token
 void	tokenadd_front(t_token **tklst, t_token *newtk)
 {
@@ -40,7 +51,7 @@ void	tokenadd_front(t_token **tklst, t_token *newtk)
 }
 
 /// @brief Creates a node named token
-/// @param cont Content of the token 
+/// @param cont Content of the token
 /// @return The new token
 t_token	*newtoken(char *cont)
 {

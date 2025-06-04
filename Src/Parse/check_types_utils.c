@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_types_utils.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:53:11 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 12:53:13 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
@@ -32,12 +43,11 @@ bool	check_quotes(char *input)
 
 /// @brief If is Operator
 /// @param token Node of the token list
-/// @return True if is Operator, False if is not 
+/// @return True if is Operator, False if is not
 bool	is_token(t_token *token)
 {
-	if (token->type == PIPE || token->type == RED_HD \
-	|| token->type == RED_IN \
-	|| token->type == RED_OUT || token->type == RED_APP)
+	if (token->type == PIPE || token->type == RED_HD || token->type == RED_IN
+		|| token->type == RED_OUT || token->type == RED_APP)
 		return (true);
 	return (false);
 }

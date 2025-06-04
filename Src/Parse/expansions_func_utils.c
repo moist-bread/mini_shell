@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expansions_func_utils.c                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:53:53 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 12:53:55 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
-static	int	quote_count(char *exp);
-static	void	quotes_quoted(char *quoted, int *j, char put, char between);
+static int	quote_count(char *exp);
+static void	quotes_quoted(char *quoted, int *j, char put, char between);
 
 /// @brief Removes the quotes of the token
 /// @param s The expanded string
@@ -38,9 +49,9 @@ char	*quote_remover(char *s)
 /// @return The number of quotes
 size_t	quote_conter_len(char *s)
 {
-	int			i;
-	size_t		len;
-	char		quote;
+	int		i;
+	size_t	len;
+	char	quote;
 
 	i = 0;
 	len = 0;
@@ -64,7 +75,7 @@ size_t	quote_conter_len(char *s)
 	return (len);
 }
 
-char	*quote_limiter(char	*exp)
+char	*quote_limiter(char *exp)
 {
 	char	*quoted;
 	int		i;
@@ -88,17 +99,17 @@ char	*quote_limiter(char	*exp)
 	return (quoted);
 }
 
-static	void	quotes_quoted(char *quoted, int *j, char put, char between)
+static void	quotes_quoted(char *quoted, int *j, char put, char between)
 {
 	quoted[(*j)++] = between;
 	quoted[(*j)++] = put;
 	quoted[(*j)++] = between;
 }
 
-static	int	quote_count(char *exp)
+static int	quote_count(char *exp)
 {
-	int		i;
-	int		len;
+	int	i;
+	int	len;
 
 	i = 0;
 	len = 0;

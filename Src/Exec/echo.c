@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:50:44 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 13:02:03 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
@@ -11,7 +22,6 @@ void	echo_built_in(t_minishell *ms, t_tree_node *node, int fd)
 	int	n_opt;
 	int	i;
 
-	// printf(YEL "\nEntering echo built in" DEF "\n\n");
 	n_opt = 0;
 	i = -1;
 	while (node->right && node->right->cont.args[++i])

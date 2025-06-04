@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:49:25 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 12:58:51 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
@@ -15,7 +26,6 @@ void	export_built_in(t_minishell *ms, t_tree_node *node, int fd)
 	char	*key;
 	int		i;
 
-	// printf(YEL "\nEntering export built in" DEF "\n\n");
 	if (!export_validate_options(node->right, &ms->exit_status))
 		return ;
 	ms->exit_status = 0;
@@ -24,13 +34,11 @@ void	export_built_in(t_minishell *ms, t_tree_node *node, int fd)
 	i = -1;
 	while (node->right->cont.args[++i])
 	{
-		// printf("export arg[%d]: \"%s\"\n", i, node->right->cont.args[i]);
 		if (invalid_export(node->right->cont.args[i], &ms->exit_status))
 			continue ;
 		key = get_export_key(node->right->cont.args[i]);
 		if (!key)
 			return (perror("malloc"), minishell_clean(*ms, 1));
-		// printf("key= %s\n", key);
 		ms->exit_status = 0;
 		export_distribute(ms, node->right->cont.args[i], key, get_env_idx(key,
 				ms->env));
@@ -99,7 +107,7 @@ static void	export_distribute(t_minishell *ms, char *arg, char *key,
 	if (env_idx == -1)
 	{
 		env_len = (int)ft_matrixlen(ms->env);
-		if (ft_strchr(arg, '=')) // printf("key not pres (is good)\n");
+		if (ft_strchr(arg, '='))
 		{
 			if (arg[key_len - 1] == '+')
 				ft_memmove(&arg[key_len - 1], &arg[key_len],
@@ -108,11 +116,11 @@ static void	export_distribute(t_minishell *ms, char *arg, char *key,
 				minishell_clean(*ms, 1);
 		}
 		else if (!safe_add_to_index(&ms->env, arg, ms->env_start++, env_len))
-			minishell_clean(*ms, 1); // printf("key not pres (is bad)\n");
+			minishell_clean(*ms, 1);
 	}
-	else if (arg[key_len - 1] == '+') // printf("key is pres, +=\n");
+	else if (arg[key_len - 1] == '+')
 		export_append(ms, env_idx, arg);
 	else if (ft_strcmp(ms->env[env_idx], arg) && ft_strchr(arg, '=')
 		&& replace_env_value(ms, key, get_export_value(arg), env_idx) == -1)
-		minishell_clean(*ms, 1); // printf("key is pres, different value\n");
+		minishell_clean(*ms, 1);
 }

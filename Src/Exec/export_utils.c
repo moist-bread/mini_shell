@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:51:06 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 13:01:39 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
@@ -21,9 +32,7 @@ void	export_append(t_minishell *ms, int idx, char *new)
 	if (!append)
 		return (perror("malloc"), minishell_clean(*ms, 1));
 	j = ft_strlcpy(append, ms->env[idx], ft_strlen(ms->env[idx]) + 1);
-	// printf("original: %s\n", append);
 	i = ft_strlcpy(&append[j], &new[i + 1], ft_strlen(&new[i]));
-	// printf("appended: %s\n", append);
 	if (!ft_strchr(ms->env[idx], '='))
 		move_env_var(ms, &idx, (int)ft_matrixlen(ms->env) - 1);
 	free(ms->env[idx]);
@@ -51,9 +60,7 @@ int	replace_env_value(t_minishell *ms, char *key, char *new, int idx)
 		return (perror("malloc"), -1);
 	j = ft_strlcpy(new_var, key, key_len + 1);
 	new_var[j - 1] = '=';
-	// printf("copied key: %s\n", new_var);
 	ft_strlcpy(&new_var[j], new, new_val_len);
-	// printf("copied new val: %s\n", new_var);
 	if (idx < ms->env_start)
 		move_env_var(ms, &idx, (int)ft_matrixlen(ms->env) - 1);
 	free(ms->env[idx]);

@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tree_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:54:51 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 13:49:24 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
 /// @brief Creates a new tree_node
-/// @param cont The content of this new node 
+/// @param cont The content of this new node
 /// @return The newly created node
 t_tree_node	*newtreenode(t_node_cont cont)
 {
@@ -36,17 +47,17 @@ void	tree_cont_init(t_node_cont *cont)
 	cont->limiter = NULL;
 }
 
-/// @brief Frees the AST_Tree 
+/// @brief Frees the AST_Tree
 /// @param tree_head The root of the Tree
-void	free_tree(t_tree_node *tree_head)
+void	free_tree(t_tree_node **tree_head)
 {
-	if (tree_head->left)
-		free_tree(tree_head->left);
-	if (tree_head->right)
-		free_tree(tree_head->right);
-	free_tree_node_cont(tree_head->cont);
-	free(tree_head);
-	tree_head = NULL;
+	if ((*tree_head)->left)
+		free_tree(&(*tree_head)->left);
+	if ((*tree_head)->right)
+		free_tree(&(*tree_head)->right);
+	free_tree_node_cont((*tree_head)->cont);
+	free(*tree_head);
+	*tree_head = NULL;
 }
 
 /// @brief Frees the content of witch tree node
@@ -82,60 +93,42 @@ int	expander(t_token *curr, t_minishell *ms, t_token **head)
 	return (0);
 }
 
-void	syntax_clear(t_token **token)
-{
-	t_token	*current;
-	t_token	*next;
+// /// @brief Function that prints the AST_Tree
+// /// @param tree_node The First Node of the Tree
+// /// @param depth Where i am in the AST_Tree
+// /// @param side Left or Right
+// void	print_tree(t_tree_node *tree_node, int depth, char *side)
+// {
+// 	if (!tree_node)
+// 		return ;
+// 	for (int i = 0; i < depth; i++)
+// 		printf("\t");
+// 	assign_name(tree_node->type);
+// 	printf(" (%s)\n", side);
+// 	for (int i = 0; i < depth; i++)
+// 		printf("\t");
+// 	if (tree_node->cont.cmd)
+// 		printf("CONT: %s\n", tree_node->cont.cmd);
+// 	else if (tree_node->cont.pipe_c)
+// 		printf("CONT: %c\n", tree_node->cont.pipe_c);
+// 	else if (tree_node->cont.file)
+// 		printf("CONT: %s\n", tree_node->cont.file);
+// 	else if (tree_node->cont.limiter)
+// 		printf("CONT: %s\n", tree_node->cont.limiter);
+// 	else if (tree_node->cont.args)
+// 	{
+// 		printf("CONT: ");
+// 		for (int i = 0; tree_node->cont.args[i]; i++)
+// 			printf("%s ", tree_node->cont.args[i]);
+// 		printf("\n");
+// 	}
+// }
 
-	if (!token)
-		return ;
-	current = *token;
-	while (current)
-	{
-		next = current->next;
-		free(current->cont);
-		free(current);
-		current = next;
-	}
-	*token = NULL;
-}
-
-/// @brief Function that prints the AST_Tree
-/// @param tree_node The First Node of the Tree
-/// @param depth Where i am in the AST_Tree
-/// @param side Left or Right
-void	print_tree(t_tree_node *tree_node, int depth, char *side)
-{
-	if (!tree_node)
-		return;
-	for (int i = 0; i < depth; i++)
-		printf("\t");
-	assign_name(tree_node->type);
-	printf(" (%s)\n", side);
-	for (int i = 0; i < depth; i++)
-		printf("\t");
-	if (tree_node->cont.cmd)
-		printf("CONT: %s\n", tree_node->cont.cmd);
-	else if (tree_node->cont.pipe_c)
-		printf("CONT: %c\n", tree_node->cont.pipe_c);
-	else if (tree_node->cont.file)
-		printf("CONT: %s\n", tree_node->cont.file);
-	else if (tree_node->cont.limiter)
-		printf("CONT: %s\n", tree_node->cont.limiter);
-	else if (tree_node->cont.args)
-	{
-		printf("CONT: ");
-		for (int i = 0; tree_node->cont.args[i]; i++)
-			printf("%s ", tree_node->cont.args[i]);
-		printf("\n");
-	}
-}
-
-void    tree_apply_print(t_tree_node *root, int depth, char *side)
-{
-	if (root->right)
-		tree_apply_print(root->right, depth + 1, "Right");
-	print_tree(root, depth, side);
-	if (root->left)
-		tree_apply_print(root->left, depth + 1, "Left");
-}
+// void	tree_apply_print(t_tree_node *root, int depth, char *side)
+// {
+// 	if (root->right)
+// 		tree_apply_print(root->right, depth + 1, "Right");
+// 	print_tree(root, depth, side);
+// 	if (root->left)
+// 		tree_apply_print(root->left, depth + 1, "Left");
+// }

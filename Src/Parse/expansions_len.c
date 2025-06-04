@@ -1,9 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expansions_len.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 12:54:03 by rduro-pe          #+#    #+#             */
+/*   Updated: 2025/06/04 12:54:06 by rduro-pe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
 /// @brief Retrieves the lenght of the quoted string
 /// @param input The string passed
-/// @param env The enviorment 
+/// @param env The enviorment
 /// @param i Indexes
 /// @return The lenght
 long	len_double_quotes(char *s, char **env, int *i, int exit_status)
@@ -69,7 +80,7 @@ long	len_single_quote(char *input, int *i, bool exp, t_minishell ms)
 
 /// @brief Retrieves the lenght of the unquoted string
 /// @param input The string passed
-/// @param env The enviorment 
+/// @param env The enviorment
 /// @param i Indexes
 /// @return The length
 long	len_unquoted(char *s, char **env, int *i, int exit_status)
@@ -102,7 +113,7 @@ long	len_unquoted(char *s, char **env, int *i, int exit_status)
 
 /// @brief Main function that retrieves the length
 /// @param input The string passed
-/// @param env The enviorment 
+/// @param env The enviorment
 /// @return The length
 long	the_length(char *input, t_minishell ms, bool exp)
 {
@@ -133,7 +144,7 @@ long	the_length(char *input, t_minishell ms, bool exp)
 
 /// @brief Gets the lenght of the expanded variable on the enviorment
 /// @param input The string passed
-/// @param env The enviorment 
+/// @param env The enviorment
 /// @return the length
 long	len_expansion(char *input, char **env)
 {
