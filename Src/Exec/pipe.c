@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:52:15 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 13:04:56 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/04 14:46:34 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ static void	distribute_pipe_cmd(t_minishell ms, t_tree_node *node,
 		cmd_parse_and_exe(ms, node, pdata->cur_pipe);
 	else if (node->type == BUILT_IN)
 	{
-		built_in_exe(&ms, node, pdata->cur_pipe[1]);
+		built_in_exe(&ms, node, pdata->cur_pipe[1], true);
 		minishell_clean(ms, ms.exit_status);
 	}
 }

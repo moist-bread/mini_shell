@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:43:11 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 13:26:06 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/04 15:16:05 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,8 @@ void		master_distributer(t_minishell *ms, t_tree_node *node);
 void		command_process(t_minishell *ms, t_tree_node *node);
 void		cmd_parse_and_exe(t_minishell ms, t_tree_node *node, int *redir);
 void		built_in_process(t_minishell *ms, t_tree_node *node);
-void		built_in_exe(t_minishell *ms, t_tree_node *node, int out);
+void		built_in_exe(t_minishell *ms, t_tree_node *node, int out,
+				bool pipe_flag);
 
 // REDIR HANDLER
 
@@ -263,7 +264,7 @@ void		print_env(t_minishell minishell, int export_flag, int fd);
 
 // EXIT
 
-void		exit_built_in(t_minishell *ms, t_tree_node *node);
+void		exit_built_in(t_minishell *ms, t_tree_node *node, bool pipe_flag);
 int			long_check(char *argv, long *arg_n);
 
 #endif // MINISHELL_H

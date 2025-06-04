@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:49:25 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 12:58:51 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/04 14:57:53 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	export_built_in(t_minishell *ms, t_tree_node *node, int fd)
 		key = get_export_key(node->right->cont.args[i]);
 		if (!key)
 			return (perror("malloc"), minishell_clean(*ms, 1));
-		ms->exit_status = 0;
 		export_distribute(ms, node->right->cont.args[i], key, get_env_idx(key,
 				ms->env));
 		free(key);
