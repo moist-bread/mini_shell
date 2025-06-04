@@ -6,13 +6,13 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:51:42 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 15:14:57 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/04 16:34:03 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
-static bool	ft_stronly(char *cmd, int c);
+static bool	ft_stronly(char *cmd, const char *find);
 
 /// @brief Creates a pipe and assigns it, and or the existing redirs,
 /// to the PDATA struct
@@ -56,7 +56,7 @@ char	*get_path(t_minishell ms, char *cmd)
 	char	*bar;
 	int		i;
 
-	if (!*cmd || ft_stronly(cmd, '.') || ft_stronly(cmd, '/'))
+	if (!*cmd || ft_stronly(cmd, "./"))
 		return (ft_strdup(cmd));
 	path = ft_split(get_env("PATH", ms.env), ':');
 	if (!path)
@@ -78,7 +78,7 @@ char	*get_path(t_minishell ms, char *cmd)
 	return (free_split(path), ft_strdup(cmd));
 }
 
-static bool	ft_stronly(char *cmd, int c)
+static bool	ft_stronly(char *cmd, const char *find)
 {
 	int	i;
 
@@ -86,7 +86,7 @@ static bool	ft_stronly(char *cmd, int c)
 		return (false);
 	i = -1;
 	while (cmd[++i])
-		if (cmd[i] != c)
+		if (!ft_strchr(find, cmd[i]))
 			return (false);
 	return (true);
 }

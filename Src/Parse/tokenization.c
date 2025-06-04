@@ -18,6 +18,8 @@
 /// @return Input
 char	*fake_readinput(t_minishell ms, char *input)
 {
+	rl_on_new_line();
+	rl_replace_line("", 1);
 	input = readline(CYN "minishell > " DEF);
 	if (!input)
 	{

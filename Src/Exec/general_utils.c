@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:51:13 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 13:31:34 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/04 19:20:40 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 /// @param status Process exit status
 void	minishell_clean(t_minishell minishell, int status)
 {
+	rl_clear_history();
 	if (minishell.tree_head)
 		free_tree(&minishell.tree_head);
 	free_split(minishell.env);
