@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenization.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:54:44 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 19:15:40 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/06/04 19:48:33 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
 /// @return Input
 char	*fake_readinput(t_minishell ms, char *input)
 {
-	rl_on_new_line();
-	rl_replace_line("", 1);
 	input = readline(CYN "minishell > " DEF);
 	if (!input)
 	{
