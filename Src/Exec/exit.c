@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:50:52 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 14:46:57 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:54:15 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static int	long_overflow_check(char *arg, long *arg_n);
 /// @brief Exits the program, or not, according to NODE
 /// @param ms Overarching Minishell Structure
 /// @param node Current exit node to be executed
+/// @param pipe_flag if false, writes the exit message
 void	exit_built_in(t_minishell *ms, t_tree_node *node, bool pipe_flag)
 {
 	long	arg_n;

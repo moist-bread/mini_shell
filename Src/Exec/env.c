@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:50:46 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 13:04:29 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:46:29 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /// @brief Prints the current Environment
 /// @param ms Overarching Minishell Structure
 /// @param node Current env node to be executed
-/// @param fd possible redir file descriptor
+/// @param fd File Descriptor for where to send the output
 void	env_built_in(t_minishell *ms, t_tree_node *node, int fd)
 {
 	if (node->right)
@@ -41,7 +41,7 @@ void	env_built_in(t_minishell *ms, t_tree_node *node, int fd)
 /// @brief Prints either export or env according to EXPORT_FLAG
 /// @param ms Overarching Minishell Structure
 /// @param export_flag 1 prints export, 0 prints env
-/// @param fd possible redir file descriptor
+/// @param fd File Descriptor for where to send the output
 void	print_env(t_minishell ms, int export_flag, int fd)
 {
 	int		i;

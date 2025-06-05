@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:50:34 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 13:01:03 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:04:14 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,17 @@ static void	cd_update_pwd(t_minishell *ms)
 	cur = getcwd(NULL, 0);
 	if (replace_env_value(ms, "PWD=", cur, get_env_idx("PWD=", ms->env)) == -1)
 		return (free(cur), minishell_clean(*ms, 1));
-	free(cur);
+	if (cur)
+		free(cur);
 	ms->exit_status = 0;
 }
 
+/// @brief 
+/// @param og Pointer to original matrix
+/// @param add String to be added to OG
+/// @param idx Index for where to add
+/// @param len Length of OG
+/// @return 1 on success (safe), 0 on failure (not safe)
 int	safe_add_to_index(char ***og, char *add, size_t idx, size_t len)
 {
 	char	**new;

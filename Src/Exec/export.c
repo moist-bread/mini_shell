@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:49:25 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 14:57:53 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 13:19:30 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	export_distribute(t_minishell *ms, char *arg, char *key,
 /// @brief Prints or Creates variables according to NODE
 /// @param ms Overarching Minishell Structure
 /// @param node Current export node to be executed
-/// @param fd possible redir file descriptor
+/// @param fd File Descriptor for where to send the output
 void	export_built_in(t_minishell *ms, t_tree_node *node, int fd)
 {
 	char	*key;
@@ -48,7 +48,7 @@ void	export_built_in(t_minishell *ms, t_tree_node *node, int fd)
 /// @brief Checks if NODE exists, if it's an invalid option or an argument
 /// @param node Possible argument node
 /// @param status Exit status to update
-/// @return 0 when invalid, 1 when valid
+/// @return 1 when valid, 0 when invalid
 static int	export_validate_options(t_tree_node *node, int *status)
 {
 	*status = 0;
@@ -66,6 +66,7 @@ static int	export_validate_options(t_tree_node *node, int *status)
 
 /// @brief Verifies if recieved ARG is an invalid identifier
 /// @param arg Identifier
+/// @param status Exit status to update
 /// @return 1 when invalid, 0 when valid
 static int	invalid_export(char *arg, int *status)
 {

@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:52:33 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 12:52:34 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 14:25:27 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	init_sigact(t_minishell *minishell, int flag)
 	sigaction(SIGINT, &sa, NULL);
 }
 
+/// @brief Saves the adress of the minishell struct and returns it
 t_minishell	*mem_save(t_minishell *minishell)
 {
 	static t_minishell	*ms_save;

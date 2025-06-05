@@ -6,12 +6,13 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:51:37 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 12:51:38 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:48:33 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
+static void	ft_string_swap(char **a, char **b);
 static void	matrix_quick_sort(char **qs, int start, int pivot);
 
 /// @brief Makes a sorted copy of ORIGINAL using Quick Sort
@@ -41,7 +42,7 @@ char	**sort_matrix(char **original, int len)
 	return (sorted);
 }
 
-void	ft_string_swap(char **a, char **b)
+static void	ft_string_swap(char **a, char **b)
 {
 	char	*swp;
 

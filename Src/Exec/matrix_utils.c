@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:51:32 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 12:51:33 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 14:06:51 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	free_matrix(void **matrix, int max);
 /// @param add String to be added to MATRIX
 /// @param idx Index for where to add
 /// @param len Length of MATRIX
-/// @return New MATRIX with added ADD
+/// @return New MATRIX with added ADD, or NULL on malloc failure
 char	**matrix_add_to_index(char **matrix, char *add, size_t idx, size_t len)
 {
 	char	**new;
