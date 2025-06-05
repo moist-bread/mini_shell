@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:51:19 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/05 13:24:25 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:51:19 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	get_env_idx(char *search, char **env)
 	int	len;
 	int	i;
 
-	if (!env || !search)
+	if (!env || !search || !*search)
 		return (-1);
 	len = ft_strlen(search);
 	i = -1;
