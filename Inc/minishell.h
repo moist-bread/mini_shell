@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:43:11 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/05 12:48:20 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 14:29:21 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ char		*quote_remover(char *s);
 char		*quote_limiter(char *exp);
 size_t		quote_conter_len(char *s);
 char		*my_function(t_minishell ms, char *line, bool lim_flag);
+// char		*expansionv2(char *input, char **env, bool *flag);
 
 // ASSIGN TYPES
 
@@ -127,6 +128,7 @@ int			space_length(char *input);
 char		*space_put(char *input, int len);
 void		write_and_advance(char *result, int *res_idx, char *exp);
 int			process_token_quotes(t_token *curr);
+int			quote_count(char *exp);
 
 // CHECKS
 
