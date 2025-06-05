@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:52:39 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 12:52:40 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 14:25:45 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void	minishell_struct_init(t_minishell *ms, char **env)
 /// @brief Initializes the environment depending on the recieved OLD_ENV
 /// @param ms Overarching Minishell Structure
 /// @param old_env Old Environment recieved by the program
-/// @return New Environemnt
 static void	env_init(t_minishell *ms, char **old_env)
 {
 	char	**tmp;

@@ -6,13 +6,13 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:51:42 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 16:34:03 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 14:17:15 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
-static bool	ft_stronly(char *cmd, const char *find);
+static bool	ft_stronly(char *str, const char *find);
 
 /// @brief Creates a pipe and assigns it, and or the existing redirs,
 /// to the PDATA struct
@@ -78,15 +78,19 @@ char	*get_path(t_minishell ms, char *cmd)
 	return (free_split(path), ft_strdup(cmd));
 }
 
-static bool	ft_stronly(char *cmd, const char *find)
+/// @brief Checks if STR only contains characters from FIND
+/// @param str String to be checked 
+/// @param find String containing all "allowed" characters
+/// @return true if it only contains chars in FIND, else false
+static bool	ft_stronly(char *str, const char *find)
 {
 	int	i;
 
-	if (!*cmd)
+	if (!*str)
 		return (false);
 	i = -1;
-	while (cmd[++i])
-		if (!ft_strchr(find, cmd[i]))
+	while (str[++i])
+		if (!ft_strchr(find, str[i]))
 			return (false);
 	return (true);
 }

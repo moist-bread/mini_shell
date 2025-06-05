@@ -6,12 +6,13 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:49:40 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 12:49:48 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 13:22:21 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
+/// @brief checks for \t, \\n, \v, \f, \r or space
 int	ft_iswhitespace(int c)
 {
 	return ((c >= '\t' && c <= '\r') || c == ' ');

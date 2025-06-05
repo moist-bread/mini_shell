@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:50:44 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 13:02:03 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:42:26 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static int	echo_validate_option(char *arg);
 /// @brief Echoes NODES's arguments and handles the option -n
 /// @param ms Overarching Minishell Structure
 /// @param node Current echo node to be executed
+/// @param fd File Descriptor for where to send the output
 void	echo_built_in(t_minishell *ms, t_tree_node *node, int fd)
 {
 	int	n_opt;
@@ -44,7 +45,7 @@ void	echo_built_in(t_minishell *ms, t_tree_node *node, int fd)
 
 /// @brief Checks if ARG is a valid -n option or just an argument
 /// @param arg Possible option argument
-/// @return 0 when invalid, 1 when valid
+/// @return 1 when valid, 0 when invalid
 static int	echo_validate_option(char *arg)
 {
 	int	i;

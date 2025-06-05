@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:52:15 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 14:46:34 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:30:27 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ static void	setup_pipe_cmd(t_minishell ms, t_tree_node *node,
 
 	redir[0] = 0;
 	redir[1] = 1;
-	redir_handler(&ms, node, &redir[0], &redir[1]);
+	redir_handler(&ms, node->left, &redir[0], &redir[1]);
 	successful_redir_check(&redir[0], &redir[1], pdata->here_docs[idx]);
 	assign_pipe_fds(ms, pdata, redir, idx);
 	pdata->pid[idx] = fork();

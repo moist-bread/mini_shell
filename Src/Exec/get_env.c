@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:51:19 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 12:51:20 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 13:24:25 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*get_env(char *search, char **env)
 /// @brief Gets the index associated with Key SEARCH
 /// @param search  Key Name for which to search in ENV
 /// @param env Environment
-/// @return Index where the SEARCH key name was found
+/// @return Index where SEARCH was found, -1 when not found
 int	get_env_idx(char *search, char **env)
 {
 	int	len;

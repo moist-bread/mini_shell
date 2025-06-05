@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:43:11 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/05 13:43:24 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/06/05 14:29:44 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,7 +191,6 @@ int			ft_iswhitespace(int c);
 // MATRIX QUICK SORT
 
 char		**sort_matrix(char **original, int len);
-void		ft_string_swap(char **a, char **b);
 
 // DISTRIBUTER
 
@@ -206,7 +205,7 @@ void		built_in_exe(t_minishell *ms, t_tree_node *node, int out,
 
 void		redir_handler(t_minishell *ms, t_tree_node *node, int *in,
 				int *out);
-int			cmd_redir_executer(t_minishell *ms, t_tree_node *node, int *in,
+int			single_redir_proc(t_minishell *ms, t_tree_node *node, int *in,
 				int *out);
 int			successful_redir_check(int *in, int *out, int hd);
 void		safe_close(int fd);

@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:50:38 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 15:15:49 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:36:47 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /// @brief Looks at the Input Tree and sends it to the
 /// corresponding executer process
 /// @param ms Overarching Minishell Structure
+/// @param node Head of the Tree to be executed
 void	master_distributer(t_minishell *ms, t_tree_node *node)
 {
 	if (!node)
@@ -27,7 +28,7 @@ void	master_distributer(t_minishell *ms, t_tree_node *node)
 		built_in_process(ms, node);
 }
 
-/// @brief Opens rediractions and sends CMD NODE to be executed
+/// @brief Opens redirections and sends a node of type CMD to be executed
 /// @param ms Overarching Minishell Structure
 /// @param node Current node of type CMD to be executed
 void	command_process(t_minishell *ms, t_tree_node *node)
@@ -35,7 +36,7 @@ void	command_process(t_minishell *ms, t_tree_node *node)
 	int	id;
 	int	redir[2];
 
-	if (cmd_redir_executer(ms, node, &redir[0], &redir[1]) == -1)
+	if (single_redir_proc(ms, node, &redir[0], &redir[1]) == -1)
 		return ;
 	init_sigact(ms, 'I');
 	id = fork();
@@ -58,7 +59,7 @@ void	command_process(t_minishell *ms, t_tree_node *node)
 /// and executes said command
 /// @param ms Overarching Minishell Structure
 /// @param node Current node of type CMD to be executed
-/// @param redir Int array of size 2 with fds for redirections or pipes
+/// @param redir Int array of size 2 with fds for redirections and or pipes
 void	cmd_parse_and_exe(t_minishell ms, t_tree_node *node, int *redir)
 {
 	char	**cmd;
@@ -88,23 +89,26 @@ void	cmd_parse_and_exe(t_minishell ms, t_tree_node *node, int *redir)
 	minishell_clean(ms, status);
 }
 
-/// @brief Opens rediractions and sends BUILT_IN NODE to be executed
+/// @brief Opens redirections and sends node of type BUILT_IN to be executed
 /// @param ms Overarching Minishell Structure
 /// @param node Current node of type BUILT_IN to be executed
 void	built_in_process(t_minishell *ms, t_tree_node *node)
 {
 	int	redir[2];
 
-	if (cmd_redir_executer(ms, node, &redir[0], &redir[1]) == -1)
+	if (single_redir_proc(ms, node, &redir[0], &redir[1]) == -1)
 		return ;
 	built_in_exe(ms, node, redir[1], false);
 	safe_close(redir[0]);
 	safe_close(redir[1]);
 }
 
-/// @brief Opens rediractions and sends BUILT_IN NODE to be executed
+/// @brief Analyses NODE and sends it to the corresponding
+/// built in for execution
 /// @param ms Overarching Minishell Structure
 /// @param node Current node of type BUILT_IN to be executed
+/// @param pipe_flag Bool value to signal if the built in is being
+/// executed inside a pipe
 void	built_in_exe(t_minishell *ms, t_tree_node *node, int out,
 		bool pipe_flag)
 {

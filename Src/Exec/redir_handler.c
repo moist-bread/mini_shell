@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:52:20 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 14:56:22 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:33:54 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 static void	ambiguous_redir_verify(t_tree_node *node, int *in, int *out);
 
-/// @brief Opens all redirections associated with NODE and
+/// @brief Processes all redirections associated with a single NODE and
 /// stores them in IN and OUT
 /// @param ms Overarching Minishell Structure
 /// @param node Node from which to check for redirections
-/// @param in Variable to store the resulting infile fd
-/// @param out Variable to store the resulting outfile fd
-/// @return -1 on failure, 0 on success
-int	cmd_redir_executer(t_minishell *ms, t_tree_node *node, int *in, int *out)
+/// @param in Variable to store the resulting input fd
+/// @param out Variable to store the resulting output fd
+/// @return 0 on success, -1 on failure
+int	single_redir_proc(t_minishell *ms, t_tree_node *node, int *in, int *out)
 {
 	int	hd;
 
@@ -37,7 +37,7 @@ int	cmd_redir_executer(t_minishell *ms, t_tree_node *node, int *in, int *out)
 			ms->exit_status = 130;
 		return (-1);
 	}
-	redir_handler(ms, node, in, out);
+	redir_handler(ms, node->left, in, out);
 	return (successful_redir_check(in, out, hd));
 }
 
@@ -47,26 +47,26 @@ int	cmd_redir_executer(t_minishell *ms, t_tree_node *node, int *in, int *out)
 /// @param out Var where to store output redirections
 void	redir_handler(t_minishell *ms, t_tree_node *node, int *in, int *out)
 {
-	if (!node->left || (node->left->type != RED_HD && !node->left->cont.file))
+	if (!node || (node->type != RED_HD && !node->cont.file))
 		return (ambiguous_redir_verify(node, in, out));
-	if (node->left->type == RED_IN)
+	if (node->type == RED_IN)
 	{
 		safe_close(*in);
-		*in = open(node->left->cont.file, O_RDONLY);
+		*in = open(node->cont.file, O_RDONLY);
 	}
-	else if (node->left->type == RED_OUT)
+	else if (node->type == RED_OUT)
 	{
 		safe_close(*out);
-		*out = open(node->left->cont.file, O_RDWR | O_TRUNC | O_CREAT, 0644);
+		*out = open(node->cont.file, O_RDWR | O_TRUNC | O_CREAT, 0644);
 	}
-	else if (node->left->type == RED_APP)
+	else if (node->type == RED_APP)
 	{
 		safe_close(*out);
-		*out = open(node->left->cont.file, O_RDWR | O_APPEND | O_CREAT, 0644);
+		*out = open(node->cont.file, O_RDWR | O_APPEND | O_CREAT, 0644);
 	}
 	if (*in == -1 || *out == -1)
-		return (error_msg_status(node->left->cont.file, &ms->exit_status, 1));
-	if (node->left->left)
+		return (error_msg_status(node->cont.file, &ms->exit_status, 1));
+	if (node->left)
 		redir_handler(ms, node->left, in, out);
 }
 
@@ -76,16 +76,16 @@ void	redir_handler(t_minishell *ms, t_tree_node *node, int *in, int *out)
 /// @param out Var where to store output redirections
 static void	ambiguous_redir_verify(t_tree_node *node, int *in, int *out)
 {
-	if (!node->left)
+	if (!node)
 		return ;
-	if (node->left->type == RED_IN)
+	if (node->type == RED_IN)
 	{
 		ft_printf_fd(2, "ambiguous redirect\n");
 		mem_save(NULL)->exit_status = 1;
 		safe_close(*in);
 		*in = -1;
 	}
-	else if (node->left->type == RED_OUT || node->left->type == RED_APP)
+	else if (node->type == RED_OUT || node->type == RED_APP)
 	{
 		ft_printf_fd(2, "ambiguous redirect\n");
 		mem_save(NULL)->exit_status = 1;
