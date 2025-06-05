@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:54:09 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 19:12:51 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/06/05 14:17:38 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,33 +89,32 @@ char	*expansion(char *input, char **env, bool *flag)
 	return (result);
 }
 
-/// @brief Separates the expanded string and removes the quotes
-/// @param expanded Expanded string
-/// @param is_quote If is a quoted string or not
-/// @return The new unquoted string
 char	**separator_3000(char *expanded, int is_quote)
 {
 	char	**final_result;
 	char	*quoted;
 
 	final_result = NULL;
-	quoted = quote_limiter(expanded);
-	free(expanded);
-	if (!quoted)
-		return (NULL);
+	quoted = NULL;
 	if (is_quote == 0)
+	{
+		quoted = quote_limiter(expanded);
+		if (!quoted)
+			return (NULL);
 		final_result = separate(quoted);
+		free(quoted);
+	}
 	else
 	{
 		final_result = ft_calloc(sizeof(char *), 2);
 		if (!final_result)
-			return (perror("malloc7"), free(quoted), NULL);
-		final_result[0] = quote_remover(quoted);
+			return (perror("malloc7"), NULL);
+		final_result[0] = quote_remover(expanded);
 		if (!final_result[0])
-			return (free(quoted), free_split(final_result), NULL);
+			return (free_split(final_result), NULL);
 		final_result[1] = NULL;
 	}
-	return (free(quoted), final_result);
+	return (free(expanded), final_result);
 }
 
 /// @brief Does the separation with split
