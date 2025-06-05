@@ -6,13 +6,12 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:53:53 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 19:22:17 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/06/05 14:18:24 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
-static int	quote_count(char *exp);
 static void	quotes_quoted(char *quoted, int *j, char put, char between);
 
 /// @brief Removes the quotes of the token
@@ -75,29 +74,26 @@ size_t	quote_conter_len(char *s)
 	return (len);
 }
 
-char	*quote_limiter(char *exp)
+char	*quote_limiter(char	*exp)
 {
 	char	*quoted;
-	int		i[3];
+	int		i;
+	int		j;
 
-	ft_bzero(i, sizeof(i));
-	if (strlen(exp) > 0)
-		i[2] = ft_strlen(exp) - (exp[ft_strlen(exp) - 1] == '\"' \
-		|| exp[ft_strlen(exp) - 1] == '\'');
+	j = 0;
+	i = 0;
 	quoted = ft_calloc(sizeof(char), ft_strlen(exp) + quote_count(exp) + 1);
 	if (!quoted)
 		return (perror("malloc3"), NULL);
-	if (exp[0] == '\"' || exp[0] == '\'')
-		i[0]++;
-	while (i[0] < i[2])
+	while (exp[i])
 	{
-		if (exp[i[0]] == '\'')
-			quotes_quoted(quoted, &i[1], '\'', '\"');
-		else if (exp[i[0]] == '\"')
-			quotes_quoted(quoted, &i[1], '\"', '\'');
+		if (exp[i] == '\'')
+			quotes_quoted(quoted, &j, '\'', '\"');
+		else if (exp[i] == '\"')
+			quotes_quoted(quoted, &j, '\"', '\'');
 		else
-			quoted[i[1]++] = exp[i[0]];
-		i[0]++;
+			quoted[j++] = exp[i];
+		i++;
 	}
 	return (quoted);
 }
@@ -109,24 +105,14 @@ static void	quotes_quoted(char *quoted, int *j, char put, char between)
 	quoted[(*j)++] = between;
 }
 
-static int	quote_count(char *exp)
+int	quote_count(char *exp)
 {
-	int	i;
-	int	len;
-	int	size;
+	int		i;
+	int		len;
 
 	i = 0;
 	len = 0;
-	size = 0;
-	if (strlen(exp) > 0)
-		size = ft_strlen(exp) - (exp[ft_strlen(exp) - 1] == '\"' \
-	|| exp[ft_strlen(exp) - 1] == '\'');
-	if (exp[0] == '\"' || exp[0] == '\'')
-	{
-		len -= 1;
-		i++;
-	}
-	while (i < size)
+	while (exp[i])
 	{
 		if (exp[i] == '\'' || exp[i] == '\"')
 			len++;
