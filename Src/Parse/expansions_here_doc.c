@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:53:59 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/05 13:43:38 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:37:25 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static char	*process_expander(char *line, t_minishell ms)
 		return (ft_strdup(""));
 	result = ft_calloc(sizeof(char), result_len + 1);
 	if (!result)
-		return (perror("malloc4"), NULL);
+		return (perror("malloc"), NULL);
 	if (here_doc_expansion(result, line, ms, &exp) == 1)
 		return (free(result), NULL);
 	return (result);

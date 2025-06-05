@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:54:51 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 19:02:33 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:37:50 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ t_tree_node	*newtreenode(t_node_cont cont)
 
 	newnode = ft_calloc(1, sizeof(t_tree_node));
 	if (!newnode)
-		return (perror("malloc13"), NULL);
+	{
+		free_tree_node_cont(cont);
+		return (perror("malloc"), NULL);
+	}
 	newnode->cont = cont;
 	newnode->prev = NULL;
 	newnode->left = NULL;
@@ -51,6 +54,8 @@ void	tree_cont_init(t_node_cont *cont)
 /// @param tree_head The root of the Tree
 void	free_tree(t_tree_node **tree_head)
 {
+	if (!*tree_head)
+		return ;
 	if ((*tree_head)->left)
 		free_tree(&(*tree_head)->left);
 	if ((*tree_head)->right)

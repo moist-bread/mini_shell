@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:54:16 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/05 13:39:40 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:37:38 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*process_quote_expansions(char *input, t_minishell ms, int *is_quote)
 		return (free(checked), NULL);
 	result = ft_calloc(sizeof(char), result_len + 1);
 	if (!result)
-		return (perror("malloc9"), free(checked), NULL);
+		return (perror("malloc"), free(checked), NULL);
 	if (the_expansion(checked, ms, is_quote, result) == 1)
 		return (free(checked), free(result), NULL);
 	free(checked);

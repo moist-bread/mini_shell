@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:51:42 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/05 14:17:15 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 15:59:29 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,16 +66,23 @@ char	*get_path(t_minishell ms, char *cmd)
 	{
 		bar = ft_strjoin(path[i], "/");
 		if (!bar)
-			return (NULL);
+			return (free_split(path), NULL);
 		joined = ft_strjoin(bar, cmd);
 		free(bar);
 		if (!joined)
-			return (NULL);
+			return (free_split(path), NULL);
 		if (access(joined, F_OK) == 0)
 			return (free_split(path), joined);
 		free(joined);
 	}
 	return (free_split(path), ft_strdup(cmd));
+}
+
+void	delete_matrix(char **cmd, t_tree_node *node)
+{
+	free_split(cmd);
+	if (node->right)
+		node->right->cont.args = NULL;
 }
 
 /// @brief Checks if STR only contains characters from FIND

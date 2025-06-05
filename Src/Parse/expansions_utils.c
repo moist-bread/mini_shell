@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:54:09 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/05 14:17:38 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:37:36 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	*get_search(char *input, bool *flag)
 	if (!search)
 	{
 		*flag = true;
-		return (perror("malloc5"), NULL);
+		return (perror("malloc"), NULL);
 	}
 	ft_strlcpy(search, input + i, search_len + 1);
 	search[search_len] = '=';
@@ -84,7 +84,7 @@ char	*expansion(char *input, char **env, bool *flag)
 	if (!result)
 	{
 		*flag = true;
-		return (perror("malloc6"), NULL);
+		return (perror("malloc"), NULL);
 	}
 	return (result);
 }
@@ -108,7 +108,7 @@ char	**separator_3000(char *expanded, int is_quote)
 	{
 		final_result = ft_calloc(sizeof(char *), 2);
 		if (!final_result)
-			return (perror("malloc7"), NULL);
+			return (perror("malloc"), NULL);
 		final_result[0] = quote_remover(expanded);
 		if (!final_result[0])
 			return (free_split(final_result), NULL);
@@ -136,7 +136,7 @@ char	**separate(char *expanded)
 		count++;
 	final_result = ft_calloc(sizeof(char *), count + 1);
 	if (!final_result)
-		return (perror("malloc8"), free_split(result), NULL);
+		return (perror("malloc"), free_split(result), NULL);
 	while (++i < count)
 	{
 		final_result[i] = quote_remover(result[i]);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   space_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:54:37 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 12:54:37 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:37:41 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ char	*space_put(char *input, int len)
 	j = 0;
 	dest = ft_calloc(len + ft_strlen(input) + 1, sizeof(char));
 	if (!dest)
-		return (perror("malloc10"), NULL);
+		return (perror("malloc"), NULL);
 	while (input[i])
 	{
 		if (input[i] && (input[i] == '\"' || input[i] == '\''))

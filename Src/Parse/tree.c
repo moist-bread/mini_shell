@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:54:56 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 19:15:44 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:22:06 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_tree_node	*create_tree(t_token **tokens, t_minishell *ms)
 	}
 	assign_type_token(*tokens, true);
 	if (place_treenode(*tokens, &tree_node, false) == -1)
-		return (NULL);
+		return (fake_clear_token_lst(*tokens), free_tree(&tree_node), NULL);
 	return (tree_node);
 }
 
@@ -113,6 +113,7 @@ static int	if_not_pipe(t_token *tokens, t_tree_node *new_tree_node,
 			return (-1);
 		new_tree_node->type = CMD;
 	}
+	*root = new_tree_node;
 	if (if_command(tokens, new_tree_node) == -1)
 		return (-1);
 	*root = new_tree_node;

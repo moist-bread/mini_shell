@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:46:25 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 12:46:27 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:36:05 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,6 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
-
-// #define MALLOC_FAIL_PROBABILITY 50
-// static inline void *random_fail_malloc(size_t size) {
-//     if ((rand() % MALLOC_FAIL_PROBABILITY) == 0)
-//         return (NULL);
-//     return (malloc(size));
-// }
-// #define malloc(x) random_fail_malloc(x)
 
 typedef struct s_list
 {

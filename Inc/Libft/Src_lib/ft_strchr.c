@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 15:15:34 by andcarva          #+#    #+#             */
-/*   Updated: 2025/04/03 15:09:19 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/06/05 15:31:02 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 char	*ft_strchr(const char *ptr, int c)
 {
+	if (!ptr)
+		return (0);
 	while (*ptr != (char)c && *ptr != '\0')
 	{
 		ptr++;

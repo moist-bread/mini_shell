@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 13:07:09 by andcarva          #+#    #+#             */
-/*   Updated: 2025/05/22 12:56:05 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 15:59:11 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,9 @@ static char	*get_word(char const *s, char c)
 	len = 0;
 	while (s[len] != '\0' && s[len] != c)
 		len++;
-	new_word = (char *)malloc(sizeof(char) * (len + 1));
+	new_word = (char *)ft_calloc(len + 1, sizeof(char));
 	if (!new_word)
-	{
-		free_split(&new_word);
 		return (NULL);
-	}
 	i = 0;
 	while (i < len)
 	{
@@ -101,7 +98,7 @@ char	**ft_split(char const *s, char c)
 	if (!s)
 		return (NULL);
 	i = 0;
-	split = malloc(sizeof(char *) * (count_str(s, c) + 1));
+	split = ft_calloc(count_str(s, c) + 1, sizeof(char *));
 	if (!split)
 		return (NULL);
 	while (s && *s != '\0' && *s != '\n')

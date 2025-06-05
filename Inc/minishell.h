@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:43:11 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/05 14:29:44 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 15:26:06 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ char		*quote_remover(char *s);
 char		*quote_limiter(char *exp);
 size_t		quote_conter_len(char *s);
 char		*my_function(t_minishell ms, char *line, bool lim_flag);
-// char		*expansionv2(char *input, char **env, bool *flag);
 
 // ASSIGN TYPES
 
@@ -224,6 +223,7 @@ void		pipe_process(t_minishell *minishell, t_tree_node *node);
 void		assign_pipe_fds(t_minishell ms, t_pipe_data *pdata, int *redir_fd,
 				int idx);
 char		*get_path(t_minishell minishell, char *cmd);
+void		delete_matrix(char **cmd, t_tree_node *node);
 int			error_code_for_exec(char *path);
 
 // ECHO

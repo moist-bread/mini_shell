@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenization.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:54:44 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 19:48:33 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:36:28 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ char	*fake_readinput(t_minishell ms, char *input)
 		printf(BLU "exit" DEF "\n");
 		minishell_clean(ms, ms.exit_status);
 	}
-	add_history(input);
+	if (*input)
+		add_history(input);
 	return (input);
 }
 
@@ -36,7 +37,10 @@ t_token	*create_tokens(char *input)
 
 	tokens = NULL;
 	if (place_token(input, &tokens) == -1)
+	{
+		syntax_clear(&tokens);
 		minishell_clean(*mem_save(NULL), 1);
+	}
 	assign_type_token(tokens, false);
 	master_check(&tokens);
 	free(input);

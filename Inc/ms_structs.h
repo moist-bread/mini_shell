@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_structs.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:42:54 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 12:45:06 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 14:56:27 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 /// @param cmd_n Amount of cmds
 /// @param cur_pipe Stores IN fd and OUT fd
 /// @param next_pipe Read end of created pipe
-/// @param here_docs stores the ids of
+/// @param here_docs stores the fds
 /// @param pid Stores child process ids
 /// @param env Environment
 typedef struct s_pipe_data

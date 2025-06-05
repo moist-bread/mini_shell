@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checks.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:53:17 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 13:45:57 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:37:18 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*check_expansion(char *input)
 	checked = ft_calloc(sizeof(char), (ft_strlen(input) - checked_len(input))
 			+ 1);
 	if (!checked)
-		return (perror("malloc1"), NULL);
+		return (perror("malloc"), NULL);
 	while (input[i])
 	{
 		while (input[i] && (input[i] == '\"' || input[i] == '\''))

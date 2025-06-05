@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:53:49 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/05 13:39:51 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/06/05 14:33:57 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,11 @@ int	process_token_quotes(t_token *curr)
 	{
 		cont = check_expansion(curr->cont);
 		if (!cont)
-			return (printf("process tk1\n"), 1);
+			return (1);
 		curr->quote = true;
 		new_cont = quote_remover(cont);
 		if (!new_cont)
-			return (printf("process tk1\n"), 1);
+			return (1);
 		free(cont);
 	}
 	else

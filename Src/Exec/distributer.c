@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   distributer.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:50:38 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/05 12:36:47 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 15:59:31 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,16 +74,15 @@ void	cmd_parse_and_exe(t_minishell ms, t_tree_node *node, int *redir)
 		minishell_clean(ms, 1);
 	path = get_path(ms, cmd[0]);
 	if (!path)
-		return (perror("malloc"), minishell_clean(ms, 1));
+		return (perror("malloc"), delete_matrix(cmd, node), \
+		minishell_clean(ms, 1));
 	if (redir[0] > 2)
 		dup2(redir[0], STDIN_FILENO);
 	if (redir[1] > 2)
 		dup2(redir[1], STDOUT_FILENO);
 	master_close();
 	execve(path, cmd, &ms.env[ms.env_start]);
-	free_split(cmd);
-	if (node->right)
-		node->right->cont.args = NULL;
+	delete_matrix(cmd, node);
 	status = error_code_for_exec(path);
 	free(path);
 	minishell_clean(ms, status);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenization_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:54:40 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 13:11:40 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:37:44 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ t_token	*newtoken(char *cont)
 
 	newtk = ft_calloc(1, sizeof(t_token));
 	if (!newtk)
-		return (perror("malloc11"), NULL);
+		return (perror("malloc"), NULL);
 	newtk->cont = ft_strdup(cont);
 	newtk->next = NULL;
 	newtk->prev = NULL;

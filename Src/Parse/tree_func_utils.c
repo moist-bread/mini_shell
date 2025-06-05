@@ -6,7 +6,7 @@
 /*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:54:47 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/04 18:55:10 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:37:47 by andcarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	**tree_alloc_args(t_token *token)
 	i = tree_arg_len(token, temp);
 	args = ft_calloc(i + 1, sizeof(char *));
 	if (!args)
-		return (perror("malloc12"), NULL);
+		return (perror("malloc"), NULL);
 	i = 0;
 	while (temp && temp->type != PIPE)
 	{
