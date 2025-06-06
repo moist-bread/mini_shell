@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:52:33 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/05 14:25:27 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/06 14:40:21 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,10 @@ static void	parent_sig_handler(int signal)
 static void	here_doc_sig_handler(int signal)
 {
 	if (signal == SIGINT)
+	{
+		printf("\n");
 		minishell_clean(*mem_save(NULL), 130);
+	}
 }
 
 /// @brief Basic error function

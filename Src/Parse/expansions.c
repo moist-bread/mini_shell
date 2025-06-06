@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansions.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andcarva <andcarva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:54:16 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/05 16:37:38 by andcarva         ###   ########.fr       */
+/*   Updated: 2025/06/06 14:41:22 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	expand_double_quotes(char *s, char *result, int *i, t_minishell ms)
 			i[0] += 2;
 		else if (s[i[0]] == '$' && s[i[0] + 1] == '?')
 			expansion_exit_status(result, i, ft_itoa(ms.exit_status));
-		else
+		else if (s[i[0]])
 			result[i[1]++] = s[i[0]++];
 	}
 	result[i[1]] = s[i[0]];
