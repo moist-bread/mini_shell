@@ -6,7 +6,7 @@
 /*   By: rduro-pe <rduro-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:50:44 by rduro-pe          #+#    #+#             */
-/*   Updated: 2025/06/06 14:40:52 by rduro-pe         ###   ########.fr       */
+/*   Updated: 2025/06/06 17:07:20 by rduro-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ void	echo_built_in(t_minishell *ms, t_tree_node *node, int fd)
 			ft_printf_fd(fd, " ");
 		if (node->right->cont.args[i])
 			ft_printf_fd(fd, "%s", node->right->cont.args[i]);
+		else
+			break ;
 	}
 	if (!n_opt)
 		ft_printf_fd(fd, "\n");
@@ -51,7 +53,7 @@ static int	echo_validate_option(char *arg)
 {
 	int	i;
 
-	if (*arg == '-')
+	if (*arg == '-' && arg[1])
 	{
 		i = 0;
 		while (arg[++i] == 'n')
